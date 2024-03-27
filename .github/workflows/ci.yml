@@ -67,10 +67,12 @@ jobs:
         run: dotnet build --configuration ${{ matrix.configuration }}
       - name: Test Garnet
         run: dotnet test -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
-      - name: DEBUG - dir
-        run: dir 
-      - name: DEBUG - dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+
+      - name: DEBUG dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
         run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+      - name: DEBUG - Hard Drive space
+        run: wmic LogicalDisk where DriveType="3" get DeviceID,Size,FreeSpace
+        if: runner.os == 'Windows'
       - name: DEBUG - Memory
         run: systeminfo | find "Available Physical Memory"
         if: runner.os == 'Windows'
