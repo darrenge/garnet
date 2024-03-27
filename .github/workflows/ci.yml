@@ -68,12 +68,12 @@ jobs:
       - name: Test Garnet
         run: dotnet test -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
 
-      - name: DEBUG dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+      - name: DEBUG - List results files and their sizes
         run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
-      - name: DEBUG - Hard Drive space
+      - name: DEBUG - System Hard Drive space
         run: wmic LogicalDisk where DriveType="3" get DeviceID,Size,FreeSpace
         if: runner.os == 'Windows'
-      - name: DEBUG - Memory
+      - name: DEBUG - System Available Memory
         run: systeminfo | find "Available Physical Memory"
         if: runner.os == 'Windows'
 
