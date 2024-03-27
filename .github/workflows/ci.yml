@@ -11,6 +11,8 @@ on:
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
 
 jobs:
   changes:
@@ -65,6 +67,10 @@ jobs:
         run: dotnet build --configuration ${{ matrix.configuration }}
       - name: Test Garnet
         run: dotnet test -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+      - name: DEBUG - dir
+        run: dir
+      - name: DEBUG - Memory
+        run: systeminfo | find "Available Physical Memory"
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
