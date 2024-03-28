@@ -51,6 +51,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         framework: [ 'net6.0', 'net8.0' ]
         configuration: [ 'Debug', 'Release' ]
+        test: [ 'Garnet.test', 'Garnet.cluster.test' ]
     if: needs.changes.outputs.garnet == 'true'
     steps:
       - name: Check out code
@@ -66,10 +67,10 @@ jobs:
       - name: Build Garnet
         run: dotnet build --configuration ${{ matrix.configuration }}
       - name: Test Garnet
-        run: dotnet test -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+        run: dotnet test/${{ matrix.test }} -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
         timeout-minutes: 30 
       - name: DEBUG - List test result files and their sizes
-        run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+        run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}"
       - name: DEBUG - System Hard Drive space
         run: wmic LogicalDisk where DriveType="3" get DeviceID,Size,FreeSpace
         if: runner.os == 'Windows'
@@ -79,8 +80,8 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: dotnet-garnet-results-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}
-          path: GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}
+          name: dotnet-garnet-results-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}
+          path: GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}
         if: ${{ always() }}
 
   # Job to build and test Tsavorite code (only if there were changes to it)
