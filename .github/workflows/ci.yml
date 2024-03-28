@@ -67,7 +67,7 @@ jobs:
         run: dotnet build --configuration ${{ matrix.configuration }}
       - name: Test Garnet
         run: dotnet test -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
-
+        timeout-minutes: 30 
       - name: DEBUG - List test result files and their sizes
         run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
       - name: DEBUG - System Hard Drive space
@@ -76,7 +76,6 @@ jobs:
       - name: DEBUG - System Available Memory
         run: systeminfo | find "Available Physical Memory"
         if: runner.os == 'Windows'
-
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
@@ -126,6 +125,7 @@ jobs:
         run: dotnet build libs/storage/Tsavorite/cs/test/Tsavorite.test.csproj --configuration ${{ matrix.configuration }}
       - name: Test Tsavorite
         run: dotnet test libs/storage/Tsavorite/cs/test/Tsavorite.test.csproj -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "TsavoriteTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}"
+        timeout-minutes: 30 
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
