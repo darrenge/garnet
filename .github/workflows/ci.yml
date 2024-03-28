@@ -67,7 +67,7 @@ jobs:
       - name: Build Garnet
         run: dotnet build --configuration ${{ matrix.configuration }}
       - name: Test Garnet
-        run: dotnet test ${{ matrix.test }} -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}"
+        run: dotnet test test/${{ matrix.test }} -f ${{ matrix.framework }} --logger "console;verbosity=detailed" --logger trx --results-directory "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}"
         timeout-minutes: 30 
       - name: DEBUG - List test result files and their sizes
         run: dir "GarnetTestResults-${{ matrix.os }}-${{ matrix.framework }}-${{ matrix.configuration }}-${{ matrix.test }}"
