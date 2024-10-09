@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728518082502,
+  "lastUpdate": 1728518099949,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -1136,6 +1136,52 @@ window.BENCHMARK_DATA = {
             "value": 26698.36958618164,
             "unit": "ns",
             "range": "± 259.86390806768566"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "06f46f22c76afd5e9485e90bb90a1009d20962cc",
+          "message": "Config fix on LuaRunner",
+          "timestamp": "2024-10-09T23:51:31Z",
+          "url": "https://github.com/darrenge/garnet/commit/06f46f22c76afd5e9485e90bb90a1009d20962cc"
+        },
+        "date": 1728518099321,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Get",
+            "value": 46803.158438546314,
+            "unit": "ns",
+            "range": "± 49.553025221902985"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Set",
+            "value": 48514.9377746582,
+            "unit": "ns",
+            "range": "± 436.6538336047789"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MGet",
+            "value": 41212.68094811073,
+            "unit": "ns",
+            "range": "± 56.7615386399301"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MSet",
+            "value": 41023.9240234375,
+            "unit": "ns",
+            "range": "± 649.8853354283432"
           }
         ]
       }
