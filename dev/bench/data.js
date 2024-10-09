@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728511108607,
+  "lastUpdate": 1728511112062,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -178,6 +178,52 @@ window.BENCHMARK_DATA = {
             "value": 40710.218241373695,
             "unit": "ns",
             "range": "± 49.62632840089058"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "e70459e2209c0054a6369aa4b408cfc5efca4ed6",
+          "message": "Separate commit comment and chart into two separate tasks",
+          "timestamp": "2024-10-09T21:54:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/e70459e2209c0054a6369aa4b408cfc5efca4ed6"
+        },
+        "date": 1728511110816,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Get",
+            "value": 26884.426006062826,
+            "unit": "ns",
+            "range": "± 229.91225791063962"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Set",
+            "value": 25739.595677693684,
+            "unit": "ns",
+            "range": "± 228.7833204841329"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MGet",
+            "value": 20461.046160888673,
+            "unit": "ns",
+            "range": "± 37.826932088858634"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MSet",
+            "value": 18997.125615437824,
+            "unit": "ns",
+            "range": "± 238.37399481126823"
           }
         ]
       }
