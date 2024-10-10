@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728585829266,
+  "lastUpdate": 1728585832071,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -4870,6 +4870,52 @@ window.BENCHMARK_DATA = {
             "value": 25762.76072184245,
             "unit": "ns",
             "range": "± 29.065350280389392"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "086b8ddcdab708bb7a308d9803b612588862e7b2",
+          "message": "Adding continue-on-error: true for BDN runs",
+          "timestamp": "2024-10-10T16:47:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/086b8ddcdab708bb7a308d9803b612588862e7b2"
+        },
+        "date": 1728585820281,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress1",
+            "value": 103.30581982930501,
+            "unit": "ns",
+            "range": "± 0.2824751149049347"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress2",
+            "value": 173.9232686849741,
+            "unit": "ns",
+            "range": "± 0.45752754590391864"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress3",
+            "value": 802.5716718037924,
+            "unit": "ns",
+            "range": "± 3.2662157376152847"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress4",
+            "value": 1698.7827173868816,
+            "unit": "ns",
+            "range": "± 5.075642230846818"
           }
         ]
       }
