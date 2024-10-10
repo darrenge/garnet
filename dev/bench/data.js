@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728577768268,
+  "lastUpdate": 1728577771547,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -2330,6 +2330,52 @@ window.BENCHMARK_DATA = {
             "value": 40444.70085144043,
             "unit": "ns",
             "range": "± 96.87749313879655"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "ce013da2066f4f95e8da809c7458de779964f208",
+          "message": "Making the failure not happen as only a warning",
+          "timestamp": "2024-10-10T16:24:06Z",
+          "url": "https://github.com/darrenge/garnet/commit/ce013da2066f4f95e8da809c7458de779964f208"
+        },
+        "date": 1728577770357,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress1",
+            "value": 158.15337443351746,
+            "unit": "ns",
+            "range": "± 0.6311655217053015"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress2",
+            "value": 292.2052704175313,
+            "unit": "ns",
+            "range": "± 2.4908888307338044"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress3",
+            "value": 1378.599982579549,
+            "unit": "ns",
+            "range": "± 6.788590147504794"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress4",
+            "value": 2698.452590179443,
+            "unit": "ns",
+            "range": "± 22.62843458617086"
           }
         ]
       }
