@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728585806865,
+  "lastUpdate": 1728585829266,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -4830,6 +4830,46 @@ window.BENCHMARK_DATA = {
             "value": 38949.69961983817,
             "unit": "ns",
             "range": "± 29.321459742751227"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "086b8ddcdab708bb7a308d9803b612588862e7b2",
+          "message": "Adding continue-on-error: true for BDN runs",
+          "timestamp": "2024-10-10T16:47:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/086b8ddcdab708bb7a308d9803b612588862e7b2"
+        },
+        "date": 1728585819501,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Get",
+            "value": 22201.879178560695,
+            "unit": "ns",
+            "range": "± 42.42156113801048"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Set",
+            "value": 17644.251607259113,
+            "unit": "ns",
+            "range": "± 34.43362553371983"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Incr",
+            "value": 25762.76072184245,
+            "unit": "ns",
+            "range": "± 29.065350280389392"
           }
         ]
       }
