@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1728578682228,
+  "lastUpdate": 1728578685318,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -3646,6 +3646,52 @@ window.BENCHMARK_DATA = {
             "value": 18624.027797154016,
             "unit": "ns",
             "range": "± 34.431668229304925"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "0e2e15de42eda82a39a800c011079a3fdeb651a7",
+          "message": "Adding the Fail Stop back in",
+          "timestamp": "2024-10-10T16:39:54Z",
+          "url": "https://github.com/darrenge/garnet/commit/0e2e15de42eda82a39a800c011079a3fdeb651a7"
+        },
+        "date": 1728578673505,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress1",
+            "value": 104.46274142998915,
+            "unit": "ns",
+            "range": "± 0.20254245161778106"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress2",
+            "value": 177.31406138493463,
+            "unit": "ns",
+            "range": "± 0.5051812956716819"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress3",
+            "value": 717.8737572261265,
+            "unit": "ns",
+            "range": "± 1.2826226785228925"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress4",
+            "value": 1802.322637117826,
+            "unit": "ns",
+            "range": "± 3.310315682759995"
           }
         ]
       }
