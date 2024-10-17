@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729206070732,
+  "lastUpdate": 1729206071726,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -1916,6 +1916,46 @@ window.BENCHMARK_DATA = {
             "value": 27273.549970499673,
             "unit": "ns",
             "range": "± 163.7279962192952"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "143387b14e3a21269750b7e1e8423fc17426b211",
+          "message": "Set continue on fail to false so if allocated is too high it won't run the others",
+          "timestamp": "2024-10-17T22:58:02Z",
+          "url": "https://github.com/darrenge/garnet/commit/143387b14e3a21269750b7e1e8423fc17426b211"
+        },
+        "date": 1729206071536,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Get",
+            "value": 20473.964698791504,
+            "unit": "ns",
+            "range": "± 24.00415880180974"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Set",
+            "value": 19694.95630318778,
+            "unit": "ns",
+            "range": "± 151.0059786321517"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Incr",
+            "value": 25717.599790300643,
+            "unit": "ns",
+            "range": "± 197.08385663521423"
           }
         ]
       }
