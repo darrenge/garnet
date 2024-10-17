@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729205592071,
+  "lastUpdate": 1729205875482,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -1224,6 +1224,46 @@ window.BENCHMARK_DATA = {
             "value": 266957.1256510417,
             "unit": "ns",
             "range": "± 599.7799987912421"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "70183df81bda5d5c9596a82ebfc3b7f42aeeee79",
+          "message": "Cleaned up config files, set allocated for those to 10% and set the Mean threshhold back to 140%",
+          "timestamp": "2024-10-17T22:54:46Z",
+          "url": "https://github.com/darrenge/garnet/commit/70183df81bda5d5c9596a82ebfc3b7f42aeeee79"
+        },
+        "date": 1729205874092,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Get",
+            "value": 20509.82433827718,
+            "unit": "ns",
+            "range": "± 14.301856550270868"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Set",
+            "value": 19472.541531880695,
+            "unit": "ns",
+            "range": "± 25.1354233418224"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespTsavoriteStress.Incr",
+            "value": 27273.549970499673,
+            "unit": "ns",
+            "range": "± 163.7279962192952"
           }
         ]
       }
