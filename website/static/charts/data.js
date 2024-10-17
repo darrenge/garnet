@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729199770151,
+  "lastUpdate": 1729199771103,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -410,6 +410,54 @@ window.BENCHMARK_DATA = {
             "value": 3002.4717529296877,
             "unit": "ns",
             "range": "± 21.583919871819276"
+          }
+        ]
+      }
+    ],
+    "Cluster.RespClusterBench (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "24512dab706657aea425979fe01f7ede0572677d",
+          "message": "Put back full tests etc",
+          "timestamp": "2024-10-17T21:11:59Z",
+          "url": "https://github.com/darrenge/garnet/commit/24512dab706657aea425979fe01f7ede0572677d"
+        },
+        "date": 1729199770402,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Get",
+            "value": 27859.363639831543,
+            "unit": "ns",
+            "range": "± 137.57588375926346"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Set",
+            "value": 24127.193481445312,
+            "unit": "ns",
+            "range": "± 256.3345855099403"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MGet",
+            "value": 20265.20463256836,
+            "unit": "ns",
+            "range": "± 188.69673132358525"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MSet",
+            "value": 19407.764186314173,
+            "unit": "ns",
+            "range": "± 223.39033356526224"
           }
         ]
       }
