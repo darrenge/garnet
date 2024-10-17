@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729199769095,
+  "lastUpdate": 1729199770151,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -362,6 +362,54 @@ window.BENCHMARK_DATA = {
             "value": 2718.013479868571,
             "unit": "ns",
             "range": "± 25.408964427487795"
+          }
+        ]
+      }
+    ],
+    "Resp.RespLuaRunnerStress (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "24512dab706657aea425979fe01f7ede0572677d",
+          "message": "Put back full tests etc",
+          "timestamp": "2024-10-17T21:11:59Z",
+          "url": "https://github.com/darrenge/garnet/commit/24512dab706657aea425979fe01f7ede0572677d"
+        },
+        "date": 1729199769023,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespLuaRunnerStress.BasicLuaRunner1",
+            "value": 201.66113536698478,
+            "unit": "ns",
+            "range": "± 0.4357115234243186"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaRunnerStress.BasicLuaRunner2",
+            "value": 316.022054365703,
+            "unit": "ns",
+            "range": "± 3.656887210646992"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaRunnerStress.BasicLuaRunner3",
+            "value": 608.8387475694929,
+            "unit": "ns",
+            "range": "± 3.994826575874991"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaRunnerStress.BasicLuaRunner4",
+            "value": 3002.4717529296877,
+            "unit": "ns",
+            "range": "± 21.583919871819276"
           }
         ]
       }
