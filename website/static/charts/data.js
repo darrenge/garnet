@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729206085786,
+  "lastUpdate": 1729206086777,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -2142,6 +2142,52 @@ window.BENCHMARK_DATA = {
             "value": 39904.964430588945,
             "unit": "ns",
             "range": "± 117.87057276679414"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "143387b14e3a21269750b7e1e8423fc17426b211",
+          "message": "Set continue on fail to false so if allocated is too high it won't run the others",
+          "timestamp": "2024-10-17T22:58:02Z",
+          "url": "https://github.com/darrenge/garnet/commit/143387b14e3a21269750b7e1e8423fc17426b211"
+        },
+        "date": 1729206086581,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Get",
+            "value": 46434.64359029134,
+            "unit": "ns",
+            "range": "± 32.806527425231494"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Set",
+            "value": 48924.50465175084,
+            "unit": "ns",
+            "range": "± 54.80798602001057"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MGet",
+            "value": 40543.19688197545,
+            "unit": "ns",
+            "range": "± 234.59094249973947"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MSet",
+            "value": 40614.13740844726,
+            "unit": "ns",
+            "range": "± 318.3570589169131"
           }
         ]
       }
