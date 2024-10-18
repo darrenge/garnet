@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729271266494,
+  "lastUpdate": 1729271267822,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -3108,6 +3108,52 @@ window.BENCHMARK_DATA = {
             "value": 2677.2096018473308,
             "unit": "ns",
             "range": "± 13.76419490327734"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "39b2e2c7a9457849e641027f8541361a118a7e21",
+          "message": "Fixed bug in YML",
+          "timestamp": "2024-10-18T16:38:22Z",
+          "url": "https://github.com/darrenge/garnet/commit/39b2e2c7a9457849e641027f8541361a118a7e21"
+        },
+        "date": 1729271267484,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress1",
+            "value": 179.377348613739,
+            "unit": "ns",
+            "range": "± 0.990566329492075"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress2",
+            "value": 291.4722039540609,
+            "unit": "ns",
+            "range": "± 2.2833654030190846"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress3",
+            "value": 1370.873173577445,
+            "unit": "ns",
+            "range": "± 7.001352890294535"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespLuaStress.BasicLuaStress4",
+            "value": 2677.5069263164814,
+            "unit": "ns",
+            "range": "± 13.994730472320605"
           }
         ]
       }
