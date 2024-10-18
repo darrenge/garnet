@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729271405565,
+  "lastUpdate": 1729271406922,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -5396,6 +5396,88 @@ window.BENCHMARK_DATA = {
             "value": 231066.32357584636,
             "unit": "ns",
             "range": "± 1481.2602748039978"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "39b2e2c7a9457849e641027f8541361a118a7e21",
+          "message": "Fixed bug in YML",
+          "timestamp": "2024-10-18T16:38:22Z",
+          "url": "https://github.com/darrenge/garnet/commit/39b2e2c7a9457849e641027f8541361a118a7e21"
+        },
+        "date": 1729271406562,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.InlinePing",
+            "value": 2092.2564230698804,
+            "unit": "ns",
+            "range": "± 1.915117865277757"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.Set",
+            "value": 18960.45195719401,
+            "unit": "ns",
+            "range": "± 172.63710934218938"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.SetEx",
+            "value": 27391.393498738606,
+            "unit": "ns",
+            "range": "± 200.71459124837875"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.Get",
+            "value": 13382.160181681314,
+            "unit": "ns",
+            "range": "± 82.29958962706466"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.Increment",
+            "value": 25765.123807779946,
+            "unit": "ns",
+            "range": "± 162.18334722567144"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.ZAddRem",
+            "value": 184076.88575846356,
+            "unit": "ns",
+            "range": "± 1592.1681859533976"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.LPushPop",
+            "value": 163807.2885131836,
+            "unit": "ns",
+            "range": "± 278.9506464478386"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.SAddRem",
+            "value": 159326.88112095423,
+            "unit": "ns",
+            "range": "± 825.3794035444373"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.HSetDel",
+            "value": 193187.25135091145,
+            "unit": "ns",
+            "range": "± 1337.5274757687907"
+          },
+          {
+            "name": "BDN.benchmark.Resp.RespParseStress.MyDictSetGet",
+            "value": 231561.07681477864,
+            "unit": "ns",
+            "range": "± 1530.7318906733453"
           }
         ]
       }
