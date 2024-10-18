@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729282091105,
+  "lastUpdate": 1729282092356,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -5074,6 +5074,58 @@ window.BENCHMARK_DATA = {
             "value": 2985.6379018147786,
             "unit": "ns",
             "range": "± 29.112046896664246"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "e3727493bd66e00d8fb93997e235c66e3d7acfe9",
+          "message": "Bumped up to 150%",
+          "timestamp": "2024-10-18T17:56:58Z",
+          "url": "https://github.com/darrenge/garnet/commit/e3727493bd66e00d8fb93997e235c66e3d7acfe9"
+        },
+        "date": 1729282091017,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Get",
+            "value": 25562.230731201173,
+            "unit": "ns",
+            "range": "± 191.94738094965"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Set",
+            "value": 25383.797927856445,
+            "unit": "ns",
+            "range": "± 155.51378503734654"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MGet",
+            "value": 21570.723831176758,
+            "unit": "ns",
+            "range": "± 22.34015684612389"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MSet",
+            "value": 20987.42120361328,
+            "unit": "ns",
+            "range": "± 255.96962559568007"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.CPBSET",
+            "value": 176900.80592564173,
+            "unit": "ns",
+            "range": "± 1132.30833361287"
           }
         ]
       }
