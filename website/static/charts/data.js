@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729273738479,
+  "lastUpdate": 1729273749490,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -3800,6 +3800,58 @@ window.BENCHMARK_DATA = {
             "value": 2753.627799987793,
             "unit": "ns",
             "range": "± 20.62025324736545"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "eae9d5ae9ba69495a379b3fe987dbf4b80ce8005",
+          "message": "Added check for linux for checkpointdir",
+          "timestamp": "2024-10-18T17:45:10Z",
+          "url": "https://github.com/darrenge/garnet/commit/eae9d5ae9ba69495a379b3fe987dbf4b80ce8005"
+        },
+        "date": 1729273748295,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Get",
+            "value": 25625.430227661134,
+            "unit": "ns",
+            "range": "± 183.66523476475135"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.Set",
+            "value": 26558.726751474234,
+            "unit": "ns",
+            "range": "± 18.216670538393856"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MGet",
+            "value": 20357.847974504744,
+            "unit": "ns",
+            "range": "± 114.79783016543487"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.MSet",
+            "value": 20123.913323974608,
+            "unit": "ns",
+            "range": "± 71.88539023242114"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterBench.CPBSET",
+            "value": 172192.51123046875,
+            "unit": "ns",
+            "range": "± 261.2587130583627"
           }
         ]
       }
