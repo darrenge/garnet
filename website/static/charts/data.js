@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729273730966,
+  "lastUpdate": 1729273733012,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -4222,6 +4222,52 @@ window.BENCHMARK_DATA = {
             "value": 41739.34173787435,
             "unit": "ns",
             "range": "± 345.18792191370073"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "eae9d5ae9ba69495a379b3fe987dbf4b80ce8005",
+          "message": "Added check for linux for checkpointdir",
+          "timestamp": "2024-10-18T17:45:10Z",
+          "url": "https://github.com/darrenge/garnet/commit/eae9d5ae9ba69495a379b3fe987dbf4b80ce8005"
+        },
+        "date": 1729273732368,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Get",
+            "value": 46691.81481933594,
+            "unit": "ns",
+            "range": "± 292.16648916145436"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.Set",
+            "value": 47308.93363647461,
+            "unit": "ns",
+            "range": "± 465.9359427436163"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MGet",
+            "value": 40992.13808695475,
+            "unit": "ns",
+            "range": "± 33.233764838430524"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.RespClusterMigrateBench.MSet",
+            "value": 40767.635091145836,
+            "unit": "ns",
+            "range": "± 89.52218424346006"
           }
         ]
       }
