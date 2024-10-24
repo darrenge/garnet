@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729809768353,
+  "lastUpdate": 1729810567661,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -6198,6 +6198,52 @@ window.BENCHMARK_DATA = {
             "value": 126801.73746744792,
             "unit": "ns",
             "range": "± 208.6729671114204"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "57ac3bd3b78fc7b525cd0971aaf9a258d4c62477",
+          "message": "Fixed Lua test as config file wasn't named correct",
+          "timestamp": "2024-10-24T22:53:05Z",
+          "url": "https://github.com/darrenge/garnet/commit/57ac3bd3b78fc7b525cd0971aaf9a258d4c62477"
+        },
+        "date": 1729810566375,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 37117.5257039388,
+            "unit": "ns",
+            "range": "± 415.1638598569"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 38296.61951090495,
+            "unit": "ns",
+            "range": "± 461.2316905995587"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31712.482508341473,
+            "unit": "ns",
+            "range": "± 109.83850137803152"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31796.77587483724,
+            "unit": "ns",
+            "range": "± 410.5043454908413"
           }
         ]
       }
