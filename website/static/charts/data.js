@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729810683766,
+  "lastUpdate": 1729810731349,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -6412,6 +6412,46 @@ window.BENCHMARK_DATA = {
             "value": 139331.88083902994,
             "unit": "ns",
             "range": "± 550.8367833141376"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "57ac3bd3b78fc7b525cd0971aaf9a258d4c62477",
+          "message": "Fixed Lua test as config file wasn't named correct",
+          "timestamp": "2024-10-24T22:53:05Z",
+          "url": "https://github.com/darrenge/garnet/commit/57ac3bd3b78fc7b525cd0971aaf9a258d4c62477"
+        },
+        "date": 1729810712658,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1892.8681373596191,
+            "unit": "ns",
+            "range": "± 1.7115462837089255"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1891.8845836932842,
+            "unit": "ns",
+            "range": "± 2.0155800267128905"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1923.4839248657227,
+            "unit": "ns",
+            "range": "± 2.2033190891376306"
           }
         ]
       }
