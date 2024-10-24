@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729282384163,
+  "lastUpdate": 1729809241000,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -5602,6 +5602,52 @@ window.BENCHMARK_DATA = {
             "value": 166767.16482979912,
             "unit": "ns",
             "range": "± 259.5834934759255"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "37465005556aca9e13b3edaf514b3fa09ebc2e69",
+          "message": "Updated config files so reads results properly",
+          "timestamp": "2024-10-24T22:30:55Z",
+          "url": "https://github.com/darrenge/garnet/commit/37465005556aca9e13b3edaf514b3fa09ebc2e69"
+        },
+        "date": 1729809239507,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35909.65308837891,
+            "unit": "ns",
+            "range": "± 280.50120124610805"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37765.35623638447,
+            "unit": "ns",
+            "range": "± 58.76531019682903"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32451.13055826823,
+            "unit": "ns",
+            "range": "± 206.20503339582254"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31283.572835286457,
+            "unit": "ns",
+            "range": "± 22.93625633568482"
           }
         ]
       }
