@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729809247792,
+  "lastUpdate": 1729809249115,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -11162,6 +11162,48 @@ window.BENCHMARK_DATA = {
             "value": 31283.572835286457,
             "unit": "ns",
             "range": "± 22.93625633568482"
+          }
+        ]
+      }
+    ],
+    "Operations.BasicOperations (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "37465005556aca9e13b3edaf514b3fa09ebc2e69",
+          "message": "Updated config files so reads results properly",
+          "timestamp": "2024-10-24T22:30:55Z",
+          "url": "https://github.com/darrenge/garnet/commit/37465005556aca9e13b3edaf514b3fa09ebc2e69"
+        },
+        "date": 1729809248829,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1717.1773763020833,
+            "unit": "ns",
+            "range": "± 15.81796429574679"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1811.762460454305,
+            "unit": "ns",
+            "range": "± 21.823993054124866"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1806.9259075164796,
+            "unit": "ns",
+            "range": "± 17.8242647683615"
           }
         ]
       }
