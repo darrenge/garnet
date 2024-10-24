@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1729809373838,
+  "lastUpdate": 1729809377141,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -11416,6 +11416,54 @@ window.BENCHMARK_DATA = {
             "value": 135029.51358468193,
             "unit": "ns",
             "range": "± 1075.1046517526295"
+          }
+        ]
+      }
+    ],
+    "Cluster.ClusterMigrate (windows-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "37465005556aca9e13b3edaf514b3fa09ebc2e69",
+          "message": "Updated config files so reads results properly",
+          "timestamp": "2024-10-24T22:30:55Z",
+          "url": "https://github.com/darrenge/garnet/commit/37465005556aca9e13b3edaf514b3fa09ebc2e69"
+        },
+        "date": 1729809375765,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 34958.68377685547,
+            "unit": "ns",
+            "range": "± 24.518226376579406"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 35912.90370396205,
+            "unit": "ns",
+            "range": "± 27.207855747082192"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30913.936438927285,
+            "unit": "ns",
+            "range": "± 45.60567839763914"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31427.195231119793,
+            "unit": "ns",
+            "range": "± 125.93076808600236"
           }
         ]
       }
