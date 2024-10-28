@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730148163453,
+  "lastUpdate": 1730148180858,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -7528,6 +7528,46 @@ window.BENCHMARK_DATA = {
             "value": 32057.934674944197,
             "unit": "ns",
             "range": "± 23.945074960966476"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "d92fe447c6bdba70531da513ed8fafda70259599",
+          "message": "Putting back to Lua Scripts to see if that works",
+          "timestamp": "2024-10-28T20:39:33Z",
+          "url": "https://github.com/darrenge/garnet/commit/d92fe447c6bdba70531da513ed8fafda70259599"
+        },
+        "date": 1730148179546,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1813.310604231698,
+            "unit": "ns",
+            "range": "± 21.304161280216857"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1813.7838628133138,
+            "unit": "ns",
+            "range": "± 20.90685791884673"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1808.4976102193198,
+            "unit": "ns",
+            "range": "± 17.04088866076045"
           }
         ]
       }
