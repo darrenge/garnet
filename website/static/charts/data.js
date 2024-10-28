@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730148896312,
+  "lastUpdate": 1730148910708,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -8342,6 +8342,52 @@ window.BENCHMARK_DATA = {
             "value": 1806.1412970225017,
             "unit": "ns",
             "range": "± 7.479824138216006"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "a061a0dcbb60c78b055d067544cb775fcc6b8a96",
+          "message": "Removed results files",
+          "timestamp": "2024-10-28T20:48:39Z",
+          "url": "https://github.com/darrenge/garnet/commit/a061a0dcbb60c78b055d067544cb775fcc6b8a96"
+        },
+        "date": 1730148894952,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 117.65034369059971,
+            "unit": "ns",
+            "range": "± 0.31732973114230584"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 186.96402311325073,
+            "unit": "ns",
+            "range": "± 0.5001797688855513"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 371.1213906606038,
+            "unit": "ns",
+            "range": "± 1.4366880336488084"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2191.289850870768,
+            "unit": "ns",
+            "range": "± 4.972644528080511"
           }
         ]
       }
