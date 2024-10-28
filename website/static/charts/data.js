@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730147111576,
+  "lastUpdate": 1730147112476,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -13520,6 +13520,54 @@ window.BENCHMARK_DATA = {
             "value": 132172.28131975446,
             "unit": "ns",
             "range": "± 83.00632036047897"
+          }
+        ]
+      }
+    ],
+    "Lua.Lua (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "d7684bef316be1945e924d26ff17664f6d8caadb",
+          "message": "Fixed Lua benchmark so can be read after it is ran",
+          "timestamp": "2024-10-28T20:21:32Z",
+          "url": "https://github.com/darrenge/garnet/commit/d7684bef316be1945e924d26ff17664f6d8caadb"
+        },
+        "date": 1730147111717,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.Lua.Script1(Params: None)",
+            "value": 188.74873287861163,
+            "unit": "ns",
+            "range": "± 0.6900542633763324"
+          },
+          {
+            "name": "BDN.benchmark.Lua.Lua.Script2(Params: None)",
+            "value": 297.8117615381877,
+            "unit": "ns",
+            "range": "± 2.809564648571175"
+          },
+          {
+            "name": "BDN.benchmark.Lua.Lua.Script3(Params: None)",
+            "value": 588.1606288637433,
+            "unit": "ns",
+            "range": "± 4.1540152900573775"
+          },
+          {
+            "name": "BDN.benchmark.Lua.Lua.Script4(Params: None)",
+            "value": 3060.525094604492,
+            "unit": "ns",
+            "range": "± 25.221627915356304"
           }
         ]
       }
