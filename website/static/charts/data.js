@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730148197109,
+  "lastUpdate": 1730148261107,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -7614,6 +7614,52 @@ window.BENCHMARK_DATA = {
             "value": 2978.791241200765,
             "unit": "ns",
             "range": "± 34.113388368831195"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "d92fe447c6bdba70531da513ed8fafda70259599",
+          "message": "Putting back to Lua Scripts to see if that works",
+          "timestamp": "2024-10-28T20:39:33Z",
+          "url": "https://github.com/darrenge/garnet/commit/d92fe447c6bdba70531da513ed8fafda70259599"
+        },
+        "date": 1730148254938,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36523.87041364397,
+            "unit": "ns",
+            "range": "± 27.90711333113545"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36405.731201171875,
+            "unit": "ns",
+            "range": "± 69.90653572554314"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30925.227942833535,
+            "unit": "ns",
+            "range": "± 32.71256375753094"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29805.36122639974,
+            "unit": "ns",
+            "range": "± 214.85749997214594"
           }
         ]
       }
