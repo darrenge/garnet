@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730147113472,
+  "lastUpdate": 1730147116733,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -6886,6 +6886,46 @@ window.BENCHMARK_DATA = {
             "value": 30897.628221784318,
             "unit": "ns",
             "range": "± 72.86499194259619"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "d7684bef316be1945e924d26ff17664f6d8caadb",
+          "message": "Fixed Lua benchmark so can be read after it is ran",
+          "timestamp": "2024-10-28T20:21:32Z",
+          "url": "https://github.com/darrenge/garnet/commit/d7684bef316be1945e924d26ff17664f6d8caadb"
+        },
+        "date": 1730147115210,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1753.9967980066936,
+            "unit": "ns",
+            "range": "± 17.973129253418247"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1806.132803853353,
+            "unit": "ns",
+            "range": "± 14.639600981084532"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1807.1696426391602,
+            "unit": "ns",
+            "range": "± 11.307647468636597"
           }
         ]
       }
