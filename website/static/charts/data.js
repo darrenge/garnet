@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730226086625,
+  "lastUpdate": 1730226092682,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -9286,6 +9286,46 @@ window.BENCHMARK_DATA = {
             "value": 31215.600977579754,
             "unit": "ns",
             "range": "± 96.09601599822831"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "df9bd6ff95cded34dfbf99bcdc886445b13db257",
+          "message": "Added           max-items-in-chart: 50 to yml file",
+          "timestamp": "2024-10-29T18:17:27Z",
+          "url": "https://github.com/darrenge/garnet/commit/df9bd6ff95cded34dfbf99bcdc886445b13db257"
+        },
+        "date": 1730226091244,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1813.489873445951,
+            "unit": "ns",
+            "range": "± 7.642902151975296"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1794.3338468869526,
+            "unit": "ns",
+            "range": "± 0.943435584615798"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1803.3918362935385,
+            "unit": "ns",
+            "range": "± 12.173313881169124"
           }
         ]
       }
