@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730226103347,
+  "lastUpdate": 1730226104651,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -18452,6 +18452,52 @@ window.BENCHMARK_DATA = {
             "value": 2950.992519106184,
             "unit": "ns",
             "range": "± 19.725149068077947"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "df9bd6ff95cded34dfbf99bcdc886445b13db257",
+          "message": "Added           max-items-in-chart: 50 to yml file",
+          "timestamp": "2024-10-29T18:17:27Z",
+          "url": "https://github.com/darrenge/garnet/commit/df9bd6ff95cded34dfbf99bcdc886445b13db257"
+        },
+        "date": 1730226104358,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 204.0525295416514,
+            "unit": "ns",
+            "range": "± 1.1596894004870049"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 312.22381615638733,
+            "unit": "ns",
+            "range": "± 1.6879898216775147"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 599.0764233907064,
+            "unit": "ns",
+            "range": "± 6.682753809565054"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2966.8510377066477,
+            "unit": "ns",
+            "range": "± 22.802646196594065"
           }
         ]
       }
