@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1730481481647,
+  "lastUpdate": 1730481484592,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -20028,6 +20028,54 @@ window.BENCHMARK_DATA = {
             "value": 2185.253415788923,
             "unit": "ns",
             "range": "± 8.533077128174545"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "e64221d474edfc425ce917befab92526efae5489",
+          "message": "Get BDN Tests up to in sync with what is in BDN branch",
+          "timestamp": "2024-11-01T10:13:17-07:00",
+          "tree_id": "1ccce47cfce4da9e29791df447455854c96d4714",
+          "url": "https://github.com/darrenge/garnet/commit/e64221d474edfc425ce917befab92526efae5489"
+        },
+        "date": 1730481483301,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 118.96196774074009,
+            "unit": "ns",
+            "range": "± 0.2860824861935142"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 197.30496724446616,
+            "unit": "ns",
+            "range": "± 0.6784007929319265"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 365.414153612577,
+            "unit": "ns",
+            "range": "± 0.9079143076149404"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2252.5404357910156,
+            "unit": "ns",
+            "range": "± 10.995925743209597"
           }
         ]
       }
