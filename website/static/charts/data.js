@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731003411292,
+  "lastUpdate": 1731003417488,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -10744,6 +10744,54 @@ window.BENCHMARK_DATA = {
             "value": 1779.235567365374,
             "unit": "ns",
             "range": "± 8.14860877357113"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "550eea9af1035b076d95ea45fe8d7609aa7ca6b1",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-11-07T10:12:32-08:00",
+          "tree_id": "ee79e644475534f08e9a1b040fdde13f087ac6e1",
+          "url": "https://github.com/darrenge/garnet/commit/550eea9af1035b076d95ea45fe8d7609aa7ca6b1"
+        },
+        "date": 1731003401381,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 121.6974417368571,
+            "unit": "ns",
+            "range": "± 1.2349904064095323"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 199.25932248433432,
+            "unit": "ns",
+            "range": "± 1.5254177934647049"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 370.22841453552246,
+            "unit": "ns",
+            "range": "± 1.7454046277451079"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2219.9759347098216,
+            "unit": "ns",
+            "range": "± 8.022934663636219"
           }
         ]
       }
