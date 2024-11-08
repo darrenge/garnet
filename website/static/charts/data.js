@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731100085661,
+  "lastUpdate": 1731100088703,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -18942,6 +18942,54 @@ window.BENCHMARK_DATA = {
             "value": 29816.373854417066,
             "unit": "ns",
             "range": "± 10.68073660911293"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f5d487528cc06e1153c809ecf100700b3d4948a0",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-11-08T13:03:21-08:00",
+          "tree_id": "df4bfe5e7f9b805a50ed285ca4294c37f5552fb7",
+          "url": "https://github.com/darrenge/garnet/commit/f5d487528cc06e1153c809ecf100700b3d4948a0"
+        },
+        "date": 1731100087318,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35243.18401630108,
+            "unit": "ns",
+            "range": "± 51.6375856636411"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37725.45142540565,
+            "unit": "ns",
+            "range": "± 59.007712015715626"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30702.35544840495,
+            "unit": "ns",
+            "range": "± 100.559695338487"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 30289.6245320638,
+            "unit": "ns",
+            "range": "± 48.06039346400185"
           }
         ]
       }
