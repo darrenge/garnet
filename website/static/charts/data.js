@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731100172676,
+  "lastUpdate": 1731100231693,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -11656,6 +11656,90 @@ window.BENCHMARK_DATA = {
             "value": 159310.44501953124,
             "unit": "ns",
             "range": "± 1265.476690305105"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f5d487528cc06e1153c809ecf100700b3d4948a0",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-11-08T13:03:21-08:00",
+          "tree_id": "df4bfe5e7f9b805a50ed285ca4294c37f5552fb7",
+          "url": "https://github.com/darrenge/garnet/commit/f5d487528cc06e1153c809ecf100700b3d4948a0"
+        },
+        "date": 1731100220535,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: DSV)",
+            "value": 16130.051981608072,
+            "unit": "ns",
+            "range": "± 21.298715341224863"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: DSV)",
+            "value": 15329.934575007512,
+            "unit": "ns",
+            "range": "± 52.85018588138128"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: DSV)",
+            "value": 14446.54529278095,
+            "unit": "ns",
+            "range": "± 13.653523945162679"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: DSV)",
+            "value": 13166.491045270648,
+            "unit": "ns",
+            "range": "± 14.349538381423079"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: DSV)",
+            "value": 130980.18973214286,
+            "unit": "ns",
+            "range": "± 162.76587750562655"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: None)",
+            "value": 21573.806980678015,
+            "unit": "ns",
+            "range": "± 27.04133954313106"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: None)",
+            "value": 18045.41015625,
+            "unit": "ns",
+            "range": "± 24.67624912142027"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: None)",
+            "value": 15289.027840750558,
+            "unit": "ns",
+            "range": "± 26.93774470275092"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: None)",
+            "value": 13942.197527204242,
+            "unit": "ns",
+            "range": "± 10.010165904601285"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: None)",
+            "value": 141847.56905691963,
+            "unit": "ns",
+            "range": "± 194.12912370173675"
           }
         ]
       }
