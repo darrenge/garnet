@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731514306149,
+  "lastUpdate": 1731514310029,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -20112,6 +20112,48 @@ window.BENCHMARK_DATA = {
             "value": 1773.4528101407564,
             "unit": "ns",
             "range": "± 16.238803455136264"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "657687810c5f8e2c7cfd5d2b289be3a27ba177e8",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-11-13T08:07:28-08:00",
+          "tree_id": "80473b0eec58c1c7957ff5359c6d8efbcf3b55e6",
+          "url": "https://github.com/darrenge/garnet/commit/657687810c5f8e2c7cfd5d2b289be3a27ba177e8"
+        },
+        "date": 1731514308176,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1775.5298478262764,
+            "unit": "ns",
+            "range": "± 5.248685670602931"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1880.8641857571072,
+            "unit": "ns",
+            "range": "± 26.492196144992185"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1895.9385578448955,
+            "unit": "ns",
+            "range": "± 3.1173912962020482"
           }
         ]
       }
