@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1731514245586,
+  "lastUpdate": 1731514253862,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -11926,6 +11926,54 @@ window.BENCHMARK_DATA = {
             "value": 1626.4535102844238,
             "unit": "ns",
             "range": "± 17.43543578100037"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "657687810c5f8e2c7cfd5d2b289be3a27ba177e8",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-11-13T08:07:28-08:00",
+          "tree_id": "80473b0eec58c1c7957ff5359c6d8efbcf3b55e6",
+          "url": "https://github.com/darrenge/garnet/commit/657687810c5f8e2c7cfd5d2b289be3a27ba177e8"
+        },
+        "date": 1731514251276,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 188.93100382731512,
+            "unit": "ns",
+            "range": "± 0.5955969594354185"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 298.2009366580418,
+            "unit": "ns",
+            "range": "± 2.138658836376531"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 594.9240081151327,
+            "unit": "ns",
+            "range": "± 5.1167185541029125"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2952.338503265381,
+            "unit": "ns",
+            "range": "± 43.60272104456319"
           }
         ]
       }
