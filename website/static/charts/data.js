@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732664393277,
+  "lastUpdate": 1732664395121,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -13198,6 +13198,54 @@ window.BENCHMARK_DATA = {
             "value": 1711.2930489948817,
             "unit": "ns",
             "range": "± 10.872101427242907"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2",
+          "message": "Added BDN.benchmark to beginning for test if not needed",
+          "timestamp": "2024-11-26T15:36:29-08:00",
+          "tree_id": "69d67643d8f2f9c5254036cffea0629aedef5f33",
+          "url": "https://github.com/darrenge/garnet/commit/a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2"
+        },
+        "date": 1732664393478,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 191.15916775067646,
+            "unit": "ns",
+            "range": "± 1.3043380911737572"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 328.0472063064575,
+            "unit": "ns",
+            "range": "± 3.600263249320959"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 598.2422045980181,
+            "unit": "ns",
+            "range": "± 4.902230213071763"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2969.24182027181,
+            "unit": "ns",
+            "range": "± 17.944916235621424"
           }
         ]
       }
