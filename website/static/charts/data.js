@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732668095040,
+  "lastUpdate": 1732668125564,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -14056,6 +14056,54 @@ window.BENCHMARK_DATA = {
             "value": 31691.661943708146,
             "unit": "ns",
             "range": "± 107.7145952528643"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "1d0906dc0cbb950a07f285b743b81eb877d63a6e",
+          "message": "Cleaned up comments, spacing and debug messages",
+          "timestamp": "2024-11-26T16:36:24-08:00",
+          "tree_id": "26daa6da98ed0b203a4b1d3a4efe62cbf79463ba",
+          "url": "https://github.com/darrenge/garnet/commit/1d0906dc0cbb950a07f285b743b81eb877d63a6e"
+        },
+        "date": 1732668116112,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 141.25486887418307,
+            "unit": "ns",
+            "range": "± 0.18093528568668316"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 245.1744794845581,
+            "unit": "ns",
+            "range": "± 1.276199778105435"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 427.99036343892413,
+            "unit": "ns",
+            "range": "± 1.1277789778831897"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2296.7471313476562,
+            "unit": "ns",
+            "range": "± 12.19757810112574"
           }
         ]
       }
