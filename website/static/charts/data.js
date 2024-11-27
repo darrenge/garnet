@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732667974537,
+  "lastUpdate": 1732667975954,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -20358,6 +20358,48 @@ window.BENCHMARK_DATA = {
             "value": 1711.2930489948817,
             "unit": "ns",
             "range": "± 10.872101427242907"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "1d0906dc0cbb950a07f285b743b81eb877d63a6e",
+          "message": "Cleaned up comments, spacing and debug messages",
+          "timestamp": "2024-11-26T16:36:24-08:00",
+          "tree_id": "26daa6da98ed0b203a4b1d3a4efe62cbf79463ba",
+          "url": "https://github.com/darrenge/garnet/commit/1d0906dc0cbb950a07f285b743b81eb877d63a6e"
+        },
+        "date": 1732667975523,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1748.1416591644288,
+            "unit": "ns",
+            "range": "± 11.537508741231543"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1747.9381154378254,
+            "unit": "ns",
+            "range": "± 18.627206541856552"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1746.724423090617,
+            "unit": "ns",
+            "range": "± 14.753703746404396"
           }
         ]
       }
