@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1732667984301,
+  "lastUpdate": 1732667994306,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -13834,6 +13834,54 @@ window.BENCHMARK_DATA = {
             "value": 31717.05322672526,
             "unit": "ns",
             "range": "± 268.95642326455373"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "1d0906dc0cbb950a07f285b743b81eb877d63a6e",
+          "message": "Cleaned up comments, spacing and debug messages",
+          "timestamp": "2024-11-26T16:36:24-08:00",
+          "tree_id": "26daa6da98ed0b203a4b1d3a4efe62cbf79463ba",
+          "url": "https://github.com/darrenge/garnet/commit/1d0906dc0cbb950a07f285b743b81eb877d63a6e"
+        },
+        "date": 1732667992617,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 182.79273816255423,
+            "unit": "ns",
+            "range": "± 0.49291242409689856"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 297.3510241508484,
+            "unit": "ns",
+            "range": "± 2.688275494936913"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 620.8499280929566,
+            "unit": "ns",
+            "range": "± 4.606959733308393"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2927.868619028727,
+            "unit": "ns",
+            "range": "± 12.943591598050594"
           }
         ]
       }
