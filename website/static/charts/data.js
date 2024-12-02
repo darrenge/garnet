@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733179882798,
+  "lastUpdate": 1733179885752,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -24828,6 +24828,48 @@ window.BENCHMARK_DATA = {
             "value": 1893.9189638410296,
             "unit": "ns",
             "range": "± 5.122623052580199"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "dfa62d26f8a3908bb9f6dd0544b69b77918869af",
+          "message": "Merge branch 'main' of https://github.com/darrenge/garnet",
+          "timestamp": "2024-12-02T14:45:55-08:00",
+          "tree_id": "79aa4c86d16777bb5e884c695b47f1a5bfcfca4e",
+          "url": "https://github.com/darrenge/garnet/commit/dfa62d26f8a3908bb9f6dd0544b69b77918869af"
+        },
+        "date": 1733179884455,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1832.6301438467842,
+            "unit": "ns",
+            "range": "± 2.4451730498850845"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1799.6050698416573,
+            "unit": "ns",
+            "range": "± 3.321600816565723"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1799.0057400294713,
+            "unit": "ns",
+            "range": "± 3.1923342401103696"
           }
         ]
       }
