@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733528798569,
+  "lastUpdate": 1733528800949,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -19538,6 +19538,54 @@ window.BENCHMARK_DATA = {
             "value": 1799.268128321721,
             "unit": "ns",
             "range": "± 2.732697186082265"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "c6950bbfb289889e6352389e57f47496901013ef",
+          "message": "Put ref in other task and not the charts",
+          "timestamp": "2024-12-06T15:41:43-08:00",
+          "tree_id": "9015d78555624002defd083de78d6904f00c5c61",
+          "url": "https://github.com/darrenge/garnet/commit/c6950bbfb289889e6352389e57f47496901013ef"
+        },
+        "date": 1733528789262,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 34979.76597377232,
+            "unit": "ns",
+            "range": "± 54.71954862589834"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37944.67529296875,
+            "unit": "ns",
+            "range": "± 37.64056938371778"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30731.794084821428,
+            "unit": "ns",
+            "range": "± 72.35213072170686"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 30110.120500837053,
+            "unit": "ns",
+            "range": "± 41.37334793996719"
           }
         ]
       }
