@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733526410492,
+  "lastUpdate": 1733526954333,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -17540,6 +17540,54 @@ window.BENCHMARK_DATA = {
             "value": 118141.50739397321,
             "unit": "ns",
             "range": "± 413.4652583452469"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "d14ca37c765799021a3e84fcc669ab56f57e4892",
+          "message": "Trying to add specific ref in the check out",
+          "timestamp": "2024-12-06T15:12:45-08:00",
+          "tree_id": "5fad5a3cd52db389fe023a6a7bb733d3b8469bbe",
+          "url": "https://github.com/darrenge/garnet/commit/d14ca37c765799021a3e84fcc669ab56f57e4892"
+        },
+        "date": 1733526951935,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36906.7585164388,
+            "unit": "ns",
+            "range": "± 526.6081966344956"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37279.5460164388,
+            "unit": "ns",
+            "range": "± 485.4633787006335"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32408.211051432292,
+            "unit": "ns",
+            "range": "± 189.3118432954355"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 32089.514864095054,
+            "unit": "ns",
+            "range": "± 276.974932571535"
           }
         ]
       }
