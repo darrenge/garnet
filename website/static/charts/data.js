@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733525808339,
+  "lastUpdate": 1733525810725,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -32960,6 +32960,54 @@ window.BENCHMARK_DATA = {
             "value": 2304.9816131591797,
             "unit": "ns",
             "range": "± 6.037331090998099"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9f43c15bbe42c350f93bd7494d2918974f1963b1",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-12-06T14:51:14-08:00",
+          "tree_id": "105fedcb26ed53d2be1065f2e25a09e752a94e54",
+          "url": "https://github.com/darrenge/garnet/commit/9f43c15bbe42c350f93bd7494d2918974f1963b1"
+        },
+        "date": 1733525807326,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 118.87125333150227,
+            "unit": "ns",
+            "range": "± 0.43867871228634525"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 198.06176934923445,
+            "unit": "ns",
+            "range": "± 1.1735653678953082"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 370.28467814127606,
+            "unit": "ns",
+            "range": "± 0.6112391771312378"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2182.3178100585938,
+            "unit": "ns",
+            "range": "± 9.78325938575814"
           }
         ]
       }
