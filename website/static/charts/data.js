@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733526155271,
+  "lastUpdate": 1733526158537,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -34436,6 +34436,54 @@ window.BENCHMARK_DATA = {
             "value": 2182.3178100585938,
             "unit": "ns",
             "range": "± 9.78325938575814"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "e11a1a42d5d0a4448315ffcbd4048723235530be",
+          "message": "trying to add \"ref\" on commit compare",
+          "timestamp": "2024-12-06T14:54:58-08:00",
+          "tree_id": "d5d340f995b917f9fe089b8ba3e23123da392cf4",
+          "url": "https://github.com/darrenge/garnet/commit/e11a1a42d5d0a4448315ffcbd4048723235530be"
+        },
+        "date": 1733526157141,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 119.3005879720052,
+            "unit": "ns",
+            "range": "± 0.5166898027456348"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 193.66517407553536,
+            "unit": "ns",
+            "range": "± 0.5749010436133267"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 373.88087681361606,
+            "unit": "ns",
+            "range": "± 0.9110380344035331"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2187.33515058245,
+            "unit": "ns",
+            "range": "± 8.623719250991982"
           }
         ]
       }
