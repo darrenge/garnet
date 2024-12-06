@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733527664505,
+  "lastUpdate": 1733527673666,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -18140,6 +18140,54 @@ window.BENCHMARK_DATA = {
             "value": 29543.535940987724,
             "unit": "ns",
             "range": "± 20.32673398424464"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "607222ae0d077886ea469a720865ec9cc56a77fe",
+          "message": "Updated to more recent commit id",
+          "timestamp": "2024-12-06T15:23:10-08:00",
+          "tree_id": "5fa1509916600cb3263633e8f93cc205684b5054",
+          "url": "https://github.com/darrenge/garnet/commit/607222ae0d077886ea469a720865ec9cc56a77fe"
+        },
+        "date": 1733527666115,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 119.06392574310303,
+            "unit": "ns",
+            "range": "± 0.2996869714441865"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 202.728533744812,
+            "unit": "ns",
+            "range": "± 0.8815580262875994"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 337.2735704694475,
+            "unit": "ns",
+            "range": "± 1.3365137342020423"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2244.863646371024,
+            "unit": "ns",
+            "range": "± 11.380393996219967"
           }
         ]
       }
