@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733180959567,
+  "lastUpdate": 1733525653103,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -16268,6 +16268,54 @@ window.BENCHMARK_DATA = {
             "value": 124020.32307942708,
             "unit": "ns",
             "range": "± 381.0840366585203"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9f43c15bbe42c350f93bd7494d2918974f1963b1",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-12-06T14:51:14-08:00",
+          "tree_id": "105fedcb26ed53d2be1065f2e25a09e752a94e54",
+          "url": "https://github.com/darrenge/garnet/commit/9f43c15bbe42c350f93bd7494d2918974f1963b1"
+        },
+        "date": 1733525650596,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36991.17411702474,
+            "unit": "ns",
+            "range": "± 269.12635041927535"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37404.56042480469,
+            "unit": "ns",
+            "range": "± 54.78045901410741"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31694.562772310695,
+            "unit": "ns",
+            "range": "± 106.00328793881889"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 32170.99559326172,
+            "unit": "ns",
+            "range": "± 317.89390410171484"
           }
         ]
       }
