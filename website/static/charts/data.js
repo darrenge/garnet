@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733529096160,
+  "lastUpdate": 1733529109889,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -20078,6 +20078,54 @@ window.BENCHMARK_DATA = {
             "value": 1679.462991441999,
             "unit": "ns",
             "range": "± 4.444539561203124"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "6774c687c3cc2ffa8a196354b7f55bad7e1a71a4",
+          "message": "Put it back to the proper task",
+          "timestamp": "2024-12-06T15:46:12-08:00",
+          "tree_id": "f279d93f41b1f5a1103380d43bb893c1466a431d",
+          "url": "https://github.com/darrenge/garnet/commit/6774c687c3cc2ffa8a196354b7f55bad7e1a71a4"
+        },
+        "date": 1733529093427,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 120.54275830586751,
+            "unit": "ns",
+            "range": "± 0.34486520671427406"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 202.924526654757,
+            "unit": "ns",
+            "range": "± 1.5753727705095406"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 406.26768747965497,
+            "unit": "ns",
+            "range": "± 0.8134785283787606"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2271.5086110432944,
+            "unit": "ns",
+            "range": "± 7.9595344345995915"
           }
         ]
       }
