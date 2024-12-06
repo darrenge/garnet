@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733527134161,
+  "lastUpdate": 1733527566015,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -17954,6 +17954,54 @@ window.BENCHMARK_DATA = {
             "value": 165170.6802106585,
             "unit": "ns",
             "range": "± 1373.9789339342742"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "607222ae0d077886ea469a720865ec9cc56a77fe",
+          "message": "Updated to more recent commit id",
+          "timestamp": "2024-12-06T15:23:10-08:00",
+          "tree_id": "5fa1509916600cb3263633e8f93cc205684b5054",
+          "url": "https://github.com/darrenge/garnet/commit/607222ae0d077886ea469a720865ec9cc56a77fe"
+        },
+        "date": 1733527564263,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36465.8224995931,
+            "unit": "ns",
+            "range": "± 310.05673502002435"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37058.31401570638,
+            "unit": "ns",
+            "range": "± 51.1395671722644"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32029.658400472006,
+            "unit": "ns",
+            "range": "± 378.08196600929926"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31257.51447753906,
+            "unit": "ns",
+            "range": "± 335.54788860568044"
           }
         ]
       }
