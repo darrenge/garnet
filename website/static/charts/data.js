@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733527080965,
+  "lastUpdate": 1733527084059,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -35468,6 +35468,54 @@ window.BENCHMARK_DATA = {
             "value": 2187.33515058245,
             "unit": "ns",
             "range": "± 8.623719250991982"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "d14ca37c765799021a3e84fcc669ab56f57e4892",
+          "message": "Trying to add specific ref in the check out",
+          "timestamp": "2024-12-06T15:12:45-08:00",
+          "tree_id": "5fad5a3cd52db389fe023a6a7bb733d3b8469bbe",
+          "url": "https://github.com/darrenge/garnet/commit/d14ca37c765799021a3e84fcc669ab56f57e4892"
+        },
+        "date": 1733527082681,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 119.60922990526471,
+            "unit": "ns",
+            "range": "± 0.1559639001690233"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 197.91516462961832,
+            "unit": "ns",
+            "range": "± 0.8247320433193851"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 353.40183121817455,
+            "unit": "ns",
+            "range": "± 1.1430624685276265"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2277.2852579752603,
+            "unit": "ns",
+            "range": "± 6.385741897907511"
           }
         ]
       }
