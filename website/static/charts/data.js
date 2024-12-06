@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733528682962,
+  "lastUpdate": 1733528694334,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -19316,6 +19316,54 @@ window.BENCHMARK_DATA = {
             "value": 1745.7804266611736,
             "unit": "ns",
             "range": "± 17.22480585165242"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "c6950bbfb289889e6352389e57f47496901013ef",
+          "message": "Put ref in other task and not the charts",
+          "timestamp": "2024-12-06T15:41:43-08:00",
+          "tree_id": "9015d78555624002defd083de78d6904f00c5c61",
+          "url": "https://github.com/darrenge/garnet/commit/c6950bbfb289889e6352389e57f47496901013ef"
+        },
+        "date": 1733528692374,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 175.30388978549414,
+            "unit": "ns",
+            "range": "± 1.0283135737204445"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 318.912815952301,
+            "unit": "ns",
+            "range": "± 2.5520038916689773"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 598.9003045399984,
+            "unit": "ns",
+            "range": "± 4.6852259237872245"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2967.8160486857096,
+            "unit": "ns",
+            "range": "± 27.992015454166243"
           }
         ]
       }
