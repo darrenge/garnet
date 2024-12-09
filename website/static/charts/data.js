@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733780502867,
+  "lastUpdate": 1733780505829,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -38901,6 +38901,54 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/darrenge/garnet/commit/65b1550403f60f5e40f0146b4f239cfd97d6f81a"
         },
         "date": 1733780501530,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 34397.62268066406,
+            "unit": "ns",
+            "range": "± 45.79100606963825"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36752.97194260817,
+            "unit": "ns",
+            "range": "± 25.767018920583684"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31325.906808035714,
+            "unit": "ns",
+            "range": "± 24.671658648725217"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29862.077214167668,
+            "unit": "ns",
+            "range": "± 18.867061998913147"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "65b1550403f60f5e40f0146b4f239cfd97d6f81a",
+          "message": "Change ref commit to 43ccb9179e3c0605133527bc74352c2e783d96a9",
+          "timestamp": "2024-12-09T13:35:16-08:00",
+          "tree_id": "37c9d5c8ca52b6c599e9ccc3e639b5b61c94807e",
+          "url": "https://github.com/darrenge/garnet/commit/65b1550403f60f5e40f0146b4f239cfd97d6f81a"
+        },
+        "date": 1733780504523,
         "tool": "benchmarkdotnet",
         "benches": [
           {
