@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733778054645,
+  "lastUpdate": 1733778057740,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -49580,6 +49580,54 @@ window.BENCHMARK_DATA = {
             "value": 2284.2270151774087,
             "unit": "ns",
             "range": "± 7.225402191028072"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "a3b63235d5440f23fbac41156b34f19f28043843",
+          "message": "REmoving task so just now one with Ref",
+          "timestamp": "2024-12-09T12:55:34-08:00",
+          "tree_id": "3930aaa41aa9ae0aaa8a6140d8ff96dde8e704e2",
+          "url": "https://github.com/darrenge/garnet/commit/a3b63235d5440f23fbac41156b34f19f28043843"
+        },
+        "date": 1733778056415,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 119.66786086559296,
+            "unit": "ns",
+            "range": "± 1.8728863319693239"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 195.9025052877573,
+            "unit": "ns",
+            "range": "± 0.4982002705628064"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 419.1110406603132,
+            "unit": "ns",
+            "range": "± 1.4712247671213816"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2227.6129041399277,
+            "unit": "ns",
+            "range": "± 7.289424728086298"
           }
         ]
       }
