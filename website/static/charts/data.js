@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733781890663,
+  "lastUpdate": 1733781892116,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -33996,6 +33996,52 @@ window.BENCHMARK_DATA = {
             "value": 31795.383227539063,
             "unit": "ns",
             "range": "± 364.8378694132121"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Badrish Chandramouli",
+            "username": "badrishc",
+            "email": "badrishc@microsoft.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "43ccb9179e3c0605133527bc74352c2e783d96a9",
+          "message": "Fix Helm chart yml (#856)\n\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml",
+          "timestamp": "2024-12-06T19:12:53Z",
+          "url": "https://github.com/darrenge/garnet/commit/43ccb9179e3c0605133527bc74352c2e783d96a9"
+        },
+        "date": 1733781889904,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36652.77268473307,
+            "unit": "ns",
+            "range": "± 351.5574493797215"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37742.27292683919,
+            "unit": "ns",
+            "range": "± 427.57570561128665"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32304.388248697916,
+            "unit": "ns",
+            "range": "± 225.65787620873996"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31766.479113769532,
+            "unit": "ns",
+            "range": "± 297.6499267833342"
           }
         ]
       }
