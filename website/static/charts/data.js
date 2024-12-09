@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733774092998,
+  "lastUpdate": 1733774094705,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -31800,6 +31800,48 @@ window.BENCHMARK_DATA = {
             "value": 1745.0324239095053,
             "unit": "ns",
             "range": "± 16.43434217677454"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "0af7ce349d92d5504d8c039740e89d360a608bb0",
+          "message": "Putting chart stuff back to see if get previous in there properly",
+          "timestamp": "2024-12-09T11:50:44-08:00",
+          "tree_id": "972333a2d6a315155d2d43d11474317dcd1ddfbe",
+          "url": "https://github.com/darrenge/garnet/commit/0af7ce349d92d5504d8c039740e89d360a608bb0"
+        },
+        "date": 1733774094294,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1715.9542338053386,
+            "unit": "ns",
+            "range": "± 11.659528057460083"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1739.7074586232504,
+            "unit": "ns",
+            "range": "± 10.986523543975421"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1752.294402694702,
+            "unit": "ns",
+            "range": "± 26.19521319270855"
           }
         ]
       }
