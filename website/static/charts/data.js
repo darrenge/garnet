@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733772867719,
+  "lastUpdate": 1733772869751,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -43592,6 +43592,54 @@ window.BENCHMARK_DATA = {
             "value": 2968.872816721598,
             "unit": "ns",
             "range": "± 28.802896857826248"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "9d169e9a7ef2c4348a74799f9c359364635b26df",
+          "message": "Removed ref: to see if that works",
+          "timestamp": "2024-12-09T11:31:00-08:00",
+          "tree_id": "38bc1012c3ad7f6278ff4728b0b5962d13b0b004",
+          "url": "https://github.com/darrenge/garnet/commit/9d169e9a7ef2c4348a74799f9c359364635b26df"
+        },
+        "date": 1733772869104,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 187.72140051637376,
+            "unit": "ns",
+            "range": "± 1.1123377612531227"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 329.0048223563603,
+            "unit": "ns",
+            "range": "± 1.9115529972976197"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 591.8975263323102,
+            "unit": "ns",
+            "range": "± 4.2487110197235"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2947.401479593913,
+            "unit": "ns",
+            "range": "± 21.348854031170138"
           }
         ]
       }
