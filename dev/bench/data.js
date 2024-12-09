@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733773787542,
+  "lastUpdate": 1733773795515,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Cluster.ClusterMigrate (ubuntu-latest  net8.0 Release)": [
@@ -322,6 +322,56 @@ window.BENCHMARK_DATA = {
             "value": 1890.069307599749,
             "unit": "ns",
             "range": "± 1.814895906049997"
+          }
+        ]
+      }
+    ],
+    "Cluster.ClusterMigrate (windows-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "d69fdc20b7a265342db5c7a2e892246ff2f6126a",
+          "message": "Adding the \"previous\" task",
+          "timestamp": "2024-12-09T11:44:20-08:00",
+          "tree_id": "9640b41136f8106657d52a8fdd43c14111f448d0",
+          "url": "https://github.com/darrenge/garnet/commit/d69fdc20b7a265342db5c7a2e892246ff2f6126a"
+        },
+        "date": 1733773792266,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35574.676513671875,
+            "unit": "ns",
+            "range": "± 42.998108520980786"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36989.3809000651,
+            "unit": "ns",
+            "range": "± 58.90598861472037"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30593.785682091348,
+            "unit": "ns",
+            "range": "± 14.035414919001923"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 30204.55998011998,
+            "unit": "ns",
+            "range": "± 13.851274451849026"
           }
         ]
       }
