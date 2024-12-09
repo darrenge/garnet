@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733778034912,
+  "lastUpdate": 1733778038079,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -36926,6 +36926,54 @@ window.BENCHMARK_DATA = {
             "value": 29557.6668372521,
             "unit": "ns",
             "range": "± 27.83998300925814"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "a3b63235d5440f23fbac41156b34f19f28043843",
+          "message": "REmoving task so just now one with Ref",
+          "timestamp": "2024-12-09T12:55:34-08:00",
+          "tree_id": "3930aaa41aa9ae0aaa8a6140d8ff96dde8e704e2",
+          "url": "https://github.com/darrenge/garnet/commit/a3b63235d5440f23fbac41156b34f19f28043843"
+        },
+        "date": 1733778036621,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35455.404428335336,
+            "unit": "ns",
+            "range": "± 140.0367632352029"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37732.274576822914,
+            "unit": "ns",
+            "range": "± 45.77536113493305"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31098.927089146204,
+            "unit": "ns",
+            "range": "± 18.415914721515275"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29938.158475435695,
+            "unit": "ns",
+            "range": "± 35.241226070533536"
           }
         ]
       }
