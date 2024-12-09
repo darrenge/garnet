@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733788186667,
+  "lastUpdate": 1733788190121,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -27886,6 +27886,54 @@ window.BENCHMARK_DATA = {
             "value": 141427.32805524554,
             "unit": "ns",
             "range": "± 151.40876804178228"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "a0de579cd6fccf08fedb7f75b8003ddd1dc1fa57",
+          "message": "Adeded   workflow_dispatch: to the deploy website yml",
+          "timestamp": "2024-12-09T15:42:08-08:00",
+          "tree_id": "edb068c12fa3657def2b2ff3041f10f8e03ce7e0",
+          "url": "https://github.com/darrenge/garnet/commit/a0de579cd6fccf08fedb7f75b8003ddd1dc1fa57"
+        },
+        "date": 1733788171272,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 34955.316162109375,
+            "unit": "ns",
+            "range": "± 38.56561767310701"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36147.78606708233,
+            "unit": "ns",
+            "range": "± 52.74291035099826"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30870.542805989582,
+            "unit": "ns",
+            "range": "± 26.39181102133347"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29476.88446044922,
+            "unit": "ns",
+            "range": "± 95.25215639731599"
           }
         ]
       }
