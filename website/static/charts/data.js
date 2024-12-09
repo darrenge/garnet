@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733774353839,
+  "lastUpdate": 1733774357426,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -39981,6 +39981,90 @@ window.BENCHMARK_DATA = {
           "url": "https://github.com/darrenge/garnet/commit/0af7ce349d92d5504d8c039740e89d360a608bb0"
         },
         "date": 1733774352130,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: DSV)",
+            "value": 16264.520467122396,
+            "unit": "ns",
+            "range": "± 40.55719155420748"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: DSV)",
+            "value": 15090.017445882162,
+            "unit": "ns",
+            "range": "± 13.37083536874242"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: DSV)",
+            "value": 14354.993438720703,
+            "unit": "ns",
+            "range": "± 18.858676922468295"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: DSV)",
+            "value": 12799.37262901893,
+            "unit": "ns",
+            "range": "± 47.50399629589855"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: DSV)",
+            "value": 124612.32561383929,
+            "unit": "ns",
+            "range": "± 221.4796156820755"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: None)",
+            "value": 23321.866716657365,
+            "unit": "ns",
+            "range": "± 76.58177826422394"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: None)",
+            "value": 18445.32012939453,
+            "unit": "ns",
+            "range": "± 28.879594805820993"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: None)",
+            "value": 15459.188725398137,
+            "unit": "ns",
+            "range": "± 11.120149078619932"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: None)",
+            "value": 14848.971666608539,
+            "unit": "ns",
+            "range": "± 11.827019593938335"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: None)",
+            "value": 142562.51032902644,
+            "unit": "ns",
+            "range": "± 132.12498810085165"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "0af7ce349d92d5504d8c039740e89d360a608bb0",
+          "message": "Putting chart stuff back to see if get previous in there properly",
+          "timestamp": "2024-12-09T11:50:44-08:00",
+          "tree_id": "972333a2d6a315155d2d43d11474317dcd1ddfbe",
+          "url": "https://github.com/darrenge/garnet/commit/0af7ce349d92d5504d8c039740e89d360a608bb0"
+        },
+        "date": 1733774355741,
         "tool": "benchmarkdotnet",
         "benches": [
           {
