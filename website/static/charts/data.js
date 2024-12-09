@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733781892116,
+  "lastUpdate": 1733781893556,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -35532,6 +35532,46 @@ window.BENCHMARK_DATA = {
             "value": 1747.3257058461506,
             "unit": "ns",
             "range": "± 13.906530528394674"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Badrish Chandramouli",
+            "username": "badrishc",
+            "email": "badrishc@microsoft.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "43ccb9179e3c0605133527bc74352c2e783d96a9",
+          "message": "Fix Helm chart yml (#856)\n\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml",
+          "timestamp": "2024-12-06T19:12:53Z",
+          "url": "https://github.com/darrenge/garnet/commit/43ccb9179e3c0605133527bc74352c2e783d96a9"
+        },
+        "date": 1733781891907,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1779.5574655532837,
+            "unit": "ns",
+            "range": "± 16.755712929111606"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1761.639777501424,
+            "unit": "ns",
+            "range": "± 16.90147161207196"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1761.3406321207683,
+            "unit": "ns",
+            "range": "± 14.816458751802491"
           }
         ]
       }
