@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733782122284,
+  "lastUpdate": 1733782126354,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -45170,6 +45170,88 @@ window.BENCHMARK_DATA = {
             "value": 136777.0489032452,
             "unit": "ns",
             "range": "± 279.65174548770545"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Badrish Chandramouli",
+            "username": "badrishc",
+            "email": "badrishc@microsoft.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "43ccb9179e3c0605133527bc74352c2e783d96a9",
+          "message": "Fix Helm chart yml (#856)\n\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml",
+          "timestamp": "2024-12-06T19:12:53Z",
+          "url": "https://github.com/darrenge/garnet/commit/43ccb9179e3c0605133527bc74352c2e783d96a9"
+        },
+        "date": 1733782124691,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: DSV)",
+            "value": 16029.144756610576,
+            "unit": "ns",
+            "range": "± 17.053410606930203"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: DSV)",
+            "value": 15383.215942382812,
+            "unit": "ns",
+            "range": "± 27.353614941047656"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: DSV)",
+            "value": 14440.490417480469,
+            "unit": "ns",
+            "range": "± 44.33612107817476"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: DSV)",
+            "value": 12974.684361049107,
+            "unit": "ns",
+            "range": "± 15.915936389988161"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: DSV)",
+            "value": 128166.46728515625,
+            "unit": "ns",
+            "range": "± 148.11602069997684"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Get(Params: None)",
+            "value": 20080.466989370492,
+            "unit": "ns",
+            "range": "± 15.715520705700913"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.Set(Params: None)",
+            "value": 17877.819119966945,
+            "unit": "ns",
+            "range": "± 182.80725364680603"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MGet(Params: None)",
+            "value": 15654.696655273438,
+            "unit": "ns",
+            "range": "± 30.708011008094804"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.MSet(Params: None)",
+            "value": 14290.52233014788,
+            "unit": "ns",
+            "range": "± 10.732353391202745"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterOperations.CTXNSET(Params: None)",
+            "value": 140616.93209134616,
+            "unit": "ns",
+            "range": "± 280.49047657172946"
           }
         ]
       }
