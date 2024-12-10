@@ -84,7 +84,7 @@ jobs:
           alert-threshold: '101%' 
           comment-on-alert: false
           fail-on-alert: true
-          alert-comment-cc-users: '@darrenge'
+          alert-comment-cc-users: '@darrenge @badrishc'
           summary-always: false
           gh-pages-branch: 'continuousbenchmark'
           benchmark-data-dir-path: 'website/static/charts'
