@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733789944686,
+  "lastUpdate": 1733789948385,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -42330,6 +42330,54 @@ window.BENCHMARK_DATA = {
             "value": 29476.88446044922,
             "unit": "ns",
             "range": "± 95.25215639731599"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "793b09489442f14db5cb979934479081b1dc8029",
+          "message": "Testing alert threshold - so change threshold from 150 to 101",
+          "timestamp": "2024-12-09T16:13:37-08:00",
+          "tree_id": "765406e192a923bdd3dd8febb3a9c9decd8d2546",
+          "url": "https://github.com/darrenge/garnet/commit/793b09489442f14db5cb979934479081b1dc8029"
+        },
+        "date": 1733789946745,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35280.78177315848,
+            "unit": "ns",
+            "range": "± 36.608151808810945"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 35524.36785016741,
+            "unit": "ns",
+            "range": "± 28.287323826013743"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31427.632649739582,
+            "unit": "ns",
+            "range": "± 22.435656607625006"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29531.754629952567,
+            "unit": "ns",
+            "range": "± 44.5407926039261"
           }
         ]
       }
