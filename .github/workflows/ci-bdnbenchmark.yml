@@ -84,7 +84,6 @@ jobs:
           alert-threshold: '101%' 
           comment-on-alert: true
           fail-on-alert: true
-          alert-comment-cc-users: '@darrenge'
           summary-always: false
           gh-pages-branch: 'continuousbenchmark'
           benchmark-data-dir-path: 'website/static/charts'
@@ -103,4 +102,3 @@ jobs:
           benchmark-data-dir-path: 'website/static/charts'
           auto-push: true
           max-items-in-chart: 50
-          ref: 43ccb9179e3c0605133527bc74352c2e783d96a9
