@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733854032143,
+  "lastUpdate": 1733854060266,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -33486,6 +33486,54 @@ window.BENCHMARK_DATA = {
             "value": 156857.26759440106,
             "unit": "ns",
             "range": "± 1539.6354014249596"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "070d5d711abbbd866b3200aa35d9c7c7dae96e83",
+          "message": "Trying multiple users",
+          "timestamp": "2024-12-10T10:01:03-08:00",
+          "tree_id": "b53ca20c26476ffeecab383073f7d6229838e9cb",
+          "url": "https://github.com/darrenge/garnet/commit/070d5d711abbbd866b3200aa35d9c7c7dae96e83"
+        },
+        "date": 1733854041887,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36193.25960599459,
+            "unit": "ns",
+            "range": "± 504.9084496328193"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36321.84834798177,
+            "unit": "ns",
+            "range": "± 31.069127199149747"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31232.862345377605,
+            "unit": "ns",
+            "range": "± 37.41709604383489"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29874.96571858724,
+            "unit": "ns",
+            "range": "± 29.817042323499997"
           }
         ]
       }
