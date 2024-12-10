@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733854651528,
+  "lastUpdate": 1733854655110,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -51684,6 +51684,48 @@ window.BENCHMARK_DATA = {
             "value": 1859.5864804585774,
             "unit": "ns",
             "range": "± 11.392866850732307"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "9796cfa514f1f635c0bd9985195391d5360e8895",
+          "message": "One more try ... separate with semi colon",
+          "timestamp": "2024-12-10T10:12:08-08:00",
+          "tree_id": "b166b1ef750d0c80e34e0e627891b1a57cc0bcec",
+          "url": "https://github.com/darrenge/garnet/commit/9796cfa514f1f635c0bd9985195391d5360e8895"
+        },
+        "date": 1733854653405,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1830.136775970459,
+            "unit": "ns",
+            "range": "± 2.479146164149084"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1805.6004251752581,
+            "unit": "ns",
+            "range": "± 2.3466221924508024"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1800.030163356236,
+            "unit": "ns",
+            "range": "± 3.6563199445323025"
           }
         ]
       }
