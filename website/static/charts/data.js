@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733857263682,
+  "lastUpdate": 1733857331350,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -35760,6 +35760,54 @@ window.BENCHMARK_DATA = {
             "value": 2957.4594432285853,
             "unit": "ns",
             "range": "± 14.108883109580688"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "e27b89c68422e21430bf6796a09e7bf67f215647",
+          "message": "Turning alert back on",
+          "timestamp": "2024-12-10T10:57:38-08:00",
+          "tree_id": "eebf2cd697ef400117e5e3e4deca43567e45215c",
+          "url": "https://github.com/darrenge/garnet/commit/e27b89c68422e21430bf6796a09e7bf67f215647"
+        },
+        "date": 1733857320620,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35146.94039481027,
+            "unit": "ns",
+            "range": "± 62.696211282057874"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36538.07772122897,
+            "unit": "ns",
+            "range": "± 104.86845989890277"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30724.973551432293,
+            "unit": "ns",
+            "range": "± 15.284369390304928"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29637.53880092076,
+            "unit": "ns",
+            "range": "± 84.76933208003173"
           }
         ]
       }
