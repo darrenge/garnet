@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733790754099,
+  "lastUpdate": 1733790758107,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -58570,6 +58570,52 @@ window.BENCHMARK_DATA = {
             "value": 2343.435446421305,
             "unit": "ns",
             "range": "± 3.7633665947943618"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Badrish Chandramouli",
+            "username": "badrishc",
+            "email": "badrishc@microsoft.com"
+          },
+          "committer": {
+            "name": "GitHub",
+            "username": "web-flow",
+            "email": "noreply@github.com"
+          },
+          "id": "43ccb9179e3c0605133527bc74352c2e783d96a9",
+          "message": "Fix Helm chart yml (#856)\n\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml\r\n\r\n* Update helm-chart.yml",
+          "timestamp": "2024-12-06T19:12:53Z",
+          "url": "https://github.com/darrenge/garnet/commit/43ccb9179e3c0605133527bc74352c2e783d96a9"
+        },
+        "date": 1733790756522,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 121.49109106797438,
+            "unit": "ns",
+            "range": "± 0.715483127409149"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 196.3331381479899,
+            "unit": "ns",
+            "range": "± 0.6536925129898068"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 354.39109802246094,
+            "unit": "ns",
+            "range": "± 1.2408504184977414"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2387.5869750976562,
+            "unit": "ns",
+            "range": "± 7.439818976613814"
           }
         ]
       }
