@@ -90,7 +90,7 @@ jobs:
           auto-push: true
 
       # Run `github-action-benchmark` action for the Continuous Benchmarking Charts (https://microsoft.github.io/garnet/charts/)
-      - name: Store specific commit to be used as previous in summary
+      - name: Store benchmark result for charts
         uses: benchmark-action/github-action-benchmark@v1
         with:
           name: ${{matrix.test}} (${{matrix.os}}  ${{matrix.framework}} ${{matrix.configuration}})
