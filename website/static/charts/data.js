@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733855579357,
+  "lastUpdate": 1733855582758,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -50764,6 +50764,54 @@ window.BENCHMARK_DATA = {
             "value": 30255.89059682993,
             "unit": "ns",
             "range": "± 34.057238111900894"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "c7a5204f0352707800d715a300357c57b6640464",
+          "message": "Just darrenge and not list",
+          "timestamp": "2024-12-10T10:27:25-08:00",
+          "tree_id": "f2d0d0642378a7fc8a1411efba600067097271a1",
+          "url": "https://github.com/darrenge/garnet/commit/c7a5204f0352707800d715a300357c57b6640464"
+        },
+        "date": 1733855581422,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 34676.60173688616,
+            "unit": "ns",
+            "range": "± 34.70764629445112"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36471.57639723558,
+            "unit": "ns",
+            "range": "± 47.8593849393695"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30874.00381905692,
+            "unit": "ns",
+            "range": "± 29.820230566093862"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29684.454345703125,
+            "unit": "ns",
+            "range": "± 23.74058822960228"
           }
         ]
       }
