@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733791345662,
+  "lastUpdate": 1733791350563,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -29594,6 +29594,54 @@ window.BENCHMARK_DATA = {
             "value": 2238.418858846029,
             "unit": "ns",
             "range": "± 5.958813559149512"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "527c040f4d863a26569c0a40df831eee803e8486",
+          "message": "Removing the CC part to make sure the user gets the email",
+          "timestamp": "2024-12-09T16:36:48-08:00",
+          "tree_id": "a2c3b1d4d75d657021c588bbdaac9469868e255d",
+          "url": "https://github.com/darrenge/garnet/commit/527c040f4d863a26569c0a40df831eee803e8486"
+        },
+        "date": 1733791333618,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35385.182291666664,
+            "unit": "ns",
+            "range": "± 140.28955927588314"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37577.57001604353,
+            "unit": "ns",
+            "range": "± 57.73638438939155"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 30726.28455528846,
+            "unit": "ns",
+            "range": "± 39.873918522971344"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 30387.759634164664,
+            "unit": "ns",
+            "range": "± 41.791951876319374"
           }
         ]
       }
