@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733790641287,
+  "lastUpdate": 1733790656631,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -28712,6 +28712,52 @@ window.BENCHMARK_DATA = {
             "value": 31242.943272517277,
             "unit": "ns",
             "range": "± 39.18938349492152"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "793b09489442f14db5cb979934479081b1dc8029",
+          "message": "Testing alert threshold - so change threshold from 150 to 101",
+          "timestamp": "2024-12-10T00:13:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/793b09489442f14db5cb979934479081b1dc8029"
+        },
+        "date": 1733790653949,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 179.81074701944988,
+            "unit": "ns",
+            "range": "± 1.6573588107599535"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 309.27342062730054,
+            "unit": "ns",
+            "range": "± 2.3827091045641366"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 591.5362966855367,
+            "unit": "ns",
+            "range": "± 3.197857561667404"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2935.4717330932617,
+            "unit": "ns",
+            "range": "± 23.82139103332611"
           }
         ]
       }
