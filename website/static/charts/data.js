@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733792210645,
+  "lastUpdate": 1733792212796,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -37922,6 +37922,54 @@ window.BENCHMARK_DATA = {
             "value": 31232.70999654134,
             "unit": "ns",
             "range": "± 22.56683112734213"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "5e6df2aceedb90551c9ce6c3f4657552d057518d",
+          "message": "Updated comment",
+          "timestamp": "2024-12-09T16:53:31-08:00",
+          "tree_id": "1cc6c034137ce771cff6c59544a9ab11df28cafc",
+          "url": "https://github.com/darrenge/garnet/commit/5e6df2aceedb90551c9ce6c3f4657552d057518d"
+        },
+        "date": 1733792212102,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 38251.28201700847,
+            "unit": "ns",
+            "range": "± 372.6728662071862"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37523.529584612166,
+            "unit": "ns",
+            "range": "± 234.67179066392256"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31701.34407755534,
+            "unit": "ns",
+            "range": "± 275.7868422231877"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 32160.690368652344,
+            "unit": "ns",
+            "range": "± 49.352413956092406"
           }
         ]
       }
