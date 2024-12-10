@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733857833301,
+  "lastUpdate": 1733857834839,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -69126,6 +69126,54 @@ window.BENCHMARK_DATA = {
             "value": 2957.4594432285853,
             "unit": "ns",
             "range": "± 14.108883109580688"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "9e9c12f845de0f0a5b2e2d5522f793dc13da46e9",
+          "message": "Removed CC and turned off comment on alert",
+          "timestamp": "2024-12-10T11:06:51-08:00",
+          "tree_id": "c77d5317653446e25568c1d0dc7f6f2faad80c7a",
+          "url": "https://github.com/darrenge/garnet/commit/9e9c12f845de0f0a5b2e2d5522f793dc13da46e9"
+        },
+        "date": 1733857834441,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 189.54126267433168,
+            "unit": "ns",
+            "range": "± 1.1535818701551075"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 347.5458190991328,
+            "unit": "ns",
+            "range": "± 1.125563518667213"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 629.2266119639079,
+            "unit": "ns",
+            "range": "± 3.2768370427491282"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 3013.73497950236,
+            "unit": "ns",
+            "range": "± 33.47077414618073"
           }
         ]
       }
