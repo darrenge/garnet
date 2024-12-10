@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733854532464,
+  "lastUpdate": 1733854533784,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -65298,6 +65298,54 @@ window.BENCHMARK_DATA = {
             "value": 3031.0139389038086,
             "unit": "ns",
             "range": "± 25.463616657937692"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "9796cfa514f1f635c0bd9985195391d5360e8895",
+          "message": "One more try ... separate with semi colon",
+          "timestamp": "2024-12-10T10:12:08-08:00",
+          "tree_id": "b166b1ef750d0c80e34e0e627891b1a57cc0bcec",
+          "url": "https://github.com/darrenge/garnet/commit/9796cfa514f1f635c0bd9985195391d5360e8895"
+        },
+        "date": 1733854533452,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 179.12987727778298,
+            "unit": "ns",
+            "range": "± 0.30879525656832385"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 323.41426871617637,
+            "unit": "ns",
+            "range": "± 2.2218330980993453"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 611.9960174560547,
+            "unit": "ns",
+            "range": "± 4.678566604914057"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 3075.406127675374,
+            "unit": "ns",
+            "range": "± 30.419324652436426"
           }
         ]
       }
