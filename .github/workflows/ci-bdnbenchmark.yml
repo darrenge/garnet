@@ -103,4 +103,3 @@ jobs:
           benchmark-data-dir-path: 'website/static/charts'
           auto-push: true
           max-items-in-chart: 50
-          ref: 43ccb9179e3c0605133527bc74352c2e783d96a9
