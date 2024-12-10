@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733851205384,
+  "lastUpdate": 1733851206873,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -62202,6 +62202,54 @@ window.BENCHMARK_DATA = {
             "value": 2947.0997472490585,
             "unit": "ns",
             "range": "± 27.428173879491528"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "86a0b0825819c93b6986ef672d44cddf64435b7a",
+          "message": "Trying to not comment on alert but still get the alert",
+          "timestamp": "2024-12-10T09:15:47-08:00",
+          "tree_id": "c77d5317653446e25568c1d0dc7f6f2faad80c7a",
+          "url": "https://github.com/darrenge/garnet/commit/86a0b0825819c93b6986ef672d44cddf64435b7a"
+        },
+        "date": 1733851206520,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 185.8205508504595,
+            "unit": "ns",
+            "range": "± 1.0545803500020126"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 302.14340178171796,
+            "unit": "ns",
+            "range": "± 3.6563699665408174"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 608.9894322713216,
+            "unit": "ns",
+            "range": "± 4.328194033436768"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 3033.3772945404053,
+            "unit": "ns",
+            "range": "± 25.41447264601413"
           }
         ]
       }
