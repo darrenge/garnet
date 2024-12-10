@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733791342989,
+  "lastUpdate": 1733791345662,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -59880,6 +59880,54 @@ window.BENCHMARK_DATA = {
             "value": 2387.5869750976562,
             "unit": "ns",
             "range": "± 7.439818976613814"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "527c040f4d863a26569c0a40df831eee803e8486",
+          "message": "Removing the CC part to make sure the user gets the email",
+          "timestamp": "2024-12-09T16:36:48-08:00",
+          "tree_id": "a2c3b1d4d75d657021c588bbdaac9469868e255d",
+          "url": "https://github.com/darrenge/garnet/commit/527c040f4d863a26569c0a40df831eee803e8486"
+        },
+        "date": 1733791342346,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 118.88659477233887,
+            "unit": "ns",
+            "range": "± 0.3982062761663399"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 195.67225660596574,
+            "unit": "ns",
+            "range": "± 0.6201598131084299"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 390.52146911621094,
+            "unit": "ns",
+            "range": "± 1.7691011009627506"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2238.418858846029,
+            "unit": "ns",
+            "range": "± 5.958813559149512"
           }
         ]
       }
