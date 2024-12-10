@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733792605424,
+  "lastUpdate": 1733848898053,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -31190,6 +31190,46 @@ window.BENCHMARK_DATA = {
             "value": 122683.97914341518,
             "unit": "ns",
             "range": "± 519.6797667230697"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "793b09489442f14db5cb979934479081b1dc8029",
+          "message": "Testing alert threshold - so change threshold from 150 to 101",
+          "timestamp": "2024-12-10T00:13:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/793b09489442f14db5cb979934479081b1dc8029"
+        },
+        "date": 1733848895289,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1777.3085147857666,
+            "unit": "ns",
+            "range": "± 15.53023267323763"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1713.6941046396892,
+            "unit": "ns",
+            "range": "± 14.218384508247171"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1746.274310684204,
+            "unit": "ns",
+            "range": "± 17.1525592990736"
           }
         ]
       }
