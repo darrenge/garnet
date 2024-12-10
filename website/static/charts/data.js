@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733848899489,
+  "lastUpdate": 1733848901681,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -31230,6 +31230,52 @@ window.BENCHMARK_DATA = {
             "value": 1746.274310684204,
             "unit": "ns",
             "range": "± 17.1525592990736"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "committer": {
+            "name": "darrenge",
+            "username": "darrenge",
+            "email": "darrenge@microsoft.com"
+          },
+          "id": "793b09489442f14db5cb979934479081b1dc8029",
+          "message": "Testing alert threshold - so change threshold from 150 to 101",
+          "timestamp": "2024-12-10T00:13:37Z",
+          "url": "https://github.com/darrenge/garnet/commit/793b09489442f14db5cb979934479081b1dc8029"
+        },
+        "date": 1733848896684,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36548.087927246095,
+            "unit": "ns",
+            "range": "± 354.0421119863636"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37126.87967529297,
+            "unit": "ns",
+            "range": "± 358.1016866072275"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32226.197249192457,
+            "unit": "ns",
+            "range": "± 24.27221432206934"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31536.54887898763,
+            "unit": "ns",
+            "range": "± 268.315938965055"
           }
         ]
       }
