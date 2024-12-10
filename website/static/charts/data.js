@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733857951461,
+  "lastUpdate": 1733857974920,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -36618,6 +36618,102 @@ window.BENCHMARK_DATA = {
             "value": 29411.159574068508,
             "unit": "ns",
             "range": "± 18.906896030811186"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "9e9c12f845de0f0a5b2e2d5522f793dc13da46e9",
+          "message": "Removed CC and turned off comment on alert",
+          "timestamp": "2024-12-10T11:06:51-08:00",
+          "tree_id": "c77d5317653446e25568c1d0dc7f6f2faad80c7a",
+          "url": "https://github.com/darrenge/garnet/commit/9e9c12f845de0f0a5b2e2d5522f793dc13da46e9"
+        },
+        "date": 1733857971484,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: ACL)",
+            "value": 148382.9026611328,
+            "unit": "ns",
+            "range": "± 1532.7940303462487"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: ACL)",
+            "value": 129930.55982384316,
+            "unit": "ns",
+            "range": "± 483.893743533231"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: ACL)",
+            "value": 127255.61375209263,
+            "unit": "ns",
+            "range": "± 497.18261243410143"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: ACL)",
+            "value": 154584.66604817708,
+            "unit": "ns",
+            "range": "± 1898.0658417488537"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: AOF)",
+            "value": 160244.0951660156,
+            "unit": "ns",
+            "range": "± 480.16899620444826"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: AOF)",
+            "value": 145018.50785945012,
+            "unit": "ns",
+            "range": "± 535.2715145073607"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: AOF)",
+            "value": 142410.55247279577,
+            "unit": "ns",
+            "range": "± 276.1756539824416"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: AOF)",
+            "value": 164252.9272273137,
+            "unit": "ns",
+            "range": "± 1144.4128545571311"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: None)",
+            "value": 147948.03211388222,
+            "unit": "ns",
+            "range": "± 666.9254877509163"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: None)",
+            "value": 133175.8330485026,
+            "unit": "ns",
+            "range": "± 325.9361949668737"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: None)",
+            "value": 133138.4066068209,
+            "unit": "ns",
+            "range": "± 436.41526630464347"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: None)",
+            "value": 158805.21471228966,
+            "unit": "ns",
+            "range": "± 1919.8667331916492"
           }
         ]
       }
