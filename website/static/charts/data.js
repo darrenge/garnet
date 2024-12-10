@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733854897530,
+  "lastUpdate": 1733855422770,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -34350,6 +34350,54 @@ window.BENCHMARK_DATA = {
             "value": 125832.32584635417,
             "unit": "ns",
             "range": "± 731.4939613886137"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "c7a5204f0352707800d715a300357c57b6640464",
+          "message": "Just darrenge and not list",
+          "timestamp": "2024-12-10T10:27:25-08:00",
+          "tree_id": "f2d0d0642378a7fc8a1411efba600067097271a1",
+          "url": "https://github.com/darrenge/garnet/commit/c7a5204f0352707800d715a300357c57b6640464"
+        },
+        "date": 1733855419492,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36828.85653279622,
+            "unit": "ns",
+            "range": "± 329.81748173040484"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37116.18225097656,
+            "unit": "ns",
+            "range": "± 28.382573977527475"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 33267.689200265064,
+            "unit": "ns",
+            "range": "± 218.01634039260313"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31964.92010091146,
+            "unit": "ns",
+            "range": "± 287.5081669695584"
           }
         ]
       }
