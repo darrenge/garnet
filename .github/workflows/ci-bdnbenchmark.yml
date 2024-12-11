@@ -44,7 +44,7 @@ jobs:
       - name: Generate Matrix
         id: matrix
         run: |
-          matrix=$(jq -c 'keys | map({"benchmark": .})' benchmarks.json)
+          matrix=$(jq -c 'keys | map({"benchmark": .})' BDN_Benchmark_Config.json)
           echo "Matrix: $matrix"
           echo "::set-output name=matrix::$matrix"
 
