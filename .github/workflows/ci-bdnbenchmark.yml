@@ -30,23 +30,6 @@ jobs:
             - 'website/**'
           bdnbenchmark:
             - '!((*.md)|(website/**))'
-       
-  setup:
-    name: Setup Environment
-    runs-on: ubuntu-latest
- 
-    steps:
-      - name: Set up Node.js (if needed for jq)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
- 
-      - name: Generate Matrix
-        id: matrix
-        run: |
-          matrix=$(jq -c 'keys | map({"benchmark": .})' ./test/BDNPerfTests/BDN_Benchmark_Config.json)
-          echo "Matrix: $matrix"
-          echo "::set-output name=matrix::$matrix"
 
   # Job to build and run BDN.benchmark
   build-run-bdnbenchmark:
@@ -59,7 +42,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         framework: [ 'net8.0' ]
         configuration: [ 'Release' ]
-        test: [ 'Operations.BasicOperations', 'Operations.ObjectOperations', 'Cluster.ClusterMigrate', 'Cluster.ClusterOperations', 'Lua.LuaScripts' ]
+        test: [ 'Operations.BasicOperations', 'Operations.ObjectOperations', 'Cluster.ClusterMigrate', 'Cluster.ClusterOperations', 'Lua.LuaScripts', 'Operations.CustomOperations','Operations.RawStringOperations' ]
         #test: ${{ fromJson(steps.matrix.outputs.matrix) }}
     steps:
       - name: Check out code
