@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733961376467,
+  "lastUpdate": 1733961406054,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -53369,46 +53369,6 @@ window.BENCHMARK_DATA = {
             "email": "darrenge@microsoft.com"
           },
           "committer": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
-          "id": "a061a0dcbb60c78b055d067544cb775fcc6b8a96",
-          "message": "Removed results files",
-          "timestamp": "2024-10-28T20:48:39Z",
-          "url": "https://github.com/darrenge/garnet/commit/a061a0dcbb60c78b055d067544cb775fcc6b8a96"
-        },
-        "date": 1730148894608,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
-            "value": 1743.2951990763347,
-            "unit": "ns",
-            "range": "± 5.1388125347690465"
-          },
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
-            "value": 1892.1345965067546,
-            "unit": "ns",
-            "range": "± 3.495049521052859"
-          },
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
-            "value": 1806.1412970225017,
-            "unit": "ns",
-            "range": "± 7.479824138216006"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
-          "committer": {
             "name": "GitHub",
             "username": "web-flow",
             "email": "noreply@github.com"
@@ -55436,6 +55396,48 @@ window.BENCHMARK_DATA = {
             "value": 1796.1264451344807,
             "unit": "ns",
             "range": "± 1.5843250035520506"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "84b6adf0f6285fa4a81089464e084a762c654df5",
+          "message": "Comments",
+          "timestamp": "2024-12-11T15:50:42-08:00",
+          "tree_id": "6d4b3b858987c7edd36cae10889acd8cc7cc7603",
+          "url": "https://github.com/darrenge/garnet/commit/84b6adf0f6285fa4a81089464e084a762c654df5"
+        },
+        "date": 1733961392762,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1829.4671058654785,
+            "unit": "ns",
+            "range": "± 2.4069567511761645"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1798.7074307032995,
+            "unit": "ns",
+            "range": "± 2.4109406270979417"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1893.242725959191,
+            "unit": "ns",
+            "range": "± 2.6963859929722025"
           }
         ]
       }
