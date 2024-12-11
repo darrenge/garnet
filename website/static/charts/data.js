@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733961406054,
+  "lastUpdate": 1733961425923,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -72740,6 +72740,104 @@ window.BENCHMARK_DATA = {
             "value": 2210.143045278696,
             "unit": "ns",
             "range": "± 4.531670968165015"
+          }
+        ]
+      }
+    ],
+    "Operations.CustomOperations (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "84b6adf0f6285fa4a81089464e084a762c654df5",
+          "message": "Comments",
+          "timestamp": "2024-12-11T15:50:42-08:00",
+          "tree_id": "6d4b3b858987c7edd36cae10889acd8cc7cc7603",
+          "url": "https://github.com/darrenge/garnet/commit/84b6adf0f6285fa4a81089464e084a762c654df5"
+        },
+        "date": 1733961422551,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: ACL)",
+            "value": 41751.186668982875,
+            "unit": "ns",
+            "range": "± 121.247596718033"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: ACL)",
+            "value": 187691.3892124721,
+            "unit": "ns",
+            "range": "± 1821.5107748555663"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: ACL)",
+            "value": 117146.0134379069,
+            "unit": "ns",
+            "range": "± 159.31965043734385"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: ACL)",
+            "value": 88511.77793782552,
+            "unit": "ns",
+            "range": "± 1414.1668461331924"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: AOF)",
+            "value": 43170.027779715405,
+            "unit": "ns",
+            "range": "± 343.95633140198146"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: AOF)",
+            "value": 204758.29370117188,
+            "unit": "ns",
+            "range": "± 1013.7589776177109"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: AOF)",
+            "value": 125881.45273061898,
+            "unit": "ns",
+            "range": "± 294.8768033308917"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: AOF)",
+            "value": 115497.08443196614,
+            "unit": "ns",
+            "range": "± 592.819679969853"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: None)",
+            "value": 43174.796565755205,
+            "unit": "ns",
+            "range": "± 346.4157612646315"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: None)",
+            "value": 180611.05579427083,
+            "unit": "ns",
+            "range": "± 1431.8710708746369"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: None)",
+            "value": 118172.06511230468,
+            "unit": "ns",
+            "range": "± 562.888396413679"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: None)",
+            "value": 88460.36631422777,
+            "unit": "ns",
+            "range": "± 69.73750871008538"
           }
         ]
       }
