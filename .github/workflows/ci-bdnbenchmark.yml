@@ -11,7 +11,7 @@ env:
 
 permissions:
   actions: write
-  deployments: write  #permission to deploy GitHub pages website
+  deployments: write  # permission to deploy GitHub pages website
   contents: write  # permission to update benchmark contents in gh-pages branch
 
 jobs:
@@ -30,7 +30,24 @@ jobs:
             - 'website/**'
           bdnbenchmark:
             - '!((*.md)|(website/**))'
-  
+       
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Set up Node.js (if needed for jq)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+ 
+      - name: Generate Matrix
+        id: matrix
+        run: |
+          matrix=$(jq -c 'keys | map({"benchmark": .})' benchmarks.json)
+          echo "Matrix: $matrix"
+          echo "::set-output name=matrix::$matrix"
+
   # Job to build and run BDN.benchmark
   build-run-bdnbenchmark:
     name: BDNBenchmark
@@ -43,9 +60,14 @@ jobs:
         framework: [ 'net8.0' ]
         configuration: [ 'Release' ]
         test: [ 'Operations.BasicOperations', 'Operations.ObjectOperations', 'Cluster.ClusterMigrate', 'Cluster.ClusterOperations', 'Lua.LuaScripts' ]
+        #test: ${{ fromJson(steps.matrix.outputs.matrix) }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+      - name: Set up Node.js (if needed for jq)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
