@@ -4,6 +4,7 @@
 [![](https://img.shields.io/nuget/dt/microsoft.garnet.svg?label=nuget%20library&color=007edf&logo=nuget)](https://www.nuget.org/packages/microsoft.garnet)
 [![](https://img.shields.io/nuget/dt/garnet-server.svg?label=dotnet%20tool&color=007edf&logo=nuget)](https://www.nuget.org/packages/garnet-server)
 [![Discord Shield](https://discordapp.com/api/guilds/1213937452272582676/widget.png?style=shield)](https://aka.ms/garnet-discord)
+[![Current Perf](https://img.shields.io/nuget/dt/garnet-server.svg?label=dotnet%20tool&color=007edf&logo=nuget)](https://microsoft.github.io/garnet/charts/)
 
 Garnet is a new remote cache-store from Microsoft Research, that offers several unique benefits:
 * Garnet adopts the popular [RESP](https://redis.io/docs/reference/protocol-spec/) wire protocol as a starting point, which makes it possible to use Garnet from unmodified Redis clients available in
