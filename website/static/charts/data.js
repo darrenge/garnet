@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734025676286,
+  "lastUpdate": 1734025695583,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -50996,54 +50996,6 @@ window.BENCHMARK_DATA = {
             "username": "web-flow"
           },
           "distinct": true,
-          "id": "550eea9af1035b076d95ea45fe8d7609aa7ca6b1",
-          "message": "Merge branch 'microsoft:main' into main",
-          "timestamp": "2024-11-07T10:12:32-08:00",
-          "tree_id": "ee79e644475534f08e9a1b040fdde13f087ac6e1",
-          "url": "https://github.com/darrenge/garnet/commit/550eea9af1035b076d95ea45fe8d7609aa7ca6b1"
-        },
-        "date": 1731003459274,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
-            "value": 35346.43371582031,
-            "unit": "ns",
-            "range": "± 82.00594697339926"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
-            "value": 36372.48026529948,
-            "unit": "ns",
-            "range": "± 44.377953722401145"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
-            "value": 31620.931570870536,
-            "unit": "ns",
-            "range": "± 37.30193842878652"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
-            "value": 29816.373854417066,
-            "unit": "ns",
-            "range": "± 10.68073660911293"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
           "id": "f5d487528cc06e1153c809ecf100700b3d4948a0",
           "message": "Merge branch 'microsoft:main' into main",
           "timestamp": "2024-11-08T13:03:21-08:00",
@@ -53364,6 +53316,54 @@ window.BENCHMARK_DATA = {
             "value": 30366.1323038737,
             "unit": "ns",
             "range": "± 209.5389849710678"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "948a427b6c9c5dbda9953f69e1d33dc31ef33ba1",
+          "message": "Changed name of badge",
+          "timestamp": "2024-12-12T09:43:04-08:00",
+          "tree_id": "35cd108b521bf5e59b6e5372c67c4e94056ff59c",
+          "url": "https://github.com/darrenge/garnet/commit/948a427b6c9c5dbda9953f69e1d33dc31ef33ba1"
+        },
+        "date": 1734025683154,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35350.07985432943,
+            "unit": "ns",
+            "range": "± 104.62597961757795"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36563.14188639323,
+            "unit": "ns",
+            "range": "± 44.31441168603647"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31159.326985677082,
+            "unit": "ns",
+            "range": "± 24.57844547243757"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 30096.172790527344,
+            "unit": "ns",
+            "range": "± 82.06320466088026"
           }
         ]
       }
