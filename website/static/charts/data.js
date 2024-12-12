@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1733962497596,
+  "lastUpdate": 1733962515896,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -50986,52 +50986,6 @@ window.BENCHMARK_DATA = {
       {
         "commit": {
           "author": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
-          "committer": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
-          "id": "df9bd6ff95cded34dfbf99bcdc886445b13db257",
-          "message": "Added           max-items-in-chart: 50 to yml file",
-          "timestamp": "2024-10-29T18:17:27Z",
-          "url": "https://github.com/darrenge/garnet/commit/df9bd6ff95cded34dfbf99bcdc886445b13db257"
-        },
-        "date": 1730226160066,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
-            "value": 34716.44185384115,
-            "unit": "ns",
-            "range": "± 16.627592973136633"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
-            "value": 38106.95495605469,
-            "unit": "ns",
-            "range": "± 31.91024216174819"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
-            "value": 30889.952674278848,
-            "unit": "ns",
-            "range": "± 41.49681710275815"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
-            "value": 29886.736591045672,
-            "unit": "ns",
-            "range": "± 34.53822500797319"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
             "email": "darrenge@microsoft.com",
             "name": "darrenge",
             "username": "darrenge"
@@ -53362,6 +53316,54 @@ window.BENCHMARK_DATA = {
             "value": 29469.4087437221,
             "unit": "ns",
             "range": "± 26.063639875166974"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "5a11b3db527d822d1a27475c04103dfe424891dd",
+          "message": "Cleaned up test code",
+          "timestamp": "2024-12-11T16:09:40-08:00",
+          "tree_id": "0216fa569e17047d1bf4b8f946905b2c60a1a0b6",
+          "url": "https://github.com/darrenge/garnet/commit/5a11b3db527d822d1a27475c04103dfe424891dd"
+        },
+        "date": 1733962497377,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 35217.015897310695,
+            "unit": "ns",
+            "range": "± 21.898911177059322"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 36820.31729561942,
+            "unit": "ns",
+            "range": "± 25.93615611395534"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31392.339148888223,
+            "unit": "ns",
+            "range": "± 417.07398009870894"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 29833.450927734375,
+            "unit": "ns",
+            "range": "± 188.1398585015145"
           }
         ]
       }
