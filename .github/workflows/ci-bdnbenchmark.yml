@@ -12,7 +12,7 @@ env:
 permissions:
   actions: write
   deployments: write  # permission to deploy GitHub pages website
-  contents: write  # permission to update benchmark contents in gh-pages branch
+  contents: write  # permission to update benchmark contents in continuousbenchmark branch
 
 jobs:
   changes:
@@ -47,10 +47,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-      - name: Set up Node.js (if needed for jq)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
