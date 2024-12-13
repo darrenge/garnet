@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734129577163,
+  "lastUpdate": 1734129687918,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -64611,136 +64611,6 @@ window.BENCHMARK_DATA = {
             "username": "darrenge",
             "email": "darrenge@microsoft.com"
           },
-          "id": "57ac3bd3b78fc7b525cd0971aaf9a258d4c62477",
-          "message": "Fixed Lua test as config file wasn't named correct",
-          "timestamp": "2024-10-24T22:53:05Z",
-          "url": "https://github.com/darrenge/garnet/commit/57ac3bd3b78fc7b525cd0971aaf9a258d4c62477"
-        },
-        "date": 1729811104073,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: ACL)",
-            "value": 117391.23447963169,
-            "unit": "ns",
-            "range": "± 176.8868827758271"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: ACL)",
-            "value": 99998.19376627605,
-            "unit": "ns",
-            "range": "± 237.73021891120314"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: ACL)",
-            "value": 93527.44303385417,
-            "unit": "ns",
-            "range": "± 624.8220307484145"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: ACL)",
-            "value": 135648.955078125,
-            "unit": "ns",
-            "range": "± 415.5421647929406"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.MyDictSetGet(Params: ACL)",
-            "value": 199481.04771205358,
-            "unit": "ns",
-            "range": "± 363.9518724841352"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.CustomProcSet(Params: ACL)",
-            "value": 127755.5712890625,
-            "unit": "ns",
-            "range": "± 203.54415283584945"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: AOF)",
-            "value": 129633.36879185268,
-            "unit": "ns",
-            "range": "± 411.3233888769706"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: AOF)",
-            "value": 112021.49739583333,
-            "unit": "ns",
-            "range": "± 293.02066453698285"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: AOF)",
-            "value": 108402.81935471755,
-            "unit": "ns",
-            "range": "± 195.0715266216321"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: AOF)",
-            "value": 132302.16145833334,
-            "unit": "ns",
-            "range": "± 1285.904015145563"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.MyDictSetGet(Params: AOF)",
-            "value": 219180.9041341146,
-            "unit": "ns",
-            "range": "± 797.2066624863663"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.CustomProcSet(Params: AOF)",
-            "value": 140550.7169596354,
-            "unit": "ns",
-            "range": "± 397.0843123467412"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: None)",
-            "value": 114253.69437081473,
-            "unit": "ns",
-            "range": "± 160.87906881813916"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: None)",
-            "value": 100461.84244791667,
-            "unit": "ns",
-            "range": "± 237.11743958835007"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: None)",
-            "value": 94354.26228841145,
-            "unit": "ns",
-            "range": "± 211.8296753261155"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.HSetDel(Params: None)",
-            "value": 128272.02880859375,
-            "unit": "ns",
-            "range": "± 464.2244283265854"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.MyDictSetGet(Params: None)",
-            "value": 203628.9404296875,
-            "unit": "ns",
-            "range": "± 434.6644292763773"
-          },
-          {
-            "name": "BDN.benchmark.Operations.ObjectOperations.CustomProcSet(Params: None)",
-            "value": 132172.28131975446,
-            "unit": "ns",
-            "range": "± 83.00632036047897"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
-          "committer": {
-            "name": "darrenge",
-            "username": "darrenge",
-            "email": "darrenge@microsoft.com"
-          },
           "id": "d7684bef316be1945e924d26ff17664f6d8caadb",
           "message": "Fixed Lua benchmark so can be read after it is ran",
           "timestamp": "2024-10-28T20:21:32Z",
@@ -69534,6 +69404,84 @@ window.BENCHMARK_DATA = {
             "value": 96906.43310546875,
             "unit": "ns",
             "range": "± 190.6738047250827"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "babykart@gmail.com",
+            "name": "babykart",
+            "username": "babykart"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f1ce0dafecaba15335e8e0767a6eeb441b72e56c",
+          "message": "[helm-chart] Add helm-docs to the helm chart workflow (#862)\n\n* Add helm-docs to the helm chart workflow\r\n\r\nSigned-off-by: babykart <babykart@gmail.com>\r\n\r\n* Standardize the variables\r\n\r\nSigned-off-by: babykart <babykart@gmail.com>\r\n\r\n* Add Helm chart artifacts build directory\r\n\r\nSigned-off-by: babykart <babykart@gmail.com>\r\n\r\n* Create a PR to update charts/garnet/README.md\r\n\r\nSigned-off-by: babykart <babykart@gmail.com>\r\n\r\n---------\r\n\r\nSigned-off-by: babykart <babykart@gmail.com>\r\nCo-authored-by: Badrish Chandramouli <badrishc@microsoft.com>",
+          "timestamp": "2024-12-13T14:08:03-08:00",
+          "tree_id": "b2aa23d9235558527754332fab728fa03d60007b",
+          "url": "https://github.com/darrenge/garnet/commit/f1ce0dafecaba15335e8e0767a6eeb441b72e56c"
+        },
+        "date": 1734129676667,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: ACL)",
+            "value": 119086.16245814732,
+            "unit": "ns",
+            "range": "± 277.88817484597456"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: ACL)",
+            "value": 102162.64567057292,
+            "unit": "ns",
+            "range": "± 325.7640424206625"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: ACL)",
+            "value": 98603.05541992188,
+            "unit": "ns",
+            "range": "± 271.7778545637428"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: AOF)",
+            "value": 132622.30224609375,
+            "unit": "ns",
+            "range": "± 518.5338924238715"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: AOF)",
+            "value": 121924.34895833333,
+            "unit": "ns",
+            "range": "± 1131.5123473880535"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: AOF)",
+            "value": 117419.58170572917,
+            "unit": "ns",
+            "range": "± 403.223464560791"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.ZAddRem(Params: None)",
+            "value": 113488.2341657366,
+            "unit": "ns",
+            "range": "± 321.9676094590473"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.LPushPop(Params: None)",
+            "value": 104142.59928385417,
+            "unit": "ns",
+            "range": "± 352.8681240772186"
+          },
+          {
+            "name": "BDN.benchmark.Operations.ObjectOperations.SAddRem(Params: None)",
+            "value": 97980.00139508929,
+            "unit": "ns",
+            "range": "± 304.0441955527243"
           }
         ]
       }
