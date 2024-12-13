@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734112247057,
+  "lastUpdate": 1734112248386,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -69352,54 +69352,6 @@ window.BENCHMARK_DATA = {
             "username": "darrenge"
           },
           "distinct": true,
-          "id": "a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2",
-          "message": "Added BDN.benchmark to beginning for test if not needed",
-          "timestamp": "2024-11-26T15:36:29-08:00",
-          "tree_id": "69d67643d8f2f9c5254036cffea0629aedef5f33",
-          "url": "https://github.com/darrenge/garnet/commit/a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2"
-        },
-        "date": 1732664396341,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
-            "value": 191.15916775067646,
-            "unit": "ns",
-            "range": "± 1.3043380911737572"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
-            "value": 328.0472063064575,
-            "unit": "ns",
-            "range": "± 3.600263249320959"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
-            "value": 598.2422045980181,
-            "unit": "ns",
-            "range": "± 4.902230213071763"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
-            "value": 2969.24182027181,
-            "unit": "ns",
-            "range": "± 17.944916235621424"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "distinct": true,
           "id": "1d0906dc0cbb950a07f285b743b81eb877d63a6e",
           "message": "Cleaned up comments, spacing and debug messages",
           "timestamp": "2024-11-26T16:36:24-08:00",
@@ -71720,6 +71672,54 @@ window.BENCHMARK_DATA = {
             "value": 2996.4410626729327,
             "unit": "ns",
             "range": "± 15.816404331533573"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "23ede79de8fd15ac068f896f773e176339c6edaf",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-12-13T09:47:34-08:00",
+          "tree_id": "ce29f42a8cac0af32908d0c08443062a8e06ea13",
+          "url": "https://github.com/darrenge/garnet/commit/23ede79de8fd15ac068f896f773e176339c6edaf"
+        },
+        "date": 1734112244548,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 178.93059435257544,
+            "unit": "ns",
+            "range": "± 1.1347562683080112"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 318.44062213897706,
+            "unit": "ns",
+            "range": "± 3.290085646443698"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 600.0470549265543,
+            "unit": "ns",
+            "range": "± 4.946865432733096"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2966.7409660339354,
+            "unit": "ns",
+            "range": "± 16.61676527852511"
           }
         ]
       }
