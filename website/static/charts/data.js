@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734045177249,
+  "lastUpdate": 1734112230195,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -42338,54 +42338,6 @@ window.BENCHMARK_DATA = {
             "username": "darrenge"
           },
           "distinct": true,
-          "id": "a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2",
-          "message": "Added BDN.benchmark to beginning for test if not needed",
-          "timestamp": "2024-11-26T15:36:29-08:00",
-          "tree_id": "69d67643d8f2f9c5254036cffea0629aedef5f33",
-          "url": "https://github.com/darrenge/garnet/commit/a6ed3a1c5378f4b81f6de19b8eafeb0698c6a3c2"
-        },
-        "date": 1732664369151,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
-            "value": 36843.49656677246,
-            "unit": "ns",
-            "range": "± 138.41376751203035"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
-            "value": 39163.407358805336,
-            "unit": "ns",
-            "range": "± 401.06078592009857"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
-            "value": 31744.375376383465,
-            "unit": "ns",
-            "range": "± 437.7744187579072"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
-            "value": 31913.58694864909,
-            "unit": "ns",
-            "range": "± 462.2344816666482"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "distinct": true,
           "id": "1d0906dc0cbb950a07f285b743b81eb877d63a6e",
           "message": "Cleaned up comments, spacing and debug messages",
           "timestamp": "2024-11-26T16:36:24-08:00",
@@ -44706,6 +44658,54 @@ window.BENCHMARK_DATA = {
             "value": 31055.432815551758,
             "unit": "ns",
             "range": "± 45.0797439776265"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "23ede79de8fd15ac068f896f773e176339c6edaf",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-12-13T09:47:34-08:00",
+          "tree_id": "ce29f42a8cac0af32908d0c08443062a8e06ea13",
+          "url": "https://github.com/darrenge/garnet/commit/23ede79de8fd15ac068f896f773e176339c6edaf"
+        },
+        "date": 1734112226577,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 37059.34690348307,
+            "unit": "ns",
+            "range": "± 27.894440991129702"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 37986.79598563058,
+            "unit": "ns",
+            "range": "± 284.25588944362715"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32344.753080240884,
+            "unit": "ns",
+            "range": "± 230.7114264954845"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31227.87550455729,
+            "unit": "ns",
+            "range": "± 287.2425452264278"
           }
         ]
       }
