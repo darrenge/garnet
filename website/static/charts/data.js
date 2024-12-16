@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734376277771,
+  "lastUpdate": 1734376312104,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -71920,54 +71920,6 @@ window.BENCHMARK_DATA = {
       {
         "commit": {
           "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "distinct": true,
-          "id": "dfa62d26f8a3908bb9f6dd0544b69b77918869af",
-          "message": "Merge branch 'main' of https://github.com/darrenge/garnet",
-          "timestamp": "2024-12-02T14:45:55-08:00",
-          "tree_id": "79aa4c86d16777bb5e884c695b47f1a5bfcfca4e",
-          "url": "https://github.com/darrenge/garnet/commit/dfa62d26f8a3908bb9f6dd0544b69b77918869af"
-        },
-        "date": 1733179847012,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
-            "value": 119.45847364572379,
-            "unit": "ns",
-            "range": "± 0.12418146667670557"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
-            "value": 197.23744025597205,
-            "unit": "ns",
-            "range": "± 0.3099205992145955"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
-            "value": 382.49964237213135,
-            "unit": "ns",
-            "range": "± 0.7663300245825034"
-          },
-          {
-            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
-            "value": 2269.922358194987,
-            "unit": "ns",
-            "range": "± 12.983017703515683"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
             "name": "darrenge",
             "username": "darrenge",
             "email": "darrenge@microsoft.com"
@@ -74298,6 +74250,54 @@ window.BENCHMARK_DATA = {
             "value": 2245.07937113444,
             "unit": "ns",
             "range": "± 4.641274926183894"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "badrishc@microsoft.com",
+            "name": "Badrish Chandramouli",
+            "username": "badrishc"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "635cd58ab0fe9423a13f1a0c38b715e61dafde22",
+          "message": "Revert \"[helm-chart] Add helm-docs to the helm chart workflow (#862)\" (#881)\n\nThis reverts commit f1ce0dafecaba15335e8e0767a6eeb441b72e56c.",
+          "timestamp": "2024-12-13T15:46:32-08:00",
+          "tree_id": "013e7e35462603ca9b981e1384552f47be440c50",
+          "url": "https://github.com/darrenge/garnet/commit/635cd58ab0fe9423a13f1a0c38b715e61dafde22"
+        },
+        "date": 1734376297286,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script1(Params: None)",
+            "value": 118.80279779434204,
+            "unit": "ns",
+            "range": "± 0.2549436145856243"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script2(Params: None)",
+            "value": 197.17199632099695,
+            "unit": "ns",
+            "range": "± 0.8513130912663653"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script3(Params: None)",
+            "value": 363.3944579533168,
+            "unit": "ns",
+            "range": "± 1.605516934677145"
+          },
+          {
+            "name": "BDN.benchmark.Lua.LuaScripts.Script4(Params: None)",
+            "value": 2261.5757575401894,
+            "unit": "ns",
+            "range": "± 4.036773210766303"
           }
         ]
       }
