@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734377522524,
+  "lastUpdate": 1734476382878,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -1267,7 +1267,6 @@ window.BENCHMARK_DATA = {
           }
         ]
       },
-     
       {
         "commit": {
           "author": {
@@ -39966,54 +39965,6 @@ window.BENCHMARK_DATA = {
             "username": "darrenge"
           },
           "committer": {
-            "email": "noreply@github.com",
-            "name": "GitHub",
-            "username": "web-flow"
-          },
-          "distinct": true,
-          "id": "9f43c15bbe42c350f93bd7494d2918974f1963b1",
-          "message": "Merge branch 'microsoft:main' into main",
-          "timestamp": "2024-12-06T14:51:14-08:00",
-          "tree_id": "105fedcb26ed53d2be1065f2e25a09e752a94e54",
-          "url": "https://github.com/darrenge/garnet/commit/9f43c15bbe42c350f93bd7494d2918974f1963b1"
-        },
-        "date": 1733525654241,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
-            "value": 36991.17411702474,
-            "unit": "ns",
-            "range": "± 269.12635041927535"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
-            "value": 37404.56042480469,
-            "unit": "ns",
-            "range": "± 54.78045901410741"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
-            "value": 31694.562772310695,
-            "unit": "ns",
-            "range": "± 106.00328793881889"
-          },
-          {
-            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
-            "value": 32170.99559326172,
-            "unit": "ns",
-            "range": "± 317.89390410171484"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
             "email": "darrenge@microsoft.com",
             "name": "darrenge",
             "username": "darrenge"
@@ -42341,6 +42292,54 @@ window.BENCHMARK_DATA = {
             "value": 32421.864375523157,
             "unit": "ns",
             "range": "± 365.2278796710068"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8a7676d6f97ec94812ac9f0939fa8ad96dacd8ea",
+          "message": "Merge branch 'microsoft:main' into main",
+          "timestamp": "2024-12-17T14:56:24-08:00",
+          "tree_id": "8a1be8408afae4d0a0c126037fee5c7abb3c2b74",
+          "url": "https://github.com/darrenge/garnet/commit/8a7676d6f97ec94812ac9f0939fa8ad96dacd8ea"
+        },
+        "date": 1734476378374,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 37103.24169311523,
+            "unit": "ns",
+            "range": "± 313.42193678988207"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 38345.51812947591,
+            "unit": "ns",
+            "range": "± 418.2119633147426"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 31810.512664794922,
+            "unit": "ns",
+            "range": "± 50.005848477349275"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 32548.874219621932,
+            "unit": "ns",
+            "range": "± 227.91155867636692"
           }
         ]
       }
