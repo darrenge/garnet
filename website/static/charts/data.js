@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1734630836578,
+  "lastUpdate": 1734630847134,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Benchmark": [
@@ -51006,48 +51006,6 @@ window.BENCHMARK_DATA = {
             "username": "darrenge"
           },
           "distinct": true,
-          "id": "607222ae0d077886ea469a720865ec9cc56a77fe",
-          "message": "Updated to more recent commit id",
-          "timestamp": "2024-12-06T15:23:10-08:00",
-          "tree_id": "5fa1509916600cb3263633e8f93cc205684b5054",
-          "url": "https://github.com/darrenge/garnet/commit/607222ae0d077886ea469a720865ec9cc56a77fe"
-        },
-        "date": 1733527708900,
-        "tool": "benchmarkdotnet",
-        "benches": [
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
-            "value": 1801.5477400559646,
-            "unit": "ns",
-            "range": "± 4.834091811139721"
-          },
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
-            "value": 1797.446793776292,
-            "unit": "ns",
-            "range": "± 1.3372019730722489"
-          },
-          {
-            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
-            "value": 1890.1808329990931,
-            "unit": "ns",
-            "range": "± 2.2099893402154565"
-          }
-        ]
-      },
-      {
-        "commit": {
-          "author": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "committer": {
-            "email": "darrenge@microsoft.com",
-            "name": "darrenge",
-            "username": "darrenge"
-          },
-          "distinct": true,
           "id": "612f42b21f8b6347229a05032e451dddfd3823c8",
           "message": "Put check out back to head and set ref for commit to be more recent",
           "timestamp": "2024-12-06T15:31:12-08:00",
@@ -53072,6 +53030,48 @@ window.BENCHMARK_DATA = {
             "value": 1813.9273496774526,
             "unit": "ns",
             "range": "± 2.7109136259809707"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "badrishc@microsoft.com",
+            "name": "Badrish Chandramouli",
+            "username": "badrishc"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "820ca0fbae009817c2946a8205465b6f1de08b52",
+          "message": "Add BDN that includes embedded network stack (#889)\n\n* Initial checkin on BDN that includes network path - handles non-TLS only\r\n\r\n* cleanup\r\n\r\n* ensure dispose\r\n\r\n* cleanup\r\n\r\n* merge from main\r\n\r\n* Update ci-bdnbenchmark.yml",
+          "timestamp": "2024-12-19T00:06:41-08:00",
+          "tree_id": "45f6c39d28c32318b8c2f04a6a6b923a5ba207e9",
+          "url": "https://github.com/darrenge/garnet/commit/820ca0fbae009817c2946a8205465b6f1de08b52"
+        },
+        "date": 1734630832295,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: ACL)",
+            "value": 1956.6045761108398,
+            "unit": "ns",
+            "range": "± 4.948556071198812"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: AOF)",
+            "value": 1893.1221280779157,
+            "unit": "ns",
+            "range": "± 1.836725324395555"
+          },
+          {
+            "name": "BDN.benchmark.Operations.BasicOperations.InlinePing(Params: None)",
+            "value": 1890.5300580538237,
+            "unit": "ns",
+            "range": "± 2.056244432114687"
           }
         ]
       }
