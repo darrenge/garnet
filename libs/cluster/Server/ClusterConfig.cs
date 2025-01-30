@@ -54,14 +54,7 @@ namespace Garnet.cluster
                 slotMap[i]._workerId = 0;
             }
             workers = new Worker[2];
-            workers[0].Address = "unassigned";
-            workers[0].Port = 0;
-            workers[0].Nodeid = null;
-            workers[0].ConfigEpoch = 0;
-            workers[0].Role = NodeRole.UNASSIGNED;
-            workers[0].ReplicaOfNodeId = null;
-            workers[0].ReplicationOffset = 0;
-            workers[0].hostname = null;
+            InitializeUnassignedWorker();
         }
 
         /// <summary>
@@ -73,6 +66,7 @@ namespace Garnet.cluster
         {
             this.slotMap = slotMap;
             this.workers = workers;
+            InitializeUnassignedWorker();
         }
 
         public ClusterConfig Copy()
@@ -82,6 +76,21 @@ namespace Garnet.cluster
             Array.Copy(workers, newWorkers, workers.Length);
             Array.Copy(slotMap, newSlotMap, slotMap.Length);
             return new ClusterConfig(newSlotMap, newWorkers);
+        }
+
+        /// <summary>
+        /// Initialize the worker at index 0 as unassigned.
+        /// </summary>
+        private void InitializeUnassignedWorker()
+        {
+            workers[0].Address = "unassigned";
+            workers[0].Port = 0;
+            workers[0].Nodeid = null;
+            workers[0].ConfigEpoch = 0;
+            workers[0].Role = NodeRole.UNASSIGNED;
+            workers[0].ReplicaOfNodeId = null;
+            workers[0].ReplicationOffset = 0;
+            workers[0].hostname = null;
         }
 
         /// <summary>
@@ -764,11 +773,12 @@ namespace Garnet.cluster
             List<string> replicas = [];
             for (ushort i = 1; i < workers.Length; i++)
             {
+                var nodeId = workers[i].Nodeid;
                 var replicaOf = workers[i].ReplicaOfNodeId;
                 if (replicaOf != null && replicaOf.Equals(nodeid, StringComparison.OrdinalIgnoreCase))
                 {
                     var info = default(ConnectionInfo);
-                    _ = clusterProvider?.clusterManager?.GetConnectionInfo(replicaOf, out info);
+                    _ = clusterProvider?.clusterManager?.GetConnectionInfo(nodeId, out info);
                     replicas.Add(GetNodeInfo(i, info));
                 }
             }
@@ -943,6 +953,8 @@ namespace Garnet.cluster
 
         public ClusterConfig MergeSlotMap(ClusterConfig senderConfig, ILogger logger = null)
         {
+            // Track if update happened to avoid expensive merge and FlushConfig operation when possible
+            var updated = false;
             var senderSlotMap = senderConfig.slotMap;
             var senderWorkerId = GetWorkerIdFromNodeId(senderConfig.LocalNodeId);
 
@@ -979,12 +991,16 @@ namespace Garnet.cluster
                 if (senderConfig.LocalNodeConfigEpoch != 0 && workers[currentOwnerId].ConfigEpoch >= senderConfig.LocalNodeConfigEpoch)
                     continue;
 
+                // Update happened only if workerId or state changed
+                // NOTE: this avoids message flooding when sender epoch equals zero
+                updated = newSlotMap[i]._workerId != senderWorkerId || newSlotMap[i]._state != SlotState.STABLE;
+
                 // Update ownership of node
                 newSlotMap[i]._workerId = senderWorkerId;
                 newSlotMap[i]._state = SlotState.STABLE;
             }
 
-            return new(newSlotMap, workers);
+            return updated ? new(newSlotMap, workers) : this;
         }
 
         /// <summary>
