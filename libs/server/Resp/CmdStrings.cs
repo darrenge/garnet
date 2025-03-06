@@ -15,9 +15,9 @@ namespace Garnet.server
         /// </summary>
         public static ReadOnlySpan<byte> CLIENT => "CLIENT"u8;
         public static ReadOnlySpan<byte> SUBSCRIBE => "SUBSCRIBE"u8;
-        public static ReadOnlySpan<byte> subscribe => "subcribe"u8;
+        public static ReadOnlySpan<byte> subscribe => "subscribe"u8;
         public static ReadOnlySpan<byte> SSUBSCRIBE => "SSUBSCRIBE"u8;
-        public static ReadOnlySpan<byte> ssubscribe => "ssubcribe"u8;
+        public static ReadOnlySpan<byte> ssubscribe => "ssubscribe"u8;
         public static ReadOnlySpan<byte> RUNTXP => "RUNTXP"u8;
         public static ReadOnlySpan<byte> GET => "GET"u8;
         public static ReadOnlySpan<byte> get => "get"u8;
@@ -37,6 +37,8 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> SETNAME => "SETNAME"u8;
         public static ReadOnlySpan<byte> INFO => "INFO"u8;
         public static ReadOnlySpan<byte> info => "info"u8;
+        public static ReadOnlySpan<byte> DEBUG => "DEBUG"u8;
+        public static ReadOnlySpan<byte> PANIC => "PANIC"u8;
         public static ReadOnlySpan<byte> DOCS => "DOCS"u8;
         public static ReadOnlySpan<byte> docs => "docs"u8;
         public static ReadOnlySpan<byte> GETKEYS => "GETKEYS"u8;
@@ -142,9 +144,12 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> GETWITHETAG => "GETWITHETAG"u8;
         public static ReadOnlySpan<byte> GETIFNOTMATCH => "GETIFNOTMATCH"u8;
         public static ReadOnlySpan<byte> SETIFMATCH => "SETIFMATCH"u8;
+        public static ReadOnlySpan<byte> SETIFGREATER => "SETIFGREATER"u8;
         public static ReadOnlySpan<byte> FIELDS => "FIELDS"u8;
         public static ReadOnlySpan<byte> TIMEOUT => "TIMEOUT"u8;
         public static ReadOnlySpan<byte> ERROR => "ERROR"u8;
+        public static ReadOnlySpan<byte> INCRBY => "INCRBY"u8;
+        public static ReadOnlySpan<byte> NOGET => "NOGET"u8;
 
         /// <summary>
         /// Response strings
@@ -210,7 +215,6 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> RESP_ERR_HASH_VALUE_IS_NOT_FLOAT => "ERR hash value is not a float."u8;
         public static ReadOnlySpan<byte> RESP_ERR_GENERIC_VALUE_IS_OUT_OF_RANGE => "ERR value is out of range, must be positive."u8;
         public static ReadOnlySpan<byte> RESP_ERR_PROTOCOL_VALUE_IS_NOT_INTEGER => "ERR Protocol version is not an integer or out of range."u8;
-        public static ReadOnlySpan<byte> RESP_ERR_GENERIC_UKNOWN_SUBCOMMAND => "ERR Unknown subcommand. Try LATENCY HELP."u8;
         public static ReadOnlySpan<byte> RESP_ERR_GENERIC_INDEX_OUT_RANGE => "ERR index out of range"u8;
         public static ReadOnlySpan<byte> RESP_ERR_GENERIC_SELECT_INVALID_INDEX => "ERR invalid database index."u8;
         public static ReadOnlySpan<byte> RESP_ERR_GENERIC_SELECT_CLUSTER_MODE => "ERR SELECT is not allowed in cluster mode"u8;
@@ -241,6 +245,7 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> RESP_ERR_GT_LT_NX_NOT_COMPATIBLE => "ERR GT, LT, and/or NX options at the same time are not compatible"u8;
         public static ReadOnlySpan<byte> RESP_ERR_INCR_SUPPORTS_ONLY_SINGLE_PAIR => "ERR INCR option supports a single increment-element pair"u8;
         public static ReadOnlySpan<byte> RESP_ERR_INVALID_BITFIELD_TYPE => "ERR Invalid bitfield type. Use something like i16 u8. Note that u64 is not supported but i64 is"u8;
+        public static ReadOnlySpan<byte> RESP_ERR_INVALID_OVERFLOW_TYPE => "ERR Invalid OVERFLOW type specified"u8;
         public static ReadOnlySpan<byte> RESP_ERR_SCRIPT_FLUSH_OPTIONS => "ERR SCRIPT FLUSH only support SYNC|ASYNC option"u8;
         public static ReadOnlySpan<byte> RESP_ERR_BUSSYKEY => "BUSYKEY Target key name already exists."u8;
         public static ReadOnlySpan<byte> RESP_ERR_LENGTH_AND_INDEXES => "If you want both the length and indexes, please just use IDX."u8;
@@ -250,6 +255,10 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> RESP_COMMAND_HAS_NO_KEY_ARGS => "The command has no key arguments"u8;
         public static ReadOnlySpan<byte> RESP_ERR_INVALID_CLIENT_UNBLOCK_REASON => "ERR CLIENT UNBLOCK reason should be TIMEOUT or ERROR"u8;
         public static ReadOnlySpan<byte> RESP_UNBLOCKED_CLIENT_VIA_CLIENT_UNBLOCK => "UNBLOCKED client unblocked via CLIENT UNBLOCK"u8;
+        public static ReadOnlySpan<byte> RESP_ERR_INVALID_ETAG => "ETAG must be a numerical value greater than or equal to 0"u8;
+        public static ReadOnlySpan<byte> RESP_ERR_DEUBG_DISALLOWED =>
+            @"ERR DEBUG command not allowed. If the EnableDebugCommand option is set to ""local"", you can run it from a local connection, otherwise you need to set this option in the configuration file, and then restart the server."u8;
+
 
         /// <summary>
         /// Response string templates
@@ -321,6 +330,7 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> DELUSER => "DELUSER"u8;
         public static ReadOnlySpan<byte> EXISTS => "EXISTS"u8;
         public static ReadOnlySpan<byte> FLUSH => "FLUSH"u8;
+        public static ReadOnlySpan<byte> GETUSER => "GETUSER"u8;
         public static ReadOnlySpan<byte> LOAD => "LOAD"u8;
         public static ReadOnlySpan<byte> LOADCS => "LOADCS"u8;
         public static ReadOnlySpan<byte> SETUSER => "SETUSER"u8;
@@ -372,6 +382,7 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> mtasks => "MTASKS"u8;
         public static ReadOnlySpan<byte> aofsync => "AOFSYNC"u8;
         public static ReadOnlySpan<byte> appendlog => "APPENDLOG"u8;
+        public static ReadOnlySpan<byte> attach_sync => "ATTACH_SYNC"u8;
         public static ReadOnlySpan<byte> banlist => "BANLIST"u8;
         public static ReadOnlySpan<byte> begin_replica_recover => "BEGIN_REPLICA_RECOVER"u8;
         public static ReadOnlySpan<byte> endpoint => "ENDPOINT"u8;
@@ -380,6 +391,7 @@ namespace Garnet.server
         public static ReadOnlySpan<byte> initiate_replica_sync => "INITIATE_REPLICA_SYNC"u8;
         public static ReadOnlySpan<byte> send_ckpt_file_segment => "SEND_CKPT_FILE_SEGMENT"u8;
         public static ReadOnlySpan<byte> send_ckpt_metadata => "SEND_CKPT_METADATA"u8;
+        public static ReadOnlySpan<byte> cluster_sync => "SYNC"u8;
 
         // Lua scripting strings
         public static ReadOnlySpan<byte> LUA_OK => "OK"u8;
