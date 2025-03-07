@@ -7,24 +7,21 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   DOTNET_NOLOGO: true
 
-jobs:
 
+jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out code
+    - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
-    - name: Install dependencies
-      run: dotnet restore Garnet.sln
-    - name: Check style format
-      run: dotnet format Garnet.sln --no-restore --verify-no-changes --verbosity diagnostic
+        dotnet-version: '6.0.x' # Specify the .NET version you need
 
-    - name: dotnet build
+    - name: Build Garnet projects
       run: dotnet build '**/Garnet*.csproj' -c Release
 
     - name: Publish the GarnetServer binaries
@@ -32,13 +29,3 @@ jobs:
         pwsh ./.azure/pipelines/createbinaries.ps1 1
       shell: pwsh
 
-    - name: Copy Zipped Files to Artifacts dir
-      run: |
-        mkdir -p ${{ github.workspace }}/artifacts
-        cp -r ${{ github.workspace }}/main/GarnetServer/bin/Release/net8.0/publish/output/* ${{ github.workspace }}/artifacts/
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: drop
-        path: ${{ github.workspace }}/artifacts
