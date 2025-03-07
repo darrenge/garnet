@@ -19,10 +19,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '6.0.x' # Specify the .NET version you need
+        dotnet-version: '8.0.x' # Specify the .NET version you need
 
-    - name: Build Garnet projects
-      run: dotnet build '**/Garnet*.csproj' -c Release
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build Garnet
+      run: dotnet build --configuration Release
 
     - name: Publish the GarnetServer binaries
       run: |
