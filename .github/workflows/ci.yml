@@ -1,22 +1,30 @@
 name: CI
+ 
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
 
 on:
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Check out code
+      uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
       with:
-        submodules: recursive
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'
+        dotnet-version: 8.0.x
+    - name: Install dependencies
+      run: dotnet restore Garnet.sln
+    - name: Check style format
+      run: dotnet format Garnet.sln --no-restore --verify-no-changes --verbosity diagnostic
 
     - name: dotnet build
       run: dotnet build '**/Garnet*.csproj' -c Release
