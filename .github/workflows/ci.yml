@@ -1,16 +1,14 @@
-name: CI
- 
-env:
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  DOTNET_NOLOGO: true
+name: CI - testing publish
 
 on:
   workflow_dispatch:
 
-permissions:
-  contents: read
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
 
 jobs:
+
   build:
     runs-on: ubuntu-latest
 
