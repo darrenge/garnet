@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745340919429,
+  "lastUpdate": 1745340963958,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Operations.ObjectOperations (ubuntu-latest  net8.0 Release)": [
@@ -990,6 +990,104 @@ window.BENCHMARK_DATA = {
             "value": 204173.906703404,
             "unit": "ns",
             "range": "± 633.0477597041632"
+          }
+        ]
+      }
+    ],
+    "Operations.CustomOperations (ubuntu-latest  net9.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "ac88d4a51e60048efc5a675726d3e9d0957b3fc6",
+          "message": "Just change to main so benchmark fires off",
+          "timestamp": "2025-04-22T09:30:39-07:00",
+          "tree_id": "12b9b2524ad0e2baf6d7d66b53786fa27da70760",
+          "url": "https://github.com/darrenge/garnet/commit/ac88d4a51e60048efc5a675726d3e9d0957b3fc6"
+        },
+        "date": 1745340957321,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: ACL)",
+            "value": 31369.568093436104,
+            "unit": "ns",
+            "range": "± 43.85862186318358"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: ACL)",
+            "value": 141212.08990885416,
+            "unit": "ns",
+            "range": "± 1407.0694056470313"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: ACL)",
+            "value": 111041.53783365885,
+            "unit": "ns",
+            "range": "± 494.6126258453174"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: ACL)",
+            "value": 73422.54524739583,
+            "unit": "ns",
+            "range": "± 655.7814876157761"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: AOF)",
+            "value": 31507.00844828288,
+            "unit": "ns",
+            "range": "± 44.57498766397584"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: AOF)",
+            "value": 146381.85147530693,
+            "unit": "ns",
+            "range": "± 659.1812966507696"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: AOF)",
+            "value": 121711.08104654947,
+            "unit": "ns",
+            "range": "± 603.5808383774825"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: AOF)",
+            "value": 100181.36900916466,
+            "unit": "ns",
+            "range": "± 220.43335839064594"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomRawStringCommand(Params: None)",
+            "value": 32381.730970110213,
+            "unit": "ns",
+            "range": "± 42.612460689628676"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomObjectCommand(Params: None)",
+            "value": 140150.71295166016,
+            "unit": "ns",
+            "range": "± 304.5109581766285"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomTransaction(Params: None)",
+            "value": 110533.33171793619,
+            "unit": "ns",
+            "range": "± 484.97178945045704"
+          },
+          {
+            "name": "BDN.benchmark.Operations.CustomOperations.CustomProcedure(Params: None)",
+            "value": 72820.8518348107,
+            "unit": "ns",
+            "range": "± 323.775637990856"
           }
         ]
       }
