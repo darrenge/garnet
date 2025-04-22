@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745338905126,
+  "lastUpdate": 1745338906858,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Network.BasicOperations (ubuntu-latest  net9.0 Release)": [
@@ -106,6 +106,50 @@ window.BENCHMARK_DATA = {
             "value": 137251.32361653645,
             "unit": "ns",
             "range": "± 940.8588728366443"
+          }
+        ]
+      }
+    ],
+    "Operations.PubSubOperations (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "ff40f08003da7409e329b455acb1e8805e3616e9",
+          "message": "Updated to main",
+          "timestamp": "2025-04-22T09:18:00-07:00",
+          "tree_id": "1697ee5b26ded92e3d98070bacca54bc950e95c7",
+          "url": "https://github.com/darrenge/garnet/commit/ff40f08003da7409e329b455acb1e8805e3616e9"
+        },
+        "date": 1745338900113,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Operations.PubSubOperations.Publish(Params: ACL)",
+            "value": 18658.884461622973,
+            "unit": "ns",
+            "range": "± 38.86865340669859"
+          },
+          {
+            "name": "BDN.benchmark.Operations.PubSubOperations.Publish(Params: AOF)",
+            "value": 18417.910304478235,
+            "unit": "ns",
+            "range": "± 64.23678292080508"
+          },
+          {
+            "name": "BDN.benchmark.Operations.PubSubOperations.Publish(Params: None)",
+            "value": 19115.19663297213,
+            "unit": "ns",
+            "range": "± 19.064947660878662"
           }
         ]
       }
