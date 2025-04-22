@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
-using System.Threading;
 using Garnet.server.ACL;
 using Garnet.server.Auth;
 using Garnet.server.Lua;
@@ -22,8 +21,8 @@ namespace Garnet.server
         // for compatibility
         internal const int SHA1Len = 40;
         readonly RespServerSession processor;
-        readonly ScratchBufferNetworkSender scratchBufferNetworkSender;
         readonly StoreWrapper storeWrapper;
+        readonly ScratchBufferNetworkSender scratchBufferNetworkSender;
         readonly ILogger logger;
         readonly Dictionary<ScriptHashKey, LuaRunner> scriptCache = [];
         readonly byte[] hash = new byte[SHA1Len / 2];
@@ -31,6 +30,8 @@ namespace Garnet.server
         readonly LuaMemoryManagementMode memoryManagementMode;
         readonly int? memoryLimitBytes;
         readonly LuaTimeoutManager timeoutManager;
+        readonly LuaLoggingMode logMode;
+        readonly HashSet<string> allowedFunctions;
 
         LuaRunner timeoutRunningScript;
         LuaTimeoutManager.Registration timeoutRegistration;
@@ -56,6 +57,8 @@ namespace Garnet.server
             // There's some parsing involved in these, so save them off per-session
             memoryManagementMode = storeWrapper.serverOptions.LuaOptions.MemoryManagementMode;
             memoryLimitBytes = storeWrapper.serverOptions.LuaOptions.GetMemoryLimitBytes();
+            logMode = storeWrapper.serverOptions.LuaOptions.LogMode;
+            allowedFunctions = storeWrapper.serverOptions.LuaOptions.AllowedFunctions;
         }
 
         public void Dispose()
@@ -123,21 +126,27 @@ namespace Garnet.server
         /// 
         /// If necessary, <paramref name="digestOnHeap"/> will be set so the allocation can be reused.
         /// </summary>
-        internal bool TryLoad(RespServerSession session, ReadOnlySpan<byte> source, ScriptHashKey digest, out LuaRunner runner, out ScriptHashKey? digestOnHeap, out string error)
+        internal bool TryLoad(
+            RespServerSession session,
+            ReadOnlySpan<byte> source,
+            ScriptHashKey digest,
+            out LuaRunner runner,
+            out ScriptHashKey? digestOnHeap,
+            out byte[] compiledSource
+        )
         {
-            error = null;
-
             if (scriptCache.TryGetValue(digest, out runner))
             {
                 digestOnHeap = null;
+                compiledSource = null;
                 return true;
             }
 
             try
             {
-                var sourceOnHeap = source.ToArray();
+                compiledSource = LuaRunner.CompileSource(source);
 
-                runner = new LuaRunner(memoryManagementMode, memoryLimitBytes, sourceOnHeap, storeWrapper.serverOptions.LuaTransactionMode, processor, scratchBufferNetworkSender, logger);
+                runner = new LuaRunner(memoryManagementMode, memoryLimitBytes, logMode, allowedFunctions, compiledSource, storeWrapper.serverOptions.LuaTransactionMode, processor, scratchBufferNetworkSender, storeWrapper.redisProtocolVersion, logger);
 
                 // If compilation fails, an error is written out
                 if (runner.CompileForSession(session))
@@ -173,12 +182,25 @@ namespace Garnet.server
             }
             catch (Exception ex)
             {
-                error = ex.Message;
+                logger?.LogError(ex, "During Lua script loading, an unexpected exception");
+
                 digestOnHeap = null;
+                compiledSource = null;
                 return false;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Attempt to remove the script with the given hash from the cache.
+        /// </summary>
+        internal void Remove(ScriptHashKey key)
+        {
+            if (scriptCache.Remove(key, out var runner))
+            {
+                runner.Dispose();
+            }
         }
 
         /// <summary>
@@ -197,18 +219,31 @@ namespace Garnet.server
             scriptCache.Clear();
         }
 
+        /// <summary>
+        /// Swap database sessions in processor session
+        /// </summary>
+        /// <param name="dbId1">First database ID</param>
+        /// <param name="dbId2">Second database ID</param>
+        /// <returns>True if successful</returns>
+        internal bool TrySwapDatabaseSessions(int dbId1, int dbId2) =>
+            processor.TrySwapDatabaseSessions(dbId1, dbId2);
+
         static ReadOnlySpan<byte> HEX_CHARS => "0123456789abcdef"u8;
 
         public void GetScriptDigest(ReadOnlySpan<byte> source, Span<byte> into)
+        => GetScriptDigest(source, hash, into);
+
+        public static void GetScriptDigest(ReadOnlySpan<byte> source, Span<byte> sha1Bytes, Span<byte> into)
         {
-            Debug.Assert(into.Length >= SHA1Len, "into must be large enough for the hash");
+            Debug.Assert(sha1Bytes.Length >= SHA1Len / 2, "sha1Bytes must be large enough for the hash");
+            Debug.Assert(into.Length >= SHA1Len, "into must be large enough for the hash hex bytes");
 
-            _ = SHA1.HashData(source, new Span<byte>(hash));
+            _ = SHA1.HashData(source, sha1Bytes);
 
-            for (var i = 0; i < hash.Length; i++)
+            for (var i = 0; i < SHA1Len / 2; i++)
             {
-                into[i * 2] = HEX_CHARS[hash[i] >> 4];
-                into[i * 2 + 1] = HEX_CHARS[hash[i] & 0x0F];
+                into[i * 2] = HEX_CHARS[sha1Bytes[i] >> 4];
+                into[(i * 2) + 1] = HEX_CHARS[sha1Bytes[i] & 0x0F];
             }
         }
     }

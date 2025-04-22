@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Microsoft.Extensions.Logging;
@@ -79,6 +78,11 @@ namespace Garnet.common
                 logLevel,
                 categoryName,
                 formatter(state, exception));
+
+            if (exception != null)
+            {
+                msg += Environment.NewLine + exception.ToString();
+            }
 
             lock (lockObj)
             {

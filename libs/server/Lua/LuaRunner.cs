@@ -2,7 +2,11 @@
 // Licensed under the MIT license.
 
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,7 +20,7 @@ namespace Garnet.server
     /// <summary>
     /// Creates the instance to run Lua scripts
     /// </summary>
-    internal sealed class LuaRunner : IDisposable
+    internal sealed partial class LuaRunner : IDisposable
     {
         /// <summary>
         /// Adapter to allow us to write directly to the network
@@ -24,6 +28,11 @@ namespace Garnet.server
         /// </summary>
         private unsafe interface IResponseAdapter
         {
+            /// <summary>
+            /// What version of the RESP protocol to write responses out as.
+            /// </summary>
+            byte RespProtocolVersion { get; }
+
             /// <summary>
             /// Equivalent to the ref curr we pass into <see cref="RespWriteUtils"/> methods.
             /// </summary>
@@ -62,6 +71,10 @@ namespace Garnet.server
             => session.dend;
 
             /// <inheritdoc />
+            public byte RespProtocolVersion
+            => session.respProtocolVersion;
+
+            /// <inheritdoc />
             public void SendAndReset()
             => session.SendAndReset();
         }
@@ -94,6 +107,9 @@ namespace Garnet.server
 
             /// <inheritdoc />
             public unsafe byte* BufferEnd { get; private set; }
+
+            /// <inheritdoc />
+            public byte RespProtocolVersion { get; } = 2;
 
             /// <summary>
             /// Gets a span that covers the responses as written so far.
@@ -129,86 +145,6 @@ namespace Garnet.server
             }
         }
 
-        const string LoaderBlock = @"
-import = function () end
-KEYS = {}
-ARGV = {}
-sandbox_env = {
-    _G = _G;
-    _VERSION = _VERSION;
-
-    assert = assert;
-    collectgarbage = collectgarbage;
-    coroutine = coroutine;
-    error = error;
-    gcinfo = gcinfo;
-    -- explicitly not allowing getfenv
-    getmetatable = getmetatable;
-    ipairs = ipairs;
-    load = load;
-    loadstring = loadstring;
-    math = math;
-    next = next;
-    pairs = pairs;
-    pcall = pcall;
-    rawequal = rawequal;
-    rawget = rawget;
-    rawset = rawset;
-    select = select;
-    -- explicitly not allowing setfenv
-    string = string;
-    setmetatable = setmetatable;
-    table = table;
-    tonumber = tonumber;
-    tostring = tostring;
-    type = type;
-    unpack = table.unpack;
-    xpcall = xpcall;
-
-    KEYS = KEYS;
-    ARGV = ARGV;
-}
--- do resets in the Lua side to minimize pinvokes
-function reset_keys_and_argv(fromKey, fromArgv)
-    local keyRef = KEYS
-    local keyCount = #keyRef
-    for i = fromKey, keyCount do
-        table.remove(keyRef)
-    end
-
-    local argvRef = ARGV
-    local argvCount = #argvRef
-    for i = fromArgv, argvCount do
-        table.remove(argvRef)
-    end
-end
--- responsible for sandboxing user provided code
-function load_sandboxed(source)
-    -- move into a local to avoid global lookup
-    local garnetCallRef = garnet_call
-
-    sandbox_env.redis = {
-        status_reply = function(text)
-            return text
-        end,
-
-        error_reply = function(text)
-            return { err = 'ERR ' .. text }
-        end,
-
-        call = function(...)
-            return garnetCallRef(...)
-        end
-    }
-
-    local rawFunc, err = load(source, nil, nil, sandbox_env)
-
-    return err, rawFunc
-end
-";
-
-        private static readonly ReadOnlyMemory<byte> LoaderBlockBytes = Encoding.UTF8.GetBytes(LoaderBlock);
-
         private static (int Start, ulong[] ByteMask) NoScriptDetails = InitializeNoScriptDetails();
 
         // References into Registry on the Lua side
@@ -216,25 +152,19 @@ end
         // These are mix of objects we regularly update,
         // constants we want to avoid copying from .NET to Lua,
         // and the compiled function definition.
-        readonly int keysTableRegistryIndex;
-        readonly int argvTableRegistryIndex;
+        readonly int sandboxEnvRegistryIndex;
         readonly int loadSandboxedRegistryIndex;
         readonly int resetKeysAndArgvRegistryIndex;
-        readonly int okConstStringRegistryIndex;
-        readonly int okLowerConstStringRegistryIndex;
-        readonly int errConstStringRegistryIndex;
-        readonly int noSessionAvailableConstStringRegistryIndex;
-        readonly int pleaseSpecifyRedisCallConstStringRegistryIndex;
-        readonly int errNoAuthConstStringRegistryIndex;
-        readonly int errUnknownConstStringRegistryIndex;
-        readonly int errBadArgConstStringRegistryIndex;
+        readonly int requestTimeoutRegsitryIndex;
+        readonly ConstantStringRegistryIndexes constStrs;
 
+        readonly LuaLoggingMode logMode;
+        readonly HashSet<string> allowedFunctions;
         readonly ReadOnlyMemory<byte> source;
         readonly ScratchBufferNetworkSender scratchBufferNetworkSender;
         readonly RespServerSession respServerSession;
 
         readonly ScratchBufferManager scratchBufferManager;
-        readonly ILogger logger;
         readonly TxnKeyEntries txnKeyEntries;
         readonly bool txnMode;
 
@@ -257,23 +187,48 @@ end
 
         int keyLength, argvLength;
 
+        internal readonly ILogger logger;
+
+        // Size of the array compontents of KEYS and ARGV
+        // We keep these up to date so we can reason about allocations
+        int keysArrCapacity, argvArrCapacity;
+
+        /// <summary>
+        /// If an invocation ran into an error that has left the <see cref="LuaRunner"/> in a bad (but legal) state, 
+        /// returns true indicating the <see cref="LuaRunner"/> should be recreated at the next convenience.
+        /// </summary>
+        public bool NeedsDispose
+        => state.NeedsDispose;
+
         /// <summary>
         /// Creates a new runner with the source of the script
         /// </summary>
         public unsafe LuaRunner(
             LuaMemoryManagementMode memMode,
             int? memLimitBytes,
+            LuaLoggingMode logMode,
+            HashSet<string> allowedFunctions,
             ReadOnlyMemory<byte> source,
             bool txnMode = false,
             RespServerSession respServerSession = null,
             ScratchBufferNetworkSender scratchBufferNetworkSender = null,
+            string redisVersion = "0.0.0.0",
             ILogger logger = null
         )
         {
+            // KEYS and ARGV are always access by index, and to avoid allocation concerns
+            // we also want to track their 'array'-bits sizes
+            //
+            // So we explicitly create them with these capacities, and recreate them as necessary
+            const int InitialKeysCapacity = 5;
+            const int InitialArgvCapacity = 5;
+
             this.source = source;
             this.txnMode = txnMode;
             this.respServerSession = respServerSession;
             this.scratchBufferNetworkSender = scratchBufferNetworkSender;
+            this.logMode = logMode;
+            this.allowedFunctions = allowedFunctions;
             this.logger = logger;
 
             scratchBufferManager = respServerSession?.scratchBufferManager ?? new();
@@ -287,12 +242,23 @@ end
                 (respServerSession.noScriptStart, respServerSession.noScriptBitmap) = NoScriptDetails;
             }
 
-            keysTableRegistryIndex = -1;
-            argvTableRegistryIndex = -1;
+            sandboxEnvRegistryIndex = -1;
             loadSandboxedRegistryIndex = -1;
             functionRegistryIndex = -1;
 
             state = new LuaStateWrapper(memMode, memLimitBytes, this.logger);
+
+            if (!state.TryCreateTable(InitialKeysCapacity, 0) || !state.TrySetGlobal("KEYS\0"u8))
+            {
+                throw new GarnetException("Insufficient space in Lua VM for KEYS");
+            }
+            keysArrCapacity = InitialKeysCapacity;
+
+            if (!state.TryCreateTable(InitialArgvCapacity, 0) || !state.TrySetGlobal("ARGV\0"u8))
+            {
+                throw new GarnetException("Insufficient space in Lua VM for ARGV");
+            }
+            argvArrCapacity = InitialArgvCapacity;
 
             delegate* unmanaged[Cdecl]<nint, int> garnetCall;
             if (txnMode)
@@ -312,10 +278,63 @@ end
                 garnetCall = &LuaRunnerTrampolines.GarnetCallNoSession;
             }
 
-            var loadRes = state.LoadBuffer(LoaderBlockBytes.Span);
+            // Lua 5.4 does not provide these functions, but 5.1 does - so implement them
+            Register(ref state, "garnet_atan2\0"u8, &LuaRunnerTrampolines.Atan2);
+            Register(ref state, "garnet_cosh\0"u8, &LuaRunnerTrampolines.Cosh);
+            Register(ref state, "garnet_frexp\0"u8, &LuaRunnerTrampolines.Frexp);
+            Register(ref state, "garnet_ldexp\0"u8, &LuaRunnerTrampolines.Ldexp);
+            Register(ref state, "garnet_log10\0"u8, &LuaRunnerTrampolines.Log10);
+            Register(ref state, "garnet_pow\0"u8, &LuaRunnerTrampolines.Pow);
+            Register(ref state, "garnet_sinh\0"u8, &LuaRunnerTrampolines.Sinh);
+            Register(ref state, "garnet_tanh\0"u8, &LuaRunnerTrampolines.Tanh);
+            Register(ref state, "garnet_maxn\0"u8, &LuaRunnerTrampolines.Maxn);
+            Register(ref state, "garnet_loadstring\0"u8, &LuaRunnerTrampolines.LoadString);
+
+            // Things provided as Lua libraries, which we actually implement in .NET
+            Register(ref state, "garnet_cjson_encode\0"u8, &LuaRunnerTrampolines.CJsonEncode);
+            Register(ref state, "garnet_cjson_decode\0"u8, &LuaRunnerTrampolines.CJsonDecode);
+            Register(ref state, "garnet_bit_tobit\0"u8, &LuaRunnerTrampolines.BitToBit);
+            Register(ref state, "garnet_bit_tohex\0"u8, &LuaRunnerTrampolines.BitToHex);
+            // garnet_bitop implements bnot, bor, band, xor, etc. but isn't directly exposed
+            Register(ref state, "garnet_bitop\0"u8, &LuaRunnerTrampolines.Bitop);
+            Register(ref state, "garnet_bit_bswap\0"u8, &LuaRunnerTrampolines.BitBswap);
+            Register(ref state, "garnet_cmsgpack_pack\0"u8, &LuaRunnerTrampolines.CMsgPackPack);
+            Register(ref state, "garnet_cmsgpack_unpack\0"u8, &LuaRunnerTrampolines.CMsgPackUnpack);
+            Register(ref state, "garnet_call\0"u8, garnetCall);
+            Register(ref state, "garnet_sha1hex\0"u8, &LuaRunnerTrampolines.SHA1Hex);
+            Register(ref state, "garnet_log\0"u8, &LuaRunnerTrampolines.Log);
+            Register(ref state, "garnet_acl_check_cmd\0"u8, &LuaRunnerTrampolines.AclCheckCommand);
+            Register(ref state, "garnet_setresp\0"u8, &LuaRunnerTrampolines.SetResp);
+            Register(ref state, "garnet_unpack_trampoline\0"u8, &LuaRunnerTrampolines.UnpackTrampoline);
+
+            var redisVersionBytes = Encoding.UTF8.GetBytes(redisVersion);
+            if (!state.TryPushBuffer(redisVersionBytes) || !state.TrySetGlobal("garnet_REDIS_VERSION\0"u8))
+            {
+                throw new GarnetException("Insufficient space in Lua VM for redis version global");
+            }
+
+            var redisVersionParsed = Version.Parse(redisVersion);
+            var redisVersionNum =
+                ((byte)redisVersionParsed.Major << 16) |
+                ((byte)redisVersionParsed.Minor << 8) |
+                ((byte)redisVersionParsed.Build << 0);
+            state.PushInteger(redisVersionNum);
+            if (!state.TrySetGlobal("garnet_REDIS_VERSION_NUM\0"u8))
+            {
+                throw new GarnetException("Insufficient space in Lua VM for redis version number global");
+            }
+
+            var loadRes = state.LoadBuffer(PrepareLoaderBlockBytes(allowedFunctions, logger).Span);
             if (loadRes != LuaStatus.OK)
             {
-                throw new GarnetException("Could load loader into Lua");
+                if (state.StackTop == 1 && state.Type(1) == LuaType.String)
+                {
+                    state.KnownStringToBuffer(1, out var buff);
+                    var innerError = Encoding.UTF8.GetString(buff);
+                    throw new GarnetException($"Could not initialize Lua VM: {innerError}");
+                }
+
+                throw new GarnetException("Could not initialize Lua VM");
             }
 
             var sandboxRes = state.PCall(0, -1);
@@ -343,51 +362,51 @@ end
                 throw new GarnetException($"Could not initialize Lua sandbox state: {errMsg}");
             }
 
-            // Register garnet_call in global namespace
-            state.Register("garnet_call\0"u8, garnetCall);
-
-            state.GetGlobal(LuaType.Table, "KEYS\0"u8);
-            keysTableRegistryIndex = state.Ref();
-
-            state.GetGlobal(LuaType.Table, "ARGV\0"u8);
-            argvTableRegistryIndex = state.Ref();
+            state.GetGlobal(LuaType.Table, "sandbox_env\0"u8);
+            if (!state.TryRef(out sandboxEnvRegistryIndex))
+            {
+                throw new GarnetException("Insufficient space in VM for sandbox_env ref");
+            }
 
             state.GetGlobal(LuaType.Function, "load_sandboxed\0"u8);
-            loadSandboxedRegistryIndex = state.Ref();
+            if (!state.TryRef(out loadSandboxedRegistryIndex))
+            {
+                throw new GarnetException("Insufficient space in VM for load_sandboxed ref");
+            }
 
             state.GetGlobal(LuaType.Function, "reset_keys_and_argv\0"u8);
-            resetKeysAndArgvRegistryIndex = state.Ref();
+            if (!state.TryRef(out resetKeysAndArgvRegistryIndex))
+            {
+                throw new GarnetException("Insufficient space in VM for reset_keys_and_argv ref");
+            }
 
-            // Commonly used strings, register them once so we don't have to copy them over each time we need them
-            okConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_OK);
-            okLowerConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_ok);
-            errConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_err);
-            noSessionAvailableConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_No_session_available);
-            pleaseSpecifyRedisCallConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_ERR_Please_specify_at_least_one_argument_for_this_redis_lib_call);
-            errNoAuthConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.RESP_ERR_NOAUTH);
-            errUnknownConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_ERR_Unknown_Redis_command_called_from_script);
-            errBadArgConstStringRegistryIndex = ConstantStringToRegistry(CmdStrings.LUA_ERR_Lua_redis_lib_command_arguments_must_be_strings_or_integers);
+            state.GetGlobal(LuaType.Function, "request_timeout\0"u8);
+            if (!state.TryRef(out requestTimeoutRegsitryIndex))
+            {
+                throw new GarnetException("Insufficient space in VM for request_timeout ref");
+            }
+
+            // Load all the constant strings into the VM
+            constStrs = new(ref state);
 
             state.ExpectLuaStackEmpty();
+
+            // Attempt to register a function under the given name, throwing an exception if that fails
+            static void Register(ref LuaStateWrapper state, ReadOnlySpan<byte> name, delegate* unmanaged[Cdecl]<nint, int> function)
+            {
+                if (!state.TryRegister(name, function))
+                {
+                    throw new GarnetException($"Insufficient space in VM for {Encoding.UTF8.GetString(name[..^1])} global");
+                }
+            }
         }
 
         /// <summary>
         /// Creates a new runner with the source of the script
         /// </summary>
-        public LuaRunner(LuaOptions options, string source, bool txnMode = false, RespServerSession respServerSession = null, ScratchBufferNetworkSender scratchBufferNetworkSender = null, ILogger logger = null)
-            : this(options.MemoryManagementMode, options.GetMemoryLimitBytes(), Encoding.UTF8.GetBytes(source), txnMode, respServerSession, scratchBufferNetworkSender, logger)
+        public LuaRunner(LuaOptions options, string source, bool txnMode = false, RespServerSession respServerSession = null, ScratchBufferNetworkSender scratchBufferNetworkSender = null, string redisVersion = "0.0.0.0", ILogger logger = null)
+            : this(options.MemoryManagementMode, options.GetMemoryLimitBytes(), options.LogMode, options.AllowedFunctions, Encoding.UTF8.GetBytes(source), txnMode, respServerSession, scratchBufferNetworkSender, redisVersion, logger)
         {
-        }
-
-        /// <summary>
-        /// Some strings we use a bunch, and copying them to Lua each time is wasteful
-        ///
-        /// So instead we stash them in the Registry and load them by index
-        /// </summary>
-        private int ConstantStringToRegistry(ReadOnlySpan<byte> str)
-        {
-            state.PushBuffer(str);
-            return state.Ref();
         }
 
         /// <summary>
@@ -397,6 +416,8 @@ end
         /// </summary>
         public unsafe void CompileForRunner()
         {
+            state.ExpectLuaStackEmpty();
+
             runnerAdapter = new RunnerAdapter(scratchBufferManager);
             try
             {
@@ -427,22 +448,14 @@ end
         }
 
         /// <summary>
-        /// Actually compiles for runner.
-        /// 
-        /// If you call this directly and Lua encounters an error, the process will crash.
-        /// 
-        /// Call <see cref="CompileForRunner"/> instead.
-        /// </summary>
-        internal int UnsafeCompileForRunner()
-        => CompileCommon(ref runnerAdapter);
-
-        /// <summary>
         /// Compile script for a <see cref="RespServerSession"/>.
         /// 
         /// Any errors encountered are written out as Resp errors.
         /// </summary>
         public unsafe bool CompileForSession(RespServerSession session)
         {
+            state.ExpectLuaStackEmpty();
+
             sessionAdapter = new RespResponseAdapter(session);
 
             try
@@ -458,7 +471,7 @@ end
                     return false;
                 }
 
-                return true;
+                return functionRegistryIndex != -1;
             }
             finally
             {
@@ -466,16 +479,6 @@ end
                 LuaRunnerTrampolines.ClearCallbackContext(this);
             }
         }
-
-        /// <summary>
-        /// Actually compiles for runner.
-        /// 
-        /// If you call this directly and Lua encounters an error, the process will crash.
-        /// 
-        /// Call <see cref="CompileForSession"/> instead.
-        /// </summary>
-        internal int UnsafeCompileForSession()
-        => CompileCommon(ref sessionAdapter);
 
         /// <summary>
         /// Drops compiled function, just for benchmarking purposes.
@@ -490,349 +493,245 @@ end
         }
 
         /// <summary>
-        /// Compile script, writing errors out to given response.
-        /// </summary>
-        private unsafe int CompileCommon<TResponse>(ref TResponse resp)
-            where TResponse : struct, IResponseAdapter
-        {
-            const int NeededStackSpace = 2;
-
-            Debug.Assert(functionRegistryIndex == -1, "Shouldn't compile multiple times");
-
-            state.ExpectLuaStackEmpty();
-
-            state.ForceMinimumStackCapacity(NeededStackSpace);
-
-            _ = state.RawGetInteger(LuaType.Function, (int)LuaRegistry.Index, loadSandboxedRegistryIndex);
-            state.PushBuffer(source.Span);
-            state.Call(1, 2);
-
-            // Now the stack will have two things on it:
-            //  1. The error (nil if not error)
-            //  2. The function (nil if error)
-
-            if (state.Type(1) == LuaType.Nil)
-            {
-                // No error, success!
-
-                Debug.Assert(state.Type(2) == LuaType.Function, "Unexpected type returned from load_sandboxed");
-
-                functionRegistryIndex = state.Ref();
-            }
-            else
-            {
-                // We control the definition of load_sandboxed, so we know this will be a string
-                state.KnownStringToBuffer(1, out var errorBuf);
-
-                var errStr = $"Compilation error: {Encoding.UTF8.GetString(errorBuf)}";
-                while (!RespWriteUtils.TryWriteError(errStr, ref resp.BufferCur, resp.BufferEnd))
-                    resp.SendAndReset();
-            }
-
-            return 0;
-        }
-
-        /// <summary>
         /// Dispose the runner
         /// </summary>
         public void Dispose()
         => state.Dispose();
 
         /// <summary>
-        /// Entry point for redis.call method from a Lua script (non-transactional mode)
-        /// </summary>
-        public int GarnetCall(nint luaStatePtr)
-        {
-            state.CallFromLuaEntered(luaStatePtr);
-
-            return ProcessCommandFromScripting(ref respServerSession.basicGarnetApi);
-        }
-
-        /// <summary>
-        /// Entry point for redis.call method from a Lua script (transactional mode)
-        /// </summary>
-        public int GarnetCallWithTransaction(nint luaStatePtr)
-        {
-            state.CallFromLuaEntered(luaStatePtr);
-
-            return ProcessCommandFromScripting(ref respServerSession.lockableGarnetApi);
-        }
-
-        /// <summary>
-        /// Call somehow came in with no valid resp server session.
+        /// We can't use Lua's normal error handling functions on Linux, so instead we go through wrappers.
         /// 
-        /// This is used in benchmarking.
+        /// The last slot on the stack is used for an error message, the rest are filled with nils.
+        /// 
+        /// Raising the error is handled (on the Lua side) with the error_wrapper_r# functions.
         /// </summary>
-        internal int NoSessionResponse(nint luaStatePtr)
+        private int LuaWrappedError([ConstantExpected] int nonErrorReturns, ReadOnlySpan<byte> errorMsg)
         {
-            const int NeededStackSpace = 1;
+            Debug.Assert(nonErrorReturns <= LuaStateWrapper.LUA_MINSTACK - 1, "Cannot safely return this many returns in an error path");
 
-            state.CallFromLuaEntered(luaStatePtr);
+            state.ClearStack();
 
-            state.ForceMinimumStackCapacity(NeededStackSpace);
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(nonErrorReturns + 1), "Bounds check above should mean this never fails");
 
-            state.PushNil();
-            return 1;
+            for (var i = 0; i < nonErrorReturns; i++)
+            {
+                state.PushNil();
+            }
+
+            if (!state.TryPushBuffer(errorMsg))
+            {
+                // Don't have enough space to provide the actual error, which is itself an OOM error
+                return LuaWrappedError(nonErrorReturns, constStrs.OutOfMemory);
+            }
+
+            return nonErrorReturns + 1;
         }
 
         /// <summary>
-        /// Entry point method for executing commands from a Lua Script
+        /// We can't use Lua's normal error handling functions on Linux, so instead we go through wrappers.
+        /// 
+        /// The last slot on the stack is used for an error message, the rest are filled with nils.
+        /// 
+        /// Raising the error is handled (on the Lua side) with the error_wrapper_r# functions.
         /// </summary>
-        unsafe int ProcessCommandFromScripting<TGarnetApi>(ref TGarnetApi api)
-            where TGarnetApi : IGarnetApi
+        private int LuaWrappedError([ConstantExpected] int nonErrorReturns, int constStringRegistryIndex)
         {
-            const int AdditionalStackSpace = 1;
+            Debug.Assert(nonErrorReturns <= LuaStateWrapper.LUA_MINSTACK - 1, "Cannot safely return this many returns in an error path");
 
-            try
+            state.ClearStack();
+
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(nonErrorReturns + 1), "Should never fail, as nonErrorReturns+1 <= LUA_MINSTACK");
+
+            for (var i = 0; i < nonErrorReturns; i++)
             {
-                var argCount = state.StackTop;
-
-                if (argCount <= 0)
-                {
-                    return LuaStaticError(pleaseSpecifyRedisCallConstStringRegistryIndex);
-                }
-
-                state.ForceMinimumStackCapacity(AdditionalStackSpace);
-
-                if (!state.CheckBuffer(1, out var cmdSpan))
-                {
-                    return LuaStaticError(errBadArgConstStringRegistryIndex);
-                }
-
-                // We special-case a few performance-sensitive operations to directly invoke via the storage API
-                if (AsciiUtils.EqualsUpperCaseSpanIgnoringCase(cmdSpan, "SET"u8) && argCount == 3)
-                {
-                    if (!respServerSession.CheckACLPermissions(RespCommand.SET))
-                    {
-                        return LuaStaticError(errNoAuthConstStringRegistryIndex);
-                    }
-
-                    if (!state.CheckBuffer(2, out var keySpan) || !state.CheckBuffer(3, out var valSpan))
-                    {
-                        return LuaStaticError(errBadArgConstStringRegistryIndex);
-                    }
-
-                    // Note these spans are implicitly pinned, as they're actually on the Lua stack
-                    var key = ArgSlice.FromPinnedSpan(keySpan);
-                    var value = ArgSlice.FromPinnedSpan(valSpan);
-
-                    _ = api.SET(key, value);
-
-                    state.PushConstantString(okConstStringRegistryIndex);
-                    return 1;
-                }
-                else if (AsciiUtils.EqualsUpperCaseSpanIgnoringCase(cmdSpan, "GET"u8) && argCount == 2)
-                {
-                    if (!respServerSession.CheckACLPermissions(RespCommand.GET))
-                    {
-                        return LuaStaticError(errNoAuthConstStringRegistryIndex);
-                    }
-
-                    if (!state.CheckBuffer(2, out var keySpan))
-                    {
-                        return LuaStaticError(errBadArgConstStringRegistryIndex);
-                    }
-
-                    // Span is (implicitly) pinned since it's actually on the Lua stack
-                    var key = ArgSlice.FromPinnedSpan(keySpan);
-                    var status = api.GET(key, out var value);
-
-                    if (status == GarnetStatus.OK)
-                    {
-                        state.PushBuffer(value.ReadOnlySpan);
-                    }
-                    else
-                    {
-                        // Redis is weird, but false instead of Nil is correct here
-                        state.PushBoolean(false);
-                    }
-
-                    return 1;
-                }
-
-                // As fallback, we use RespServerSession with a RESP-formatted input. This could be optimized
-                // in future to provide parse state directly.
-
-                scratchBufferManager.Reset();
-                scratchBufferManager.StartCommand(cmdSpan, argCount - 1);
-
-                for (var i = 0; i < argCount - 1; i++)
-                {
-                    var argIx = 2 + i;
-
-                    var argType = state.Type(argIx);
-                    if (argType == LuaType.Nil)
-                    {
-                        scratchBufferManager.WriteNullArgument();
-                    }
-                    else if (argType is LuaType.String or LuaType.Number)
-                    {
-                        // KnownStringToBuffer will coerce a number into a string
-                        //
-                        // Redis nominally converts numbers to integers, but in this case just ToStrings things
-                        state.KnownStringToBuffer(argIx, out var span);
-
-                        // Span remains pinned so long as we don't pop the stack
-                        scratchBufferManager.WriteArgument(span);
-                    }
-                    else
-                    {
-                        return LuaStaticError(errBadArgConstStringRegistryIndex);
-                    }
-                }
-
-                var request = scratchBufferManager.ViewFullArgSlice();
-
-                // Once the request is formatted, we can release all the args on the Lua stack
-                //
-                // This keeps the stack size down for processing the response
-                state.Pop(argCount);
-
-                _ = respServerSession.TryConsumeMessages(request.ptr, request.length);
-
-                var response = scratchBufferNetworkSender.GetResponse();
-                var result = ProcessResponse(response.ptr, response.length);
-                scratchBufferNetworkSender.Reset();
-
-                return result;
+                state.PushNil();
             }
-            catch (Exception e)
-            {
-                // We cannot let exceptions propogate back to Lua, that is not something .NET promises will work
-
-                logger?.LogError(e, "During Lua script execution");
-
-                return state.RaiseError(e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Cause a Lua error to be raised with a message previously registered.
-        /// </summary>
-        private int LuaStaticError(int constStringRegistryIndex)
-        {
-            const int NeededStackSize = 1;
-
-            state.ForceMinimumStackCapacity(NeededStackSize);
 
             state.PushConstantString(constStringRegistryIndex);
-            return state.RaiseErrorFromStack();
+            return nonErrorReturns + 1;
         }
 
         /// <summary>
-        /// Process a RESP-formatted response from the RespServerSession.
+        /// Process a RESP(2|3)-formatted response.
         /// 
-        /// Pushes result onto state stack and returns 1, or raises an error and never returns.
+        /// Pushes result onto Lua stack and returns 1, or raises an error and never returns.
         /// </summary>
-        private unsafe int ProcessResponse(byte* ptr, int length)
+        private unsafe int ProcessRespResponse(byte respProtocolVersion, byte* respPtr, int respLen)
         {
-            const int NeededStackSize = 3;
+            var respEnd = respPtr + respLen;
 
-            state.ForceMinimumStackCapacity(NeededStackSize);
+            var ret = ProcessSingleRespTerm(respProtocolVersion, ref respPtr, respEnd);
 
-            switch (*ptr)
+            if (respPtr != respEnd)
             {
-                case (byte)'+':
-                    ptr++;
-                    length--;
-                    if (RespReadUtils.TryReadAsSpan(out var resultSpan, ref ptr, ptr + length))
+                logger?.LogError("RESP3 Response not fully consumed, this should never happen");
+
+                return LuaWrappedError(1, constStrs.UnexpectedError);
+            }
+
+            return ret;
+        }
+
+        private unsafe int ProcessSingleRespTerm(byte respProtocolVersion, ref byte* respPtr, byte* respEnd)
+        {
+            var indicator = (char)*respPtr;
+
+            var curTop = state.StackTop;
+
+            switch (indicator)
+            {
+                // Simple reply (Common)
+                case '+':
+                    respPtr++;
+                    if (RespReadUtils.TryReadAsSpan(out var resultSpan, ref respPtr, respEnd))
                     {
+                        // Space for table, 'ok', and value
+                        const int NeededStackSize = 3;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
                         // Construct a table = { 'ok': value }
-                        state.CreateTable(0, 1);
-                        state.PushConstantString(okLowerConstStringRegistryIndex);
-                        state.PushBuffer(resultSpan);
-                        state.RawSet(1);
+                        if (!state.TryCreateTable(0, 1))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+                        state.PushConstantString(constStrs.OkLower);
+                        var setInOkTable = 0;
+
+                        if (!state.TryPushBuffer(resultSpan))
+                        {
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+
+                        state.RawSet(1, curTop + 1, ref setInOkTable);
+                        Debug.Assert(setInOkTable == 1, "Didn't fill table with expected records");
 
                         return 1;
                     }
                     goto default;
 
-                case (byte)':':
-                    if (RespReadUtils.TryReadInt64(out var number, ref ptr, ptr + length))
+                // Integer (Common)
+                case ':':
+                    if (RespReadUtils.TryReadInt64(out var number, ref respPtr, respEnd))
                     {
+                        // Space for integer
+                        const int NeededStackSize = 1;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
                         state.PushInteger(number);
                         return 1;
                     }
                     goto default;
 
-                case (byte)'-':
-                    ptr++;
-                    length--;
-                    if (RespReadUtils.TryReadAsSpan(out var errSpan, ref ptr, ptr + length))
+                // Error (Common)
+                case '-':
+                    respPtr++;
+                    if (RespReadUtils.TryReadAsSpan(out var errSpan, ref respPtr, respEnd))
                     {
                         if (errSpan.SequenceEqual(CmdStrings.RESP_ERR_GENERIC_UNK_CMD))
                         {
                             // Gets a special response
-                            return LuaStaticError(errUnknownConstStringRegistryIndex);
+                            return LuaWrappedError(1, constStrs.ErrUnknown);
                         }
 
-                        state.PushBuffer(errSpan);
-                        return state.RaiseErrorFromStack();
-
+                        return LuaWrappedError(1, errSpan);
                     }
                     goto default;
 
-                case (byte)'$':
-                    if (length >= 5 && new ReadOnlySpan<byte>(ptr + 1, 4).SequenceEqual("-1\r\n"u8))
+                // Bulk string or null bulk string (Common)
+                case '$':
+                    var remainingLength = respEnd - respPtr;
+
+                    if (remainingLength >= 5 && new ReadOnlySpan<byte>(respPtr + 1, 4).SequenceEqual("-1\r\n"u8))
                     {
+                        // Space for boolean
+                        const int NeededStackSize = 1;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
                         // Bulk null strings are mapped to FALSE
                         // See: https://redis.io/docs/latest/develop/interact/programmability/lua-api/#lua-to-resp2-type-conversion
                         state.PushBoolean(false);
 
+                        respPtr += 5;
+
                         return 1;
                     }
-                    else if (RespReadUtils.TryReadSpanWithLengthHeader(out var bulkSpan, ref ptr, ptr + length))
+                    else if (RespReadUtils.TryReadSpanWithLengthHeader(out var bulkSpan, ref respPtr, respEnd))
                     {
-                        state.PushBuffer(bulkSpan);
+                        // Space for string
+                        const int NeededStackSize = 3;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
+                        if (!state.TryPushBuffer(bulkSpan))
+                        {
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
 
                         return 1;
                     }
                     goto default;
 
-                case (byte)'*':
-                    if (RespReadUtils.TryReadSignedArrayLength(out var itemCount, ref ptr, ptr + length))
+                // Array (Common)
+                case '*':
+                    if (RespReadUtils.TryReadSignedArrayLength(out var arrayItemCount, ref respPtr, respEnd))
                     {
-                        if (itemCount == -1)
+                        if (arrayItemCount == -1)
                         {
-                            // Null multi-bulk -> maps to false
+                            // Space for boolean
+                            const int NeededStackSize = 3;
+
+                            if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                            }
+
                             state.PushBoolean(false);
                         }
                         else
                         {
-                            // Create the new table
-                            state.CreateTable(itemCount, 0);
+                            // Space for table
+                            const int NeededStackSize = 1;
 
-                            for (var itemIx = 0; itemIx < itemCount; itemIx++)
+                            if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
                             {
-                                if (*ptr == '$')
-                                {
-                                    // Bulk String
-                                    if (length >= 4 && new ReadOnlySpan<byte>(ptr + 1, 4).SequenceEqual("-1\r\n"u8))
-                                    {
-                                        // Null strings are mapped to false
-                                        // See: https://redis.io/docs/latest/develop/interact/programmability/lua-api/#lua-to-resp2-type-conversion
-                                        state.PushBoolean(false);
-                                    }
-                                    else if (RespReadUtils.TryReadSpanWithLengthHeader(out var strSpan, ref ptr, ptr + length))
-                                    {
-                                        state.PushBuffer(strSpan);
-                                    }
-                                    else
-                                    {
-                                        // Error, drop the table we allocated
-                                        state.Pop(1);
-                                        goto default;
-                                    }
-                                }
-                                else
-                                {
-                                    // In practice, we ONLY ever return bulk strings
-                                    // So just... not implementing the rest for now
-                                    throw new NotImplementedException($"Unexpected sigil: {(char)*ptr}");
-                                }
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                            }
 
-                                // Stack now has table and value at itemIx on it
-                                state.RawSetInteger(1, itemIx + 1);
+                            if (!state.TryCreateTable(arrayItemCount, 0))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.OutOfMemory);
+                            }
+
+                            for (var itemIx = 0; itemIx < arrayItemCount; itemIx++)
+                            {
+                                // Pushes the item to the top of the stack
+                                _ = ProcessSingleRespTerm(respProtocolVersion, ref respPtr, respEnd);
+
+                                // Store the item into the table
+                                state.RawSetInteger(arrayItemCount, curTop + 1, itemIx + 1);
                             }
                         }
 
@@ -840,8 +739,382 @@ end
                     }
                     goto default;
 
+                // Map (RESP3 only)
+                case '%':
+                    if (respProtocolVersion != 3)
+                    {
+                        goto default;
+                    }
+
+                    if (RespReadUtils.TryReadSignedMapLength(out var mapPairCount, ref respPtr, respEnd) && mapPairCount >= 0)
+                    {
+                        // Space for table, 'map', and sub-table
+                        const int NeededStackSize = 3;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
+                        // Response is a two level table, where { map = { ... } }
+                        if (!state.TryCreateTable(0, 1))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+                        var setRecordsInTable = 0;
+
+                        state.PushConstantString(constStrs.Map);
+                        if (!state.TryCreateTable(0, mapPairCount))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+                        var setRecordsInMap = 0;
+
+                        for (var pair = 0; pair < mapPairCount; pair++)
+                        {
+                            // Read key
+                            _ = ProcessSingleRespTerm(respProtocolVersion, ref respPtr, respEnd);
+
+                            // Read value
+                            _ = ProcessSingleRespTerm(respProtocolVersion, ref respPtr, respEnd);
+
+                            // Set t[k] = v
+                            state.RawSet(mapPairCount, curTop + 3, ref setRecordsInMap);
+                        }
+                        Debug.Assert(mapPairCount == setRecordsInMap, "Didn't fill table with records");
+
+                        // Store the sub-table into the parent table
+                        state.RawSet(1, curTop + 1, ref setRecordsInTable);
+                        Debug.Assert(setRecordsInMap == 1, "Didn't fill table with records");
+
+                        return 1;
+                    }
+                    goto default;
+
+                // Null (RESP3 only)
+                case '_':
+                    {
+                        if (respProtocolVersion != 3)
+                        {
+                            goto default;
+                        }
+
+                        var remaining = respEnd - respPtr;
+                        if (remaining >= 3 && *(ushort*)(respPtr + 1) == MemoryMarshal.Read<ushort>("\r\n"u8))
+                        {
+                            respPtr += 3;
+
+                            // Space for nil
+                            const int NeededStackSize = 1;
+
+                            if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                            }
+
+                            state.PushNil();
+
+                            return 1;
+                        }
+                    }
+                    goto default;
+
+                // Set (RESP3 only)
+                case '~':
+                    if (respProtocolVersion != 3)
+                    {
+                        goto default;
+                    }
+
+                    if (RespReadUtils.TryReadSignedSetLength(out var setItemCount, ref respPtr, respEnd) && setItemCount >= 0)
+                    {
+                        // Space for table, 'set', sub-table, key, boolean
+                        const int NeededStackSize = 5;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
+                        // Response is a two level table, where { set = { ... } }
+                        if (!state.TryCreateTable(0, 1))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+                        var setRecordsInTable = 0;
+
+                        state.PushConstantString(constStrs.Set);
+                        if (!state.TryCreateTable(0, setItemCount))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.OutOfMemory);
+                        }
+                        var setRecordsInSet = 0;
+
+                        for (var pair = 0; pair < setItemCount; pair++)
+                        {
+                            // Read value, which we use as a key
+                            _ = ProcessSingleRespTerm(respProtocolVersion, ref respPtr, respEnd);
+
+                            // Unconditionally the value under the key is true
+                            state.PushBoolean(true);
+
+                            // Set t[value] = true
+                            state.RawSet(setItemCount, curTop + 3, ref setRecordsInSet);
+                        }
+                        Debug.Assert(setItemCount == setRecordsInSet, "Didn't fill table with records");
+
+                        // Store the sub-table into the parent table
+                        state.RawSet(1, curTop + 1, ref setRecordsInTable);
+                        Debug.Assert(setRecordsInTable == 1, "Didn't fill table with records");
+
+                        return 1;
+                    }
+                    goto default;
+
+                // Boolean (RESP3 only)
+                case '#':
+                    if (respProtocolVersion != 3)
+                    {
+                        goto default;
+                    }
+
+                    if ((respEnd - respPtr) >= 4)
+                    {
+                        // Space for boolean
+                        const int NeededStackSize = 1;
+
+                        if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                        {
+                            respPtr = respEnd;
+                            return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                        }
+
+                        var asInt = *(int*)respPtr;
+                        respPtr += 4;
+
+                        if (asInt == MemoryMarshal.Read<uint>("#t\r\n"u8))
+                        {
+                            state.PushBoolean(true);
+                            return 1;
+                        }
+                        else if (asInt == MemoryMarshal.Read<uint>("#f\r\n"u8))
+                        {
+                            state.PushBoolean(false);
+                            return 1;
+                        }
+
+                        // Undo advance in (unlikely) error state
+                        respPtr -= 4;
+                    }
+                    goto default;
+
+                // Double (RESP3 only)
+                case ',':
+                    {
+                        if (respProtocolVersion != 3)
+                        {
+                            goto default;
+                        }
+
+                        var fullRemainingSpan = new ReadOnlySpan<byte>(respPtr, (int)(respEnd - respPtr));
+                        var endOfDoubleIx = fullRemainingSpan.IndexOf("\r\n"u8);
+                        if (endOfDoubleIx != -1)
+                        {
+                            // ,<some data>\r\n
+                            var doubleSpan = fullRemainingSpan[..(endOfDoubleIx + 2)];
+
+                            double parsed;
+                            if (doubleSpan.Length >= 4 && *(int*)respPtr == MemoryMarshal.Read<int>(",inf"u8))
+                            {
+                                parsed = double.PositiveInfinity;
+                                respPtr += doubleSpan.Length;
+                            }
+                            else if (doubleSpan.Length >= 4 && *(int*)respPtr == MemoryMarshal.Read<int>(",nan"u8))
+                            {
+                                parsed = double.NaN;
+                                respPtr += doubleSpan.Length;
+                            }
+                            else if (doubleSpan.Length >= 5 && *(int*)(respPtr + 1) == MemoryMarshal.Read<int>("-inf"u8))
+                            {
+                                parsed = double.NegativeInfinity;
+                                respPtr += doubleSpan.Length;
+                            }
+                            else if (doubleSpan.Length >= 5 && *(int*)(respPtr + 1) == MemoryMarshal.Read<int>("-nan"u8))
+                            {
+                                // No distinction between positive and negative NaNs, by design
+                                parsed = double.NaN;
+                                respPtr += doubleSpan.Length;
+                            }
+                            else if (doubleSpan.Length >= 4 && double.TryParse(doubleSpan[1..^2], provider: CultureInfo.InvariantCulture, out parsed))
+                            {
+                                respPtr += doubleSpan.Length;
+                            }
+                            else
+                            {
+                                goto default;
+                            }
+
+                            // Space for table, 'double', and number
+                            const int NeededStackSize = 3;
+
+                            if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                            }
+
+                            // Create table like { double = <parsed> }
+                            if (!state.TryCreateTable(0, 1))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.OutOfMemory);
+                            }
+                            var setRecordsInTable = 0;
+
+                            state.PushConstantString(constStrs.Double);
+                            state.PushNumber(parsed);
+
+                            state.RawSet(1, curTop + 1, ref setRecordsInTable);
+                            Debug.Assert(setRecordsInTable == 1, "Didn't fill table with records");
+
+                            return 1;
+                        }
+                    }
+                    goto default;
+
+                // Big number (RESP3 only)
+                case '(':
+                    {
+                        if (respProtocolVersion != 3)
+                        {
+                            goto default;
+                        }
+
+                        var fullRemainingSpan = new ReadOnlySpan<byte>(respPtr, (int)(respEnd - respPtr));
+                        var endOfBigNum = fullRemainingSpan.IndexOf("\r\n"u8);
+                        if (endOfBigNum != -1)
+                        {
+                            var bigNumSpan = fullRemainingSpan[..(endOfBigNum + 2)];
+                            if (bigNumSpan.Length >= 4)
+                            {
+                                var bigNumBuf = bigNumSpan[1..^2];
+                                if (bigNumBuf.ContainsAnyExceptInRange((byte)'0', (byte)'9'))
+                                {
+                                    goto default;
+                                }
+
+                                respPtr += bigNumSpan.Length;
+
+                                // Space for table, 'big_number', and string
+                                const int NeededStackSize = 3;
+
+                                if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                                {
+                                    respPtr = respEnd;
+                                    return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                                }
+
+                                // Create table like { big_number = <bigNumBuf> }
+                                if (!state.TryCreateTable(0, 1))
+                                {
+                                    respPtr = respEnd;
+                                    return LuaWrappedError(1, constStrs.OutOfMemory);
+                                }
+                                var setRecordsInTable = 0;
+
+                                state.PushConstantString(constStrs.BigNumber);
+
+                                if (!state.TryPushBuffer(bigNumSpan))
+                                {
+                                    respPtr = respEnd;
+                                    return LuaWrappedError(1, constStrs.OutOfMemory);
+                                }
+
+                                state.RawSet(1, curTop + 1, ref setRecordsInTable);
+                                Debug.Assert(setRecordsInTable == 1, "Didn't fill table with records");
+
+                                return 1;
+                            }
+                        }
+                    }
+                    goto default;
+
+                // Verbatim strings (RESP3 only)
+                case '=':
+                    if (respProtocolVersion != 3)
+                    {
+                        goto default;
+                    }
+
+                    if (RespReadUtils.TryReadVerbatimStringLength(out var verbatimStringLength, ref respPtr, respEnd) && verbatimStringLength >= 0)
+                    {
+                        var remainingLen = respEnd - respPtr;
+                        if (remainingLen >= verbatimStringLength + 2)
+                        {
+                            var format = new ReadOnlySpan<byte>(respPtr, 3);
+                            var data = new ReadOnlySpan<byte>(respPtr + 4, verbatimStringLength - 4);
+
+                            respPtr += verbatimStringLength;
+                            if (*(ushort*)respPtr != MemoryMarshal.Read<ushort>("\r\n"u8))
+                            {
+                                respPtr -= verbatimStringLength;
+                                goto default;
+                            }
+
+                            respPtr += 2;
+
+                            // create table like { format = <format>, string = {data} }
+
+                            // Space for table, 'format'|'string', and string
+                            const int NeededStackSize = 3;
+
+                            if (!state.TryEnsureMinimumStackCapacity(NeededStackSize))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.InsufficientLuaStackSpace);
+                            }
+
+                            if (!state.TryCreateTable(0, 2))
+                            {
+                                respPtr = respEnd;
+                                return LuaWrappedError(1, constStrs.OutOfMemory);
+                            }
+                            var setRecordsInTable = 0;
+
+                            state.PushConstantString(constStrs.Format);
+
+                            if (!state.TryPushBuffer(format))
+                            {
+                                return LuaWrappedError(1, constStrs.OutOfMemory);
+                            }
+
+                            state.RawSet(2, curTop + 1, ref setRecordsInTable);
+
+                            state.PushConstantString(constStrs.String);
+
+                            if (!state.TryPushBuffer(data))
+                            {
+                                return LuaWrappedError(1, constStrs.OutOfMemory);
+                            }
+
+                            state.RawSet(2, curTop + 1, ref setRecordsInTable);
+                            Debug.Assert(setRecordsInTable == 2, "Didn't fill table with records");
+
+                            return 1;
+                        }
+                    }
+                    goto default;
+
                 default:
-                    throw new Exception("Unexpected response: " + Encoding.UTF8.GetString(new Span<byte>(ptr, length)).Replace("\n", "|").Replace("\r", "") + "]");
+                    logger?.LogError("Unexpected response, this should never happen");
+                    return LuaWrappedError(1, constStrs.UnexpectedError);
             }
         }
 
@@ -852,9 +1125,10 @@ end
         /// </summary>
         public unsafe void RunForSession(int count, RespServerSession outerSession)
         {
-            const int NeededStackSize = 2;
+            // Space for function
+            const int NeededStackSize = 1;
 
-            state.ForceMinimumStackCapacity(NeededStackSize);
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSize), "LUA_MINSTACK should be large enough that this never fails");
 
             preambleOuterSession = outerSession;
             preambleKeyAndArgvCount = count;
@@ -867,9 +1141,19 @@ end
                 {
                     state.PushCFunction(&LuaRunnerTrampolines.RunPreambleForSession);
                     var callRes = state.PCall(0, 0);
-                    if (callRes != LuaStatus.OK)
+                    if (callRes != LuaStatus.OK || state.StackTop != 0)
                     {
-                        while (!RespWriteUtils.TryWriteError("Internal Lua Error"u8, ref outerSession.dcurr, outerSession.dend))
+                        ReadOnlySpan<byte> err;
+                        if (state.StackTop >= 1 && state.Type(1) == LuaType.String)
+                        {
+                            state.KnownStringToBuffer(1, out err);
+                        }
+                        else
+                        {
+                            err = "Internal Lua Error"u8;
+                        }
+
+                        while (!RespWriteUtils.TryWriteError(err, ref outerSession.dcurr, outerSession.dend))
                             outerSession.SendAndReset();
 
                         return;
@@ -898,87 +1182,16 @@ end
         }
 
         /// <summary>
-        /// Setups a script to be run.
-        /// 
-        /// If you call this directly and Lua encounters an error, the process will crash.
-        /// 
-        /// Call <see cref="RunForSession"/> instead.
-        /// </summary>
-        internal int UnsafeRunPreambleForSession()
-        {
-            state.ExpectLuaStackEmpty();
-
-            scratchBufferManager.Reset();
-
-            ref var parseState = ref preambleOuterSession.parseState;
-
-            var offset = 1;
-            var nKeys = preambleNKeys = parseState.GetInt(offset++);
-            preambleKeyAndArgvCount--;
-            ResetParameters(nKeys, preambleKeyAndArgvCount - nKeys);
-
-            if (nKeys > 0)
-            {
-                // Get KEYS on the stack
-                _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, keysTableRegistryIndex);
-
-                for (var i = 0; i < nKeys; i++)
-                {
-                    ref var key = ref parseState.GetArgSliceByRef(offset);
-
-                    if (txnMode)
-                    {
-                        txnKeyEntries.AddKey(key, false, Tsavorite.core.LockType.Exclusive);
-                        if (!respServerSession.storageSession.objectStoreLockableContext.IsNull)
-                            txnKeyEntries.AddKey(key, true, Tsavorite.core.LockType.Exclusive);
-                    }
-
-                    // Equivalent to KEYS[i+1] = key
-                    state.PushBuffer(key.ReadOnlySpan);
-                    state.RawSetInteger(1, i + 1);
-
-                    offset++;
-                }
-
-                // Remove KEYS from the stack
-                state.Pop(1);
-
-                preambleKeyAndArgvCount -= nKeys;
-            }
-
-            if (preambleKeyAndArgvCount > 0)
-            {
-                // Get ARGV on the stack
-                _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, argvTableRegistryIndex);
-
-                for (var i = 0; i < preambleKeyAndArgvCount; i++)
-                {
-                    ref var argv = ref parseState.GetArgSliceByRef(offset);
-
-                    // Equivalent to ARGV[i+1] = argv
-                    state.PushBuffer(argv.ReadOnlySpan);
-                    state.RawSetInteger(1, i + 1);
-
-                    offset++;
-                }
-
-                // Remove ARGV from the stack
-                state.Pop(1);
-            }
-
-            return 0;
-        }
-
-        /// <summary>
         /// Runs the precompiled Lua function with specified (keys, argv) state.
         /// 
         /// Meant for use from a .NET host rather than in Garnet properly.
         /// </summary>
         public unsafe object RunForRunner(string[] keys = null, string[] argv = null)
         {
-            const int NeededStackSize = 2;
+            // Space for function
+            const int NeededStackSize = 1;
 
-            state.ForceMinimumStackCapacity(NeededStackSize);
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSize), "LUA_MINSTACK should be large enough that this never fails");
 
             try
             {
@@ -991,7 +1204,23 @@ end
                     preambleArgv = argv;
 
                     state.PushCFunction(&LuaRunnerTrampolines.RunPreambleForRunner);
-                    state.Call(0, 0);
+                    var preambleRes = state.PCall(0, 0);
+                    if (preambleRes != LuaStatus.OK || state.StackTop != 0)
+                    {
+                        string errMsg;
+                        if (state.StackTop >= 1 && state.Type(1) == LuaType.String)
+                        {
+                            // We control the definition of LoaderBlock, so we know this is a string
+                            state.KnownStringToBuffer(1, out var preambleErrSpan);
+                            errMsg = Encoding.UTF8.GetString(preambleErrSpan);
+                        }
+                        else
+                        {
+                            errMsg = "No error provided";
+                        }
+
+                        throw new GarnetException($"Could not run function preamble: {errMsg}");
+                    }
                 }
                 finally
                 {
@@ -1094,21 +1323,7 @@ end
             }
         }
 
-        /// <summary>
-        /// Setups a script to be run.
-        /// 
-        /// If you call this directly and Lua encounters an error, the process will crash.
-        /// 
-        /// Call <see cref="RunForRunner"/> instead.
-        /// </summary>
-        internal int UnsafeRunPreambleForRunner()
-        {
-            state.ExpectLuaStackEmpty();
 
-            scratchBufferManager?.Reset();
-
-            return LoadParametersForRunner(preambleKeys, preambleArgv);
-        }
 
         /// <summary>
         /// Calls <see cref="RunCommon"/> after setting up appropriate state for a transaction.
@@ -1116,6 +1331,7 @@ end
         private void RunInTransaction<TResponse>(ref TResponse response)
             where TResponse : struct, IResponseAdapter
         {
+            var txnVersion = respServerSession.storageSession.stateMachineDriver.AcquireTransactionVersion();
             try
             {
                 respServerSession.storageSession.lockableContext.BeginLockable();
@@ -1124,6 +1340,10 @@ end
                 respServerSession.SetTransactionMode(true);
                 txnKeyEntries.LockAllKeys();
 
+                txnVersion = respServerSession.storageSession.stateMachineDriver.VerifyTransactionVersion(txnVersion);
+                respServerSession.storageSession.lockableContext.LocksAcquired(txnVersion);
+                if (!respServerSession.storageSession.objectStoreLockableContext.IsNull)
+                    respServerSession.storageSession.objectStoreLockableContext.LocksAcquired(txnVersion);
                 RunCommon(ref response);
             }
             finally
@@ -1133,6 +1353,7 @@ end
                 respServerSession.storageSession.lockableContext.EndLockable();
                 if (!respServerSession.storageSession.objectStoreLockableContext.IsNull)
                     respServerSession.storageSession.objectStoreLockableContext.EndLockable();
+                respServerSession.storageSession.stateMachineDriver.EndTransaction(txnVersion);
             }
         }
 
@@ -1146,24 +1367,17 @@ end
         /// Request that the current execution of this <see cref="LuaRunner"/> timeout.
         /// </summary>
         internal unsafe void RequestTimeout()
-        => state.TrySetHook(&LuaRunnerTrampolines.ForceTimeout, LuaHookMask.Count, 1);
-
-        /// <summary>
-        /// Raises a Lua error reporting that the script has timed out.
-        /// 
-        /// If you call this outside of PCALL context, the process will crash.
-        /// </summary>
-        internal void UnsafeForceTimeout()
-        => state.RaiseError("ERR Lua script exceeded configured timeout");
+        => state.TrySetHook(&LuaRunnerTrampolines.RequestTimeout, LuaHookMask.Count, 1);
 
         /// <summary>
         /// Remove extra keys and args from KEYS and ARGV globals.
         /// </summary>
-        internal void ResetParameters(int nKeys, int nArgs)
+        internal bool TryResetParameters(int nKeys, int nArgs, out LuaStatus failingStatus)
         {
+            // Space for key count, value count, and function
             const int NeededStackSize = 3;
 
-            state.ForceMinimumStackCapacity(NeededStackSize);
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSize), "LUA_MINSTACK should be large enough that this never fails");
 
             if (keyLength > nKeys || argvLength > nArgs)
             {
@@ -1172,72 +1386,79 @@ end
                 state.PushInteger(nKeys + 1);
                 state.PushInteger(nArgs + 1);
 
-                state.Call(2, 0);
+                var callRes = state.PCall(2, 0);
+                if (callRes != LuaStatus.OK)
+                {
+                    failingStatus = callRes;
+                    return false;
+                }
             }
 
             keyLength = nKeys;
             argvLength = nArgs;
+
+            failingStatus = LuaStatus.OK;
+            return true;
         }
 
         /// <summary>
-        /// Takes .NET strings for keys and args and pushes them into KEYS and ARGV globals.
+        /// Replace KEYS in sandbox_env with a new table with the given array capacity.
         /// </summary>
-        private int LoadParametersForRunner(string[] keys, string[] argv)
+        private bool TryRecreateKEYS(int length)
         {
-            const int NeededStackSize = 2;
+            // 1 for sandbox_env, 1 for "KEYS", and 1 for new table
+            const int NeededStackSpace = 3;
 
-            state.ForceMinimumStackCapacity(NeededStackSize);
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSpace), "LUA_MINSTACK should ensure this always succeeds");
 
-            ResetParameters(keys?.Length ?? 0, argv?.Length ?? 0);
+            // Get sandbox_env and "KEYS" on the stack
+            _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, sandboxEnvRegistryIndex);
+            var sandboxEnvIndex = state.StackTop;
+            state.PushConstantString(constStrs.KEYS);
 
-            if (keys != null)
+            // Make new KEYS
+            if (!state.TryCreateTable(length, 0))
             {
-                // get KEYS on the stack
-                _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, keysTableRegistryIndex);
-
-                for (var i = 0; i < keys.Length; i++)
-                {
-                    // equivalent to KEYS[i+1] = keys[i]
-                    var key = keys[i];
-                    PrepareString(key, scratchBufferManager, out var encoded);
-                    state.PushBuffer(encoded);
-                    state.RawSetInteger(1, i + 1);
-                }
-
-                state.Pop(1);
+                return false;
             }
 
-            if (argv != null)
+            // Save it, which should have NO allocation impact because we're updating an existing slot
+            var ignored = 0;
+            state.RawSet(1, sandboxEnvIndex, ref ignored);
+
+            keysArrCapacity = length;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Replace ARGV in sandbox_env with a new table with the given array capacity.
+        /// </summary>
+        private bool TryRecreateARGV(int length)
+        {
+            // 1 for sandbox_env, 1 for "ARGV", and 1 for new table
+            const int NeededStackSpace = 3;
+
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSpace), "LUA_MINSTACK should ensure this always succeeds");
+
+            // Get sandbox_env and "KEYS" on the stack
+            _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, sandboxEnvRegistryIndex);
+            var sandboxEnvIndex = state.StackTop;
+            state.PushConstantString(constStrs.ARGV);
+
+            // Make new ARGV
+            if (!state.TryCreateTable(length, 0))
             {
-                // get ARGV on the stack
-                _ = state.RawGetInteger(LuaType.Table, (int)LuaRegistry.Index, argvTableRegistryIndex);
-
-                for (var i = 0; i < argv.Length; i++)
-                {
-                    // equivalent to ARGV[i+1] = keys[i]
-                    var arg = argv[i];
-                    PrepareString(arg, scratchBufferManager, out var encoded);
-                    state.PushBuffer(encoded);
-                    state.RawSetInteger(1, i + 1);
-                }
-
-                state.Pop(1);
+                return false;
             }
 
-            return 0;
+            // Save it, which should have NO allocation impact because we're updating an existing slot
+            var ignored = 0;
+            state.RawSet(1, sandboxEnvIndex, ref ignored);
 
-            // Convert string into a span, using buffer for storage
-            static void PrepareString(string raw, ScratchBufferManager buffer, out ReadOnlySpan<byte> strBytes)
-            {
-                var maxLen = Encoding.UTF8.GetMaxByteCount(raw.Length);
+            argvArrCapacity = length;
 
-                buffer.Reset();
-                var argSlice = buffer.CreateArgSlice(maxLen);
-                var span = argSlice.Span;
-
-                var written = Encoding.UTF8.GetBytes(raw, span);
-                strBytes = span[..written];
-            }
+            return true;
         }
 
         /// <summary>
@@ -1246,14 +1467,18 @@ end
         private unsafe void RunCommon<TResponse>(ref TResponse resp)
             where TResponse : struct, IResponseAdapter
         {
-            const int NeededStackSize = 2;
+            // Space for function
+            const int NeededStackSize = 1;
 
-            // TODO: mapping is dependent on Resp2 vs Resp3 settings
-            //       and that's not implemented at all
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(NeededStackSize), "LUA_MINSTACK should be large enough that this never fails");
 
             try
             {
-                state.ForceMinimumStackCapacity(NeededStackSize);
+                // Every invocation starts in RESP2
+                if (respServerSession != null)
+                {
+                    respServerSession.respProtocolVersion = 2;
+                }
 
                 _ = state.RawGetInteger(LuaType.Function, (int)LuaRegistry.Index, functionRegistryIndex);
 
@@ -1261,76 +1486,7 @@ end
                 if (callRes == LuaStatus.OK)
                 {
                     // The actual call worked, handle the response
-
-                    if (state.StackTop == 0)
-                    {
-                        WriteNull(this, ref resp);
-                        return;
-                    }
-
-                    var retType = state.Type(1);
-                    var isNullish = retType is LuaType.Nil or LuaType.UserData or LuaType.Function or LuaType.Thread or LuaType.UserData;
-
-                    if (isNullish)
-                    {
-                        WriteNull(this, ref resp);
-                        return;
-                    }
-                    else if (retType == LuaType.Number)
-                    {
-                        WriteNumber(this, ref resp);
-                        return;
-                    }
-                    else if (retType == LuaType.String)
-                    {
-                        WriteString(this, ref resp);
-                        return;
-                    }
-                    else if (retType == LuaType.Boolean)
-                    {
-                        WriteBoolean(this, ref resp);
-                        return;
-                    }
-                    else if (retType == LuaType.Table)
-                    {
-                        // Redis does not respect metatables, so RAW access is ok here
-
-                        // If the key "ok" is in there, we need to short circuit
-                        state.PushConstantString(okLowerConstStringRegistryIndex);
-                        var okType = state.RawGet(null, 1);
-                        if (okType == LuaType.String)
-                        {
-                            WriteString(this, ref resp);
-
-                            // Remove table from stack
-                            state.Pop(1);
-
-                            return;
-                        }
-
-                        // Remove whatever we read from the table under the "ok" key
-                        state.Pop(1);
-
-                        // If the key "err" is in there, we need to short circuit 
-                        state.PushConstantString(errConstStringRegistryIndex);
-
-                        var errType = state.RawGet(null, 1);
-                        if (errType == LuaType.String)
-                        {
-                            WriteError(this, ref resp);
-
-                            // Remove table from stack
-                            state.Pop(1);
-
-                            return;
-                        }
-
-                        // Remove whatever we read from the table under the "err" key
-                        state.Pop(1);
-
-                        // Map this table to an array
-                        WriteArray(this, ref resp);
-                    }
+                    WriteResponse(ref resp);
                 }
                 else
                 {
@@ -1390,22 +1546,453 @@ end
             {
                 state.ExpectLuaStackEmpty();
             }
+        }
 
-            // Write a null RESP value, remove the top value on the stack if there is one
-            static void WriteNull(LuaRunner runner, ref TResponse resp)
+        /// <summary>
+        /// Convert value on top of stack (if any) into a RESP# reply
+        /// and write it out to <paramref name="resp" />.
+        /// </summary>
+        private unsafe void WriteResponse<TResponse>(ref TResponse resp)
+            where TResponse : struct, IResponseAdapter
+        {
+            // Copy the response object before a trial serialization
+            const int TopLevelNeededStackSpace = 1;
+
+            // Need space for the lookup keys ("ok", "err", etc.) and their values
+            const int KeyNeededStackSpace = 1;
+
+            // 2 for the returned key and value from Next, 1 for the temp copy of the returned key
+            const int MapNeededStackSpace = 3;
+
+            // 2 for the returned key and value from Next, 1 for the temp copy of the returned key
+            const int ArrayNeededStackSize = 3;
+
+            // 2 for the returned key and value from Next
+            const int SetNeededStackSize = 2;
+
+            // 1 for the pending value
+            const int TableNeededStackSize = 1;
+
+            // This is a bit tricky since we don't know in advance how deep
+            // the stack could get during serialization.
+            //
+            // Typically we'll have plenty of space, so we don't want to do a
+            // double pass unless we have to.
+            //
+            // So what we do is serialize the response, dynamically expanding the
+            // stack.  IF we have to send, we remember that and DON'T but instead
+            // keep going to see if we'll run out of stack space.
+            //
+            // At the end, if we didn't fill the buffer (that is, we never SendAndReset)
+            // and didn't run out of stack space - we just return.  If we ran out of stack space,
+            // we reset resp.BufferCur and write an error out.  If we filled the buffer but
+            // didn't run out of stack space, we serialize AGAIN this time know we'll succeed
+            // so we can sent as we go like normal.
+            //
+            // Ideally we do everything in a single pass.
+
+            if (state.StackTop == 0)
             {
-                while (!RespWriteUtils.TryWriteNull(ref resp.BufferCur, resp.BufferEnd))
+                if (resp.RespProtocolVersion == 3)
+                {
+                    _ = TryWriteResp3Null(this, canSend: true, pop: false, ref resp, out var sendErr);
+                    Debug.Assert(sendErr == -1, "Sending a top level null should always suceed since no stack space is needed");
+                }
+                else
+                {
+                    _ = TryWriteResp2Null(this, canSend: true, pop: false, ref resp, out var sendErr);
+                    Debug.Assert(sendErr == -1, "Sending a top level null should always suceed since no stack space is needed");
+                }
+
+                return;
+            }
+
+            var oldCur = resp.BufferCur;
+
+            Debug.Assert(state.TryEnsureMinimumStackCapacity(TopLevelNeededStackSpace), "Caller should have ensured we're < LUA_MINSTACK");
+
+            // Copy the value in case we need a second pass
+            // 
+            // Note that this is just copying a reference in the case it's a table, string, etc.
+            state.PushValue(1);
+
+            var wholeResponseFitInBuffer = TryWriteSingleItem(this, canSend: false, ref resp, out var err);
+            if (wholeResponseFitInBuffer)
+            {
+                // Success in a single pass, we're done
+
+                // Remove the extra value copy we pushed
+                state.Pop(1);
+                return;
+            }
+
+            // Either an error occurred, or we need a second pass
+            // Regardless we need to roll BufferCur back
+
+            resp.BufferCur = oldCur;
+
+            if (err != -1)
+            {
+                // An error was encountered, so write it out
+
+                state.ClearStack();
+                state.PushConstantString(err);
+                state.KnownStringToBuffer(1, out var errBuff);
+
+                while (!RespWriteUtils.TryWriteError(errBuff, ref resp.BufferCur, resp.BufferEnd))
                     resp.SendAndReset();
 
-                // The stack _could_ be empty if we're writing a null, so check before popping
-                if (runner.state.StackTop != 0)
+                return;
+            }
+
+            // Second pass is required, but now we KNOW it will succeed
+            var secondPassRes = TryWriteSingleItem(this, canSend: true, ref resp, out var secondPassErr);
+            Debug.Assert(!secondPassRes, "Should have required a send in this path");
+            Debug.Assert(secondPassErr == -1, "No error should be possible on the second pass");
+
+            // Write out a single RESP item and pop it off the stack, returning true if all fit in the current send buffer
+            static bool TryWriteSingleItem(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                var curTop = runner.state.StackTop;
+                var retType = runner.state.Type(curTop);
+                var isNullish = retType is LuaType.Nil or LuaType.UserData or LuaType.Function or LuaType.Thread or LuaType.UserData;
+
+                if (isNullish)
+                {
+                    var fitInBuffer = true;
+
+                    if (resp.RespProtocolVersion == 3)
+                    {
+                        if (!TryWriteResp3Null(runner, canSend, pop: true, ref resp, out errConstStrIndex))
+                        {
+                            fitInBuffer = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!TryWriteResp2Null(runner, canSend, pop: true, ref resp, out errConstStrIndex))
+                        {
+                            fitInBuffer = false;
+                        }
+                    }
+
+                    return fitInBuffer;
+                }
+                else if (retType == LuaType.Number)
+                {
+                    return TryWriteNumber(runner, canSend, ref resp, out errConstStrIndex);
+                }
+                else if (retType == LuaType.String)
+                {
+                    return TryWriteString(runner, canSend, ref resp, out errConstStrIndex);
+                }
+                else if (retType == LuaType.Boolean)
+                {
+                    if (runner.respServerSession?.respProtocolVersion == 3 && resp.RespProtocolVersion == 2)
+                    {
+                        // This is not in spec, but is how Redis actually behaves
+                        var toPush = runner.state.ToBoolean(curTop) ? 1 : 0;
+                        runner.state.Pop(1);
+                        runner.state.PushInteger(toPush);
+
+                        return TryWriteNumber(runner, canSend, ref resp, out errConstStrIndex);
+                    }
+                    else if (runner.respServerSession?.respProtocolVersion == 2 && resp.RespProtocolVersion == 3)
+                    {
+                        // Likewise, this is how Redis actually behaves
+                        if (runner.state.ToBoolean(curTop))
+                        {
+                            runner.state.Pop(1);
+                            runner.state.PushInteger(1);
+
+                            return TryWriteNumber(runner, canSend, ref resp, out errConstStrIndex);
+                        }
+                        else
+                        {
+                            return TryWriteResp3Null(runner, canSend, pop: true, ref resp, out errConstStrIndex);
+                        }
+                    }
+                    else if (runner.respServerSession?.respProtocolVersion == 3)
+                    {
+                        // RESP3 has a proper boolean type
+                        return TryWriteResp3Boolean(runner, canSend, ref resp, out errConstStrIndex);
+                    }
+                    else
+                    {
+                        // RESP2 booleans are weird
+                        // false = null (the bulk nil)
+                        // true = 1 (the integer)
+
+                        if (runner.state.ToBoolean(curTop))
+                        {
+                            runner.state.Pop(1);
+                            runner.state.PushInteger(1);
+
+                            return TryWriteNumber(runner, canSend, ref resp, out errConstStrIndex);
+                        }
+                        else
+                        {
+                            return TryWriteResp2Null(runner, canSend, pop: true, ref resp, out errConstStrIndex);
+                        }
+                    }
+                }
+                else if (retType == LuaType.Table)
+                {
+                    // Redis does not respect metatables, so RAW access is ok here
+
+                    if (!runner.state.TryEnsureMinimumStackCapacity(KeyNeededStackSpace))
+                    {
+                        errConstStrIndex = runner.constStrs.OutOfMemory;
+                        return false;
+                    }
+
+                    runner.state.PushConstantString(runner.constStrs.Double);
+                    var doubleType = runner.state.RawGet(null, curTop);
+                    if (doubleType == LuaType.Number)
+                    {
+                        var fitInBuffer = true;
+
+                        if (resp.RespProtocolVersion == 3)
+                        {
+                            if (!TryWriteDouble(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Force double to string for RESP2
+                            if (!runner.state.TryNumberToString(curTop + 1, out _))
+                            {
+                                // Fail the whole serialization
+                                errConstStrIndex = runner.constStrs.OutOfMemory;
+                                return false;
+                            }
+
+                            if (!TryWriteString(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+
+                        // Remove table from stack
+                        runner.state.Pop(1);
+
+                        return fitInBuffer;
+                    }
+
+                    // Remove whatever we read from the table under the "double" key
+                    runner.state.Pop(1);
+
+                    runner.state.PushConstantString(runner.constStrs.Map);
+                    var mapType = runner.state.RawGet(null, curTop);
+                    if (mapType == LuaType.Table)
+                    {
+                        var fitInBuffer = true;
+
+                        if (resp.RespProtocolVersion == 3)
+                        {
+                            if (!TryWriteMap(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!TryWriteMapToArray(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+
+                        // remove table from stack
+                        runner.state.Pop(1);
+
+                        return fitInBuffer;
+                    }
+
+                    // Remove whatever we read from the table under the "map" key
+                    runner.state.Pop(1);
+
+                    runner.state.PushConstantString(runner.constStrs.Set);
+                    var setType = runner.state.RawGet(null, curTop);
+                    if (setType == LuaType.Table)
+                    {
+                        var fitInBuffer = false;
+
+                        if (resp.RespProtocolVersion == 3)
+                        {
+                            if (!TryWriteSet(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!TryWriteSetToArray(runner, canSend, ref resp, out errConstStrIndex))
+                            {
+                                fitInBuffer = false;
+                                if (errConstStrIndex != -1)
+                                {
+                                    // Fail the whole serialization
+                                    return false;
+                                }
+                            }
+                        }
+
+                        // remove table from stack
+                        runner.state.Pop(1);
+
+                        return fitInBuffer;
+                    }
+
+                    // Remove whatever we read from the table under the "set" key
+                    runner.state.Pop(1);
+
+                    // If the key "ok" is in there, we need to short circuit
+                    runner.state.PushConstantString(runner.constStrs.OkLower);
+                    var okType = runner.state.RawGet(null, curTop);
+                    if (okType == LuaType.String)
+                    {
+                        var fitInBuffer = true;
+                        if (!TryWriteString(runner, canSend, ref resp, out errConstStrIndex))
+                        {
+                            fitInBuffer = false;
+                            if (errConstStrIndex != -1)
+                            {
+                                // Fail the whole serialization
+                                return false;
+                            }
+                        }
+
+                        // Remove table from stack
+                        runner.state.Pop(1);
+
+                        return fitInBuffer;
+                    }
+
+                    // Remove whatever we read from the table under the "ok" key
+                    runner.state.Pop(1);
+
+                    // If the key "err" is in there, we need to short circuit 
+                    runner.state.PushConstantString(runner.constStrs.Err);
+
+                    var errType = runner.state.RawGet(null, curTop);
+                    if (errType == LuaType.String)
+                    {
+                        var fitInBuffer = false;
+
+                        if (!TryWriteError(runner, canSend, ref resp, out errConstStrIndex))
+                        {
+                            fitInBuffer = false;
+                            if (errConstStrIndex != -1)
+                            {
+                                // Fail the whole serialization
+                                return false;
+                            }
+                        }
+
+                        // Remove table from stack
+                        runner.state.Pop(1);
+
+                        return fitInBuffer;
+                    }
+
+                    // Remove whatever we read from the table under the "err" key
+                    runner.state.Pop(1);
+
+                    // Map this table to an array
+                    return TryWriteTableToArray(runner, canSend, ref resp, out errConstStrIndex);
+                }
+
+                Debug.Fail($"All types should have been handled, found {retType}");
+                errConstStrIndex = -1;
+                return true;
+            }
+
+            // Write out $-1\r\n (the RESP2 null) and (optionally) pop the null value off the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteResp2Null(LuaRunner runner, bool canSend, bool pop, ref TResponse resp, out int errConstStrIndex)
+            {
+                var fitInBuffer = true;
+
+                while (!RespWriteUtils.TryWriteNull(ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (pop)
                 {
                     runner.state.Pop(1);
                 }
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
             }
 
-            // Writes the number on the top of the stack, removes it from the stack
-            static void WriteNumber(LuaRunner runner, ref TResponse resp)
+            // Write out _\r\n (the RESP3 null) and (optionally) pop the null value off the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteResp3Null(LuaRunner runner, bool canSend, bool pop, ref TResponse resp, out int errConstStrIndex)
+            {
+                var fitInBuffer = true;
+
+                while (!RespWriteUtils.TryWriteResp3Null(ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (pop)
+                {
+                    runner.state.Pop(1);
+                }
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Writes the number on the top of the stack, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteNumber(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
             {
                 Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Number, "Number was not on top of stack");
 
@@ -1414,71 +2001,545 @@ end
                 // See: https://redis.io/docs/latest/develop/interact/programmability/lua-api/#lua-to-resp2-type-conversion
                 var num = (long)runner.state.CheckNumber(runner.state.StackTop);
 
+                var fitInBuffer = true;
+
                 while (!RespWriteUtils.TryWriteInt64(num, ref resp.BufferCur, resp.BufferEnd))
-                    resp.SendAndReset();
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
             }
 
-            // Writes the string on the top of the stack, removes it from the stack
-            static void WriteString(LuaRunner runner, ref TResponse resp)
+            // Writes the string on the top of the stack, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteString(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
             {
                 runner.state.KnownStringToBuffer(runner.state.StackTop, out var buf);
 
-                while (!RespWriteUtils.TryWriteBulkString(buf, ref resp.BufferCur, resp.BufferEnd))
-                    resp.SendAndReset();
+                var fitInBuffer = true;
+
+                // Strings can be veeeerrrrry large, so we can't use the short helpers
+                // Thus we write the full string directly
+                while (!RespWriteUtils.TryWriteBulkStringLength(buf, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // Repeat while we have bytes left to write
+                while (!buf.IsEmpty)
+                {
+                    // Copy bytes over
+                    var destSpace = resp.BufferEnd - resp.BufferCur;
+                    var copyLen = (int)(destSpace < buf.Length ? destSpace : buf.Length);
+                    buf.Slice(0, copyLen).CopyTo(new Span<byte>(resp.BufferCur, copyLen));
+
+                    // Advance
+                    resp.BufferCur += copyLen;
+
+                    // Flush if we filled the buffer
+                    if (destSpace == copyLen)
+                    {
+                        fitInBuffer = false;
+
+                        if (canSend)
+                        {
+                            resp.SendAndReset();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    // Move past the data we wrote out
+                    buf = buf.Slice(copyLen);
+                }
+
+                // End the string
+                while (!RespWriteUtils.TryWriteNewLine(ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
             }
 
-            // Writes the boolean on the top of the stack, removes it from the stack
-            static void WriteBoolean(LuaRunner runner, ref TResponse resp)
+            // Writes the boolean on the top of the stack, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteResp3Boolean(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
             {
                 Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Boolean, "Boolean was not on top of stack");
 
-                // Redis maps Lua false to null, and Lua true to 1  this is strange, but documented
-                //
-                // See: https://redis.io/docs/latest/develop/interact/programmability/lua-api/#lua-to-resp2-type-conversion
+                var fitInBuffer = true;
+
+                // In RESP3 there is a dedicated boolean type
                 if (runner.state.ToBoolean(runner.state.StackTop))
                 {
-                    while (!RespWriteUtils.TryWriteInt32(1, ref resp.BufferCur, resp.BufferEnd))
-                        resp.SendAndReset();
+                    while (!RespWriteUtils.TryWriteTrue(ref resp.BufferCur, resp.BufferEnd))
+                    {
+                        fitInBuffer = false;
+
+                        if (canSend)
+                        {
+                            resp.SendAndReset();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
                 else
                 {
-                    while (!RespWriteUtils.TryWriteNull(ref resp.BufferCur, resp.BufferEnd))
-                        resp.SendAndReset();
+                    while (!RespWriteUtils.TryWriteFalse(ref resp.BufferCur, resp.BufferEnd))
+                    {
+                        fitInBuffer = false;
+
+                        if (canSend)
+                        {
+                            resp.SendAndReset();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
             }
 
-            // Writes the string on the top of the stack out as an error, removes the string from the stack
-            static void WriteError(LuaRunner runner, ref TResponse resp)
+            // Writes the number on the top of the stack as a double, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteDouble(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Number, "Number was not on top of stack");
+
+                var fitInBuffer = true;
+
+                var num = runner.state.CheckNumber(runner.state.StackTop);
+
+                while (!RespWriteUtils.TryWriteDoubleNumeric(num, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Write a table on the top of the stack as a map, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteMap(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Table, "Table was not on top of stack");
+
+                if (!runner.state.TryEnsureMinimumStackCapacity(MapNeededStackSpace))
+                {
+                    errConstStrIndex = runner.constStrs.InsufficientLuaStackSpace;
+                    return false;
+                }
+
+                var mapSize = 0;
+
+                var tableIx = runner.state.StackTop;
+
+                // Push nil key as "first key"
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Now we have value at top of stack, and key one below it
+
+                    mapSize++;
+
+                    // Remove value, we don't need it
+                    runner.state.Pop(1);
+                }
+
+                var fitInBuffer = true;
+
+                // Write the map header
+                while (!RespWriteUtils.TryWriteMapLength(mapSize, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (fitInBuffer)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // Write the values out by traversing the table again
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Copy key to top of stack
+                    runner.state.PushValue(tableIx + 1);
+
+                    // Write (and remove) key out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Write (and remove) value out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Now we have the original key value on the stack
+                }
+
+                // Remove the table
+                runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Convert a table to an array, where each key-value pair is converted to 2 entries, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteMapToArray(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Table, "Table was not on top of stack");
+
+                if (!runner.state.TryEnsureMinimumStackCapacity(ArrayNeededStackSize))
+                {
+                    errConstStrIndex = runner.constStrs.InsufficientLuaStackSpace;
+                    return false;
+                }
+
+                var mapSize = 0;
+
+                var tableIx = runner.state.StackTop;
+
+                // Push nil key as "first key"
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Now we have value at top of stack, and key one below it
+
+                    mapSize++;
+
+                    // Remove value, we don't need it
+                    runner.state.Pop(1);
+                }
+
+                var arraySize = mapSize * 2;
+
+                var fitInBuffer = true;
+
+                // Write the array header
+                while (!RespWriteUtils.TryWriteArrayLength(arraySize, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // Write the values out by traversing the table again
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Copy key to top of stack
+                    runner.state.PushValue(tableIx + 1);
+
+                    // Write (and remove) key out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Write (and remove) value out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Now we have the original key value on the stack
+                }
+
+                // Remove the table
+                runner.state.Pop(1);
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Write a table on the top of the stack as a set, removes it from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteSet(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Table, "Table was not on top of stack");
+
+                if (!runner.state.TryEnsureMinimumStackCapacity(SetNeededStackSize))
+                {
+                    errConstStrIndex = runner.constStrs.InsufficientLuaStackSpace;
+                    return false;
+                }
+
+                var setSize = 0;
+
+                var tableIx = runner.state.StackTop;
+
+                // Push nil key as "first key"
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Now we have value at top of stack, and key one below it
+
+                    setSize++;
+
+                    // Remove value, we don't need it
+                    runner.state.Pop(1);
+                }
+
+                var fitInBuffer = true;
+
+                // Write the set header
+                while (!RespWriteUtils.TryWriteSetLength(setSize, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // Write the values out by traversing the table again
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Remove the value, it's ignored
+                    runner.state.Pop(1);
+
+                    // Make a copy of the key
+                    runner.state.PushValue(tableIx + 1);
+
+                    // Write (and remove) key copy out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Now we have the original key value on the stack
+                }
+
+                // Remove the table
+                runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Write a table on the top of the stack as an array that contains only the keys of the
+            // table, then remove the table from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteSetToArray(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
+            {
+                Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Table, "Table was not on top of stack");
+
+                if (!runner.state.TryEnsureMinimumStackCapacity(SetNeededStackSize))
+                {
+                    errConstStrIndex = runner.constStrs.InsufficientLuaStackSpace;
+                    return false;
+                }
+
+                var setSize = 0;
+
+                var tableIx = runner.state.StackTop;
+
+                // Push nil key as "first key"
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Now we have value at top of stack, and key one below it
+
+                    setSize++;
+
+                    // Remove value, we don't need it
+                    runner.state.Pop(1);
+                }
+
+                var arraySize = setSize;
+
+                var fitInBuffer = true;
+
+                // Write the array header
+                while (!RespWriteUtils.TryWriteArrayLength(arraySize, ref resp.BufferCur, resp.BufferEnd))
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // Write the values out by traversing the table again
+                runner.state.PushNil();
+                while (runner.state.Next(tableIx) != 0)
+                {
+                    // Remove the value, it's ignored
+                    runner.state.Pop(1);
+
+                    // Make a copy of the key
+                    runner.state.PushValue(tableIx + 1);
+
+                    // Write (and remove) key copy out
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
+                    {
+                        fitInBuffer = false;
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
+                    }
+
+                    // Now we have the original key value on the stack
+                }
+
+                // Remove the table
+                runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+
+            // Writes the string on the top of the stack out as an error, removes the string from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteError(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
             {
                 runner.state.KnownStringToBuffer(runner.state.StackTop, out var errBuff);
 
+                var fitInBuffer = true;
+
                 while (!RespWriteUtils.TryWriteError(errBuff, ref resp.BufferCur, resp.BufferEnd))
-                    resp.SendAndReset();
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
             }
 
-            static void WriteArray(LuaRunner runner, ref TResponse resp)
+            // Writes the table on the top of the stack out as an array, removed table from the stack, returning true if all fit in the current send buffer
+            static unsafe bool TryWriteTableToArray(LuaRunner runner, bool canSend, ref TResponse resp, out int errConstStrIndex)
             {
                 // Redis does not respect metatables, so RAW access is ok here
-
-                // 1 for the table, 1 for the pending value
-                const int AdditonalNeededStackSize = 2;
-
                 Debug.Assert(runner.state.Type(runner.state.StackTop) == LuaType.Table, "Table was not on top of stack");
+
+                if (!runner.state.TryEnsureMinimumStackCapacity(TableNeededStackSize))
+                {
+                    errConstStrIndex = runner.constStrs.InsufficientLuaStackSpace;
+                    return false;
+                }
 
                 // Lua # operator - this MAY stop at nils, but isn't guaranteed to
                 // See: https://www.lua.org/manual/5.3/manual.html#3.4.7
                 var maxLen = runner.state.RawLen(runner.state.StackTop);
 
                 // Find the TRUE length by scanning for nils
-                var trueLen = 0;
+                int trueLen;
                 for (trueLen = 0; trueLen < maxLen; trueLen++)
                 {
                     var type = runner.state.RawGetInteger(null, runner.state.StackTop, trueLen + 1);
@@ -1490,39 +2551,64 @@ end
                     }
                 }
 
+                var fitInBuffer = true;
+
                 while (!RespWriteUtils.TryWriteArrayLength(trueLen, ref resp.BufferCur, resp.BufferEnd))
-                    resp.SendAndReset();
+                {
+                    fitInBuffer = false;
+
+                    if (canSend)
+                    {
+                        resp.SendAndReset();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
                 for (var i = 1; i <= trueLen; i++)
                 {
                     // Push item at index i onto the stack
-                    var type = runner.state.RawGetInteger(null, runner.state.StackTop, i);
+                    _ = runner.state.RawGetInteger(null, runner.state.StackTop, i);
 
-                    switch (type)
+                    // Write the item out, removing it from teh stack
+                    if (!TryWriteSingleItem(runner, canSend, ref resp, out errConstStrIndex))
                     {
-                        case LuaType.String:
-                            WriteString(runner, ref resp);
-                            break;
-                        case LuaType.Number:
-                            WriteNumber(runner, ref resp);
-                            break;
-                        case LuaType.Boolean:
-                            WriteBoolean(runner, ref resp);
-                            break;
-                        case LuaType.Table:
-                            // For tables, we need to recurse - which means we need to check stack sizes again
-                            runner.state.ForceMinimumStackCapacity(AdditonalNeededStackSize);
-                            WriteArray(runner, ref resp);
-                            break;
-
-                        // All other Lua types map to nulls
-                        default:
-                            WriteNull(runner, ref resp);
-                            break;
+                        fitInBuffer = false;
+                        if (errConstStrIndex != -1)
+                        {
+                            // Fail the whole serialization
+                            return false;
+                        }
                     }
                 }
 
+                // Remove the table
                 runner.state.Pop(1);
+
+                errConstStrIndex = -1;
+                return fitInBuffer;
+            }
+        }
+
+        /// <summary>
+        /// Attempts a call into Lua libraries.
+        /// 
+        /// If this fails, it's basically impossible for any other Lua functionality to work.
+        /// </summary>
+        public static bool TryProbeSupport(out string errorMessage)
+        {
+            try
+            {
+                _ = NativeMethods.Version();
+                errorMessage = null;
+                return true;
+            }
+            catch (Exception e)
+            {
+                errorMessage = e.Message;
+                return false;
             }
         }
 
@@ -1566,116 +2652,5 @@ end
 
             return (start, bitmap);
         }
-    }
-
-    /// <summary>
-    /// Holds static functions for Lua-to-.NET interop.
-    /// 
-    /// We annotate these as "unmanaged callers only" as a micro-optimization.
-    /// See: https://devblogs.microsoft.com/dotnet/improvements-in-native-code-interop-in-net-5-0/#unmanagedcallersonly
-    /// </summary>
-    internal static class LuaRunnerTrampolines
-    {
-        [ThreadStatic]
-        private static LuaRunner CallbackContext;
-
-        /// <summary>
-        /// Set a <see cref="LuaRunner"/> that will be available in trampolines.
-        /// 
-        /// This assumes the same thread is used to call into Lua.
-        /// 
-        /// Call <see cref="ClearCallbackContext"/> when finished to avoid extending
-        /// the lifetime of the <see cref="LuaRunner"/>.
-        /// </summary>
-        internal static void SetCallbackContext(LuaRunner context)
-        {
-            Debug.Assert(CallbackContext == null, "Expected null context");
-            CallbackContext = context;
-        }
-
-        /// <summary>
-        /// Clear a previously set 
-        /// </summary>
-        internal static void ClearCallbackContext(LuaRunner context)
-        {
-            Debug.Assert(ReferenceEquals(CallbackContext, context), "Expected context to match");
-            CallbackContext = null;
-        }
-
-        /// <summary>
-        /// Entry point for Lua PCall'ing into <see cref="LuaRunner.UnsafeCompileForRunner"/>.
-        /// 
-        /// We need this indirection to allow Lua to detect and report internal and memory errors
-        /// without crashing the process.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int CompileForRunner(nint _)
-        => CallbackContext.UnsafeCompileForRunner();
-
-        /// <summary>
-        /// Entry point for Lua PCall'ing into <see cref="LuaRunner.UnsafeCompileForSession"/>.
-        /// 
-        /// We need this indirection to allow Lua to detect and report internal and memory errors
-        /// without crashing the process.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int CompileForSession(nint _)
-        => CallbackContext.UnsafeCompileForSession();
-
-        /// <summary>
-        /// Entry point for Lua PCall'ing into <see cref="LuaRunner.UnsafeRunPreambleForRunner"/>.
-        /// 
-        /// We need this indirection to allow Lua to detect and report internal and memory errors
-        /// without crashing the process.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int RunPreambleForRunner(nint _)
-        => CallbackContext.UnsafeRunPreambleForRunner();
-
-        /// <summary>
-        /// Entry point for Lua PCall'ing into <see cref="LuaRunner.UnsafeRunPreambleForSession"/>.
-        /// 
-        /// We need this indirection to allow Lua to detect and report internal and memory errors
-        /// without crashing the process.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int RunPreambleForSession(nint _)
-        => CallbackContext.UnsafeRunPreambleForSession();
-
-        /// <summary>
-        /// Entry point for Lua calling back into Garnet via redis.call(...).
-        /// 
-        /// This entry point is for when there isn't an active <see cref="RespServerSession"/>.
-        /// This should only happen during testing.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int GarnetCallNoSession(nint luaState)
-        => CallbackContext.NoSessionResponse(luaState);
-
-        /// <summary>
-        /// Entry point for Lua calling back into Garnet via redis.call(...).
-        /// 
-        /// This entry point is for when a transaction is in effect.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int GarnetCallWithTransaction(nint luaState)
-        => CallbackContext.GarnetCallWithTransaction(luaState);
-
-        /// <summary>
-        /// Entry point for Lua calling back into Garnet via redis.call(...).
-        /// 
-        /// This entry point is for when a transaction is not necessary.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        internal static int GarnetCallNoTransaction(nint luaState)
-        => CallbackContext.GarnetCall(luaState);
-
-        /// <summary>
-        /// Entry point for checking timeouts, called periodically from Lua.
-        /// </summary>
-        [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Callback must take these parameters")]
-        internal static void ForceTimeout(nint luaState, nint debugState)
-        => CallbackContext?.UnsafeForceTimeout();
     }
 }

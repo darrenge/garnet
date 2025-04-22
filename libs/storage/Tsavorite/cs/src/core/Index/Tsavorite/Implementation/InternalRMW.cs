@@ -329,7 +329,7 @@ namespace Tsavorite.core
                         return LatchDestination.CreateNewRecord;    // Record is in memory so force creation of a (V+1) record
                     break;  // Normal Processing; the record is below HeadAddress so the operation will go pending
 
-                default:
+                default:  // Thread is in V
                     break;
             }
             return LatchDestination.NormalProcessing;

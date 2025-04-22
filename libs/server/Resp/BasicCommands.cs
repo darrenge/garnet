@@ -267,7 +267,7 @@ namespace Garnet.server
             if (c > 1)
             {
                 // Update metrics (the first GET is accounted for by the caller)
-                if (latencyMetrics != null) opCount += c - 1;
+                if (LatencyMetrics != null) opCount += c - 1;
                 if (sessionMetrics != null)
                 {
                     sessionMetrics.total_commands_processed += (ulong)(c - 1);
@@ -892,6 +892,13 @@ namespace Garnet.server
                 return AbortWithWrongNumberOfArguments(nameof(RespCommand.FLUSHDB));
             }
 
+            if (storeWrapper.serverOptions.EnableCluster && storeWrapper.clusterProvider.IsReplica() && !clusterSession.ReadWriteSession)
+            {
+                while (!RespWriteUtils.TryWriteError(CmdStrings.RESP_ERR_FLUSHALL_READONLY_REPLICA, ref dcurr, dend))
+                    SendAndReset();
+                return true;
+            }
+
             FlushDb(RespCommand.FLUSHDB);
 
             return true;
@@ -902,9 +909,16 @@ namespace Garnet.server
         /// </summary>
         private bool NetworkFLUSHALL()
         {
-            if (parseState.Count > 2)
+            if (parseState.Count > 3)
             {
                 return AbortWithWrongNumberOfArguments(nameof(RespCommand.FLUSHALL));
+            }
+
+            if (storeWrapper.serverOptions.EnableCluster && storeWrapper.clusterProvider.IsReplica() && !clusterSession.ReadWriteSession)
+            {
+                while (!RespWriteUtils.TryWriteError(CmdStrings.RESP_ERR_FLUSHALL_READONLY_REPLICA, ref dcurr, dend))
+                    SendAndReset();
+                return true;
             }
 
             // Since Garnet currently only supports a single database,
@@ -1147,8 +1161,7 @@ namespace Garnet.server
                     }
                     else
                     {
-                        while (!RespWriteUtils.TryWriteNull(ref dcurr, dend))
-                            SendAndReset();
+                        WriteNull();
                     }
                 }
             }
@@ -1663,19 +1676,26 @@ namespace Garnet.server
             }
 
             if (async)
-                Task.Run(() => ExecuteFlushDb(unsafeTruncateLog)).ConfigureAwait(false);
+                Task.Run(() => ExecuteFlushDb(cmd, unsafeTruncateLog)).ConfigureAwait(false);
             else
-                ExecuteFlushDb(unsafeTruncateLog);
+                ExecuteFlushDb(cmd, unsafeTruncateLog);
 
             logger?.LogInformation($"Running {nameof(cmd)} {{async}} {{mode}}", async ? "async" : "sync", unsafeTruncateLog ? " with unsafetruncatelog." : string.Empty);
             while (!RespWriteUtils.TryWriteDirect(CmdStrings.RESP_OK, ref dcurr, dend))
                 SendAndReset();
         }
 
-        void ExecuteFlushDb(bool unsafeTruncateLog)
+        void ExecuteFlushDb(RespCommand cmd, bool unsafeTruncateLog)
         {
-            storeWrapper.store.Log.ShiftBeginAddress(storeWrapper.store.Log.TailAddress, truncateLog: unsafeTruncateLog);
-            storeWrapper.objectStore?.Log.ShiftBeginAddress(storeWrapper.objectStore.Log.TailAddress, truncateLog: unsafeTruncateLog);
+            switch (cmd)
+            {
+                case RespCommand.FLUSHDB:
+                    storeWrapper.FlushDatabase(unsafeTruncateLog, activeDbId);
+                    break;
+                case RespCommand.FLUSHALL:
+                    storeWrapper.FlushAllDatabases(unsafeTruncateLog);
+                    break;
+            }
         }
 
         /// <summary>
@@ -1691,6 +1711,7 @@ namespace Garnet.server
             var localEndpoint = targetSession.networkSender.LocalEndpointName;
             var clientName = targetSession.clientName;
             var user = targetSession._userHandle.User;
+            var db = targetSession.activeDbId;
             var resp = targetSession.respProtocolVersion;
             var nodeId = targetSession?.clusterSession?.RemoteNodeId;
 
@@ -1734,6 +1755,7 @@ namespace Garnet.server
                 }
             }
 
+            into.Append($" db={db}");
             into.Append($" resp={resp}");
             into.Append($" lib-name={targetSession.clientLibName}");
             into.Append($" lib-ver={targetSession.clientLibVersion}");
@@ -1742,7 +1764,7 @@ namespace Garnet.server
         bool ParseGETAndKey(ref SpanByte key)
         {
             var oldEndReadHead = readHead = endReadHead;
-            var cmd = ParseCommand(out var success);
+            var cmd = ParseCommand(writeErrorOnFailure: true, out var success);
             if (!success || cmd != RespCommand.GET)
             {
                 // If we either find no command or a different command, we back off

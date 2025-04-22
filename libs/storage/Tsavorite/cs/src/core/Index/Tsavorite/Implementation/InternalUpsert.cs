@@ -284,7 +284,7 @@ namespace Tsavorite.core
                         break;      // Normal Processing; V+1 thread encountered a record in V+1
                     return LatchDestination.CreateNewRecord;    // Upsert never goes pending; always force creation of a (V+1) record
 
-                default:
+                default: // Thread is in V
                     break;
             }
             return LatchDestination.NormalProcessing;
