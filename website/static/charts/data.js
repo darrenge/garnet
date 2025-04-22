@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745340597777,
+  "lastUpdate": 1745340794231,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Operations.ObjectOperations (ubuntu-latest  net8.0 Release)": [
@@ -644,6 +644,38 @@ window.BENCHMARK_DATA = {
             "value": 250124.3251953125,
             "unit": "ns",
             "range": "± 2579.214903415918"
+          }
+        ]
+      }
+    ],
+    "Network.BasicOperations (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "ac88d4a51e60048efc5a675726d3e9d0957b3fc6",
+          "message": "Just change to main so benchmark fires off",
+          "timestamp": "2025-04-22T09:30:39-07:00",
+          "tree_id": "12b9b2524ad0e2baf6d7d66b53786fa27da70760",
+          "url": "https://github.com/darrenge/garnet/commit/ac88d4a51e60048efc5a675726d3e9d0957b3fc6"
+        },
+        "date": 1745340786940,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Network.BasicOperations.InlinePing(Params: None)",
+            "value": 87.58863882835095,
+            "unit": "ns",
+            "range": "± 0.21339096818898767"
           }
         ]
       }
