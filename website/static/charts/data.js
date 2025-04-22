@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1745339850846,
+  "lastUpdate": 1745340098018,
   "repoUrl": "https://github.com/darrenge/garnet",
   "entries": {
     "Operations.ObjectOperations (ubuntu-latest  net8.0 Release)": [
@@ -130,6 +130,56 @@ window.BENCHMARK_DATA = {
             "value": 1744.8486080169678,
             "unit": "ns",
             "range": "± 8.115409598302435"
+          }
+        ]
+      }
+    ],
+    "Cluster.ClusterMigrate (ubuntu-latest  net8.0 Release)": [
+      {
+        "commit": {
+          "author": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "committer": {
+            "email": "darrenge@microsoft.com",
+            "name": "darrenge",
+            "username": "darrenge"
+          },
+          "distinct": true,
+          "id": "ac88d4a51e60048efc5a675726d3e9d0957b3fc6",
+          "message": "Just change to main so benchmark fires off",
+          "timestamp": "2025-04-22T09:30:39-07:00",
+          "tree_id": "12b9b2524ad0e2baf6d7d66b53786fa27da70760",
+          "url": "https://github.com/darrenge/garnet/commit/ac88d4a51e60048efc5a675726d3e9d0957b3fc6"
+        },
+        "date": 1745340091346,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Get(Params: None)",
+            "value": 36893.766817533055,
+            "unit": "ns",
+            "range": "± 32.14354147232682"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.Set(Params: None)",
+            "value": 40008.987470354354,
+            "unit": "ns",
+            "range": "± 138.57628618910775"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MGet(Params: None)",
+            "value": 32625.901606633113,
+            "unit": "ns",
+            "range": "± 43.52984599856183"
+          },
+          {
+            "name": "BDN.benchmark.Cluster.ClusterMigrate.MSet(Params: None)",
+            "value": 31507.780904134113,
+            "unit": "ns",
+            "range": "± 65.69110650996278"
           }
         ]
       }
