@@ -6,7 +6,7 @@ using Garnet.server;
 namespace Garnet
 {
     /// <summary>
-    /// Garnet server entry point
+    /// Garnet server entry point 88
     /// </summary>
     public class Program
     {
