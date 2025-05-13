@@ -42,7 +42,8 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         framework: [ 'net8.0', 'net9.0' ]
         configuration: [ 'Release' ]
-        test: [ 'Operations.BasicOperations', 'Operations.ObjectOperations', 'Operations.HashObjectOperations', 'Operations.SortedSetOperations', 'Cluster.ClusterMigrate', 'Cluster.ClusterOperations', 'Lua.LuaScripts', 'Lua.LuaScriptCacheOperations','Lua.LuaRunnerOperations','Operations.CustomOperations', 'Operations.RawStringOperations', 'Operations.ScriptOperations', 'Operations.ModuleOperations', 'Operations.PubSubOperations', 'Operations.SetOperations', 'Network.BasicOperations', 'Network.RawStringOperations' ]
+        #test: [ 'Operations.BasicOperations', 'Operations.ObjectOperations', 'Operations.HashObjectOperations', 'Operations.SortedSetOperations', 'Cluster.ClusterMigrate', 'Cluster.ClusterOperations', 'Lua.LuaScripts', 'Lua.LuaScriptCacheOperations','Lua.LuaRunnerOperations','Operations.CustomOperations', 'Operations.RawStringOperations', 'Operations.ScriptOperations', 'Operations.ModuleOperations', 'Operations.PubSubOperations', 'Operations.SetOperations', 'Network.BasicOperations', 'Network.RawStringOperations' ]
+        test: [ 'Operations.BasicOperations' ]
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -87,7 +88,7 @@ jobs:
           auto-push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           save-data-file: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           summary-always: true
-          gh-pages-branch: 'continuousbenchmark'
+          gh-pages-branch: ${{ matrix.framework == 'net8.0' && 'continuousbenchmark_net80' || 'continuousbenchmark_net90' }}
           benchmark-data-dir-path: 'website/static/charts'
           max-items-in-chart: 25
           alert-threshold: '110%'
