@@ -78,6 +78,7 @@ jobs:
         if: ${{ always() }}
 
       # Run `github-action-benchmark` action for the Continuous Benchmarking Charts (https://microsoft.github.io/garnet/charts/)
+      # For scalability reasons, we are using separate branches for different frameworks. "continuousbenchmark_net80" for net8.0 and "continuousbenchmark" for the latest (which is net9.0)
       - name: Store benchmark result for charts
         uses: benchmark-action/github-action-benchmark@d48d326b4ca9ba73ca0cd0d59f108f9e02a381c7 # v1  for security reasons have pinned tag (commit SHA) for 3rd party
         with:
@@ -88,7 +89,7 @@ jobs:
           auto-push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           save-data-file: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
           summary-always: true
-          gh-pages-branch: ${{ matrix.framework == 'net8.0' && 'continuousbenchmark_net80' || 'continuousbenchmark_net90' }}
+          gh-pages-branch: ${{ matrix.framework == 'net8.0' && 'continuousbenchmark_net80' || 'continuousbenchmark' }}
           benchmark-data-dir-path: 'website/static/charts'
           max-items-in-chart: 25
           alert-threshold: '110%'
